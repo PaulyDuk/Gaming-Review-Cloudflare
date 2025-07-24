@@ -44,7 +44,7 @@ def review_details(request, slug):
         user_reviews = review.user_reviews.filter(
             approved=True
         ).order_by("-created_on")
-    
+
     # Count only approved reviews for the public count
     user_review_count = review.user_reviews.filter(approved=True).count()
 
@@ -189,6 +189,7 @@ def user_review_edit(request, slug, review_id):
         if user_review_form.is_valid() and user_review.user == request.user:
             user_review = user_review_form.save(commit=False)
             user_review.game = review
+            user_review.approved = False
             user_review.save()
             messages.add_message(request, messages.SUCCESS, 'Review Updated!')
         else:

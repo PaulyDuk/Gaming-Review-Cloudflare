@@ -259,20 +259,20 @@
                         <h3>User Reviews</h3>
                         {% if user_reviews %}
                             {% for user_review in user_reviews %}
-                            <div class="p-2 border-bottom mb-3
+                            <div class="p-2 reviews
                               {% if not user_review.approved and user_review.user == user %}
                               faded{% elif not user_review.approved %} d-none{% endif %}">
-                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <p class="font-weight-bold mb-0">
-                                        {{ user_review.user.username }}
-                                    </p>
-                                    <div class="d-flex align-items-center">
-                                        <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
-                                        <small class="text-muted">{{ user_review.created_on }}</small>
-                                    </div>
+                                <p class="font-weight-bold">
+                                    {{ user_review.user.username }}
+                                    <span class="font-weight-normal">
+                                        {{ user_review.created_on }}
+                                    </span> wrote:
+                                </p>
+                                <div class="d-flex align-items-center mb-2">
+                                    <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
                                 </div>
-                                <div id="review{{ user_review.id }}">
-                                    <p class="mb-0">{{ user_review.review_text|linebreaks }}</p>
+                                <div id="user_review{{ user_review.id }}">
+                                    {{ user_review.review_text | linebreaks }}
                                 </div>
                                 {% if not user_review.approved and user_review.user == user %}
                                 <p class="approval">
@@ -280,8 +280,8 @@
                                 </p>
                                 {% endif %}
                                 {% if user.is_authenticated and user_review.user == user %}
-                                    <button class="btn btn-delete-review" review_id="{{ user_review.id }}">Delete</button>
-                                    <button class="btn btn-edit-review" review_id="{{ user_review.id }}" review_rating="{{ user_review.rating }}">Edit</button>
+                                    <button class="btn btn-delete-user-review" review_id="{{ user_review.id }}">Delete</button>
+                                    <button class="btn btn-edit-user-review" review_id="{{ user_review.id }}" review_rating="{{ user_review.rating }}">Edit</button>
                                 {% endif %}
                             </div>
                             {% endfor %}
@@ -296,32 +296,30 @@
                     <div class="card-body">
                         {% if user.is_authenticated %}
                             {% if not user_has_reviewed %}
-                                <div id="reviewForm">
-                                    <h3 id="reviewFormTitle">Write a Review:</h3>
-                                    <p>Posting as: {{ user.username }}</p>
-                                    <form method="post" style="margin-top: 1.3em;">
-                                        {{ user_review_form | crispy }}
-                                        {% csrf_token %}
-                                        <button id="submitReviewButton" name="review_submit" type="submit" class="btn btn-primary btn-lg">Submit Review</button>
-                                    </form>
-                                </div>
+                                <h3>Leave a review:</h3>
+                                <p>Posting as: {{ user.username }}</p>
+                                <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
+                                  {{ user_review_form | crispy }}
+                                  {% csrf_token %}
+                                  <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
+                                </form>
                             {% else %}
                                 <div id="reviewCompleteMessage">
                                     <h3>Your Review</h3>
-                                    <p class="text-info">You have already reviewed this game. Thank you for your feedback!</p>
+                                    <p class="text-info">You have already reviewed this game. You can edit or delete your review above.</p>
                                 </div>
-                                <div id="reviewForm" style="display: none;">
-                                    <h3 id="reviewFormTitle">Edit Your Review:</h3>
+                                <div id="userReviewFormContainer" style="display: none;">
+                                    <h3>Edit Your Review:</h3>
                                     <p>Posting as: {{ user.username }}</p>
-                                    <form method="post" style="margin-top: 1.3em;">
-                                        {{ user_review_form | crispy }}
-                                        {% csrf_token %}
-                                        <button id="submitReviewButton" name="review_submit" type="submit" class="btn btn-primary btn-lg">Update Review</button>
+                                    <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
+                                      {{ user_review_form | crispy }}
+                                      {% csrf_token %}
+                                      <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Update</button>
                                     </form>
                                 </div>
                             {% endif %}
                         {% else %}
-                            <p><a href="{% url 'account_login' %}">Log in</a> to write a review</p>
+                            <p><a href="{% url 'account_login' %}">Log in</a> to leave a review</p>
                         {% endif %}
                     </div>
                 </div>
@@ -350,12 +348,12 @@
   </div>
 </div>
 
-<!-- Delete review confirmation modal -->
-<div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel" aria-hidden="true">
+<!-- Delete user review confirmation modal -->
+<div class="modal fade" id="deleteUserReviewModal" tabindex="-1" aria-labelledby="deleteUserReviewModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteReviewModalLabel">Delete review?</h5>
+        <h5 class="modal-title" id="deleteUserReviewModalLabel">Delete review?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -364,7 +362,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a id="deleteReviewConfirm" href="#" class="btn btn-danger">Delete</a>
+        <a id="deleteUserReviewConfirm" href="#" class="btn btn-danger">Delete</a>
       </div>
     </div>
   </div>

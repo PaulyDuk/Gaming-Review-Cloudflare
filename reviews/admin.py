@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Review, Publisher, Developer
+from .models import Review, Publisher, Developer, Comment
 # Register your models here.
 
 class ReviewInline(admin.TabularInline):
@@ -36,3 +36,10 @@ class ReviewAdmin(SummernoteModelAdmin):
     list_filter = ('genre', 'console', 'is_published', 'publisher', 'developer')
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}
+
+@admin.register(Comment)
+class CommentAdmin(SummernoteModelAdmin):
+    summernote_fields = ('body',)
+    list_display = ('author', 'Review', 'created_on', 'approved')
+    list_filter = ('approved', 'created_on')
+    search_fields = ('author__username', 'body')

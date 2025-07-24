@@ -3,8 +3,8 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db.models import Avg
-from .models import Review, Publisher, Developer, Comment, UserReview
-from .forms import CommentForm, UserReviewForm
+from .models import Review, Publisher, Developer, UserComment, UserReview
+from .forms import UserCommentForm, UserReviewForm
 
 
 # Create your views here.
@@ -32,8 +32,8 @@ def review_details(request, slug):
 
     queryset = Review.objects.filter(is_published=True)
     review = get_object_or_404(queryset, slug=slug)
-    comments = review.comments.all().order_by("-created_on")
-    comment_count = review.comments.filter(approved=True).count()
+    user_comments = review.user_comments.all().order_by("-created_on")
+    comment_count = review.user_comments.filter(approved=True).count()
 
     # Get user reviews
     user_reviews = review.user_reviews.all().order_by("-created_on")
@@ -54,22 +54,22 @@ def review_details(request, slug):
         ).exists()
 
     # Initialize forms for both GET and POST requests
-    comment_form = CommentForm()
+    user_comment_form = UserCommentForm()
     user_review_form = UserReviewForm()
 
     if request.method == "POST":
         if 'comment_submit' in request.POST:
-            comment_form = CommentForm(data=request.POST)
-            if comment_form.is_valid():
-                comment = comment_form.save(commit=False)
-                comment.author = request.user
-                comment.review = review
-                comment.save()
+            user_comment_form = UserCommentForm(data=request.POST)
+            if user_comment_form.is_valid():
+                user_comment = user_comment_form.save(commit=False)
+                user_comment.author = request.user
+                user_comment.review = review
+                user_comment.save()
                 messages.add_message(
                     request, messages.SUCCESS,
                     'Comment submitted and awaiting approval'
                 )
-                comment_form = CommentForm()
+                user_comment_form = UserCommentForm()
 
         elif 'review_submit' in request.POST and not user_has_reviewed:
             user_review_form = UserReviewForm(data=request.POST)
@@ -90,9 +90,9 @@ def review_details(request, slug):
         "reviews/review_detail.html",
         {
             "review": review,
-            "comments": comments,
+            "user_comments": user_comments,
             "comment_count": comment_count,
-            "comment_form": comment_form,
+            "user_comment_form": user_comment_form,
             "user_reviews": user_reviews,
             "user_review_count": user_review_count,
             "average_review_score": average_review_score,
@@ -102,22 +102,22 @@ def review_details(request, slug):
     )
 
 
-def comment_edit(request, slug, comment_id):
+def user_comment_edit(request, slug, comment_id):
     """
-    view to edit comments
+    view to edit user comments
     """
     if request.method == "POST":
 
         queryset = Review.objects.filter(is_published=True)
         review = get_object_or_404(queryset, slug=slug)
-        comment = get_object_or_404(Comment, pk=comment_id)
-        comment_form = CommentForm(data=request.POST, instance=comment)
+        user_comment = get_object_or_404(UserComment, pk=comment_id)
+        user_comment_form = UserCommentForm(data=request.POST, instance=user_comment)
 
-        if comment_form.is_valid() and comment.author == request.user:
-            comment = comment_form.save(commit=False)
-            comment.review = review
-            comment.approved = False
-            comment.save()
+        if user_comment_form.is_valid() and user_comment.author == request.user:
+            user_comment = user_comment_form.save(commit=False)
+            user_comment.review = review
+            user_comment.approved = False
+            user_comment.save()
             messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
         else:
             messages.add_message(request, messages.ERROR, 'Error updating comment!')
@@ -125,16 +125,16 @@ def comment_edit(request, slug, comment_id):
     return HttpResponseRedirect(reverse('review_detail', args=[slug]))
 
 
-def comment_delete(request, slug, comment_id):
+def user_comment_delete(request, slug, comment_id):
     """
-    view to delete comment
+    view to delete user comment
     """
     queryset = Review.objects.filter(is_published=True)
-    review = get_object_or_404(queryset, slug=slug)  # Changed from 'Review' to 'review'
-    comment = get_object_or_404(Comment, pk=comment_id)
+    review = get_object_or_404(queryset, slug=slug)
+    user_comment = get_object_or_404(UserComment, pk=comment_id)
 
-    if comment.author == request.user:
-        comment.delete()
+    if user_comment.author == request.user:
+        user_comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
@@ -198,3 +198,42 @@ def search_games(request):
         })
 
     return render(request, 'reviews/search_results.html', {'query': query})
+
+
+def user_review_edit(request, slug, review_id):
+    """
+    view to edit user reviews
+    """
+    if request.method == "POST":
+        queryset = Review.objects.filter(is_published=True)
+        review = get_object_or_404(queryset, slug=slug)
+        user_review = get_object_or_404(UserReview, pk=review_id)
+        user_review_form = UserReviewForm(data=request.POST, instance=user_review)
+
+        if user_review_form.is_valid() and user_review.user == request.user:
+            user_review = user_review_form.save(commit=False)
+            user_review.game = review
+            user_review.approved = False
+            user_review.save()
+            messages.add_message(request, messages.SUCCESS, 'Review Updated!')
+        else:
+            messages.add_message(request, messages.ERROR, 'Error updating review!')
+
+    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
+
+def user_review_delete(request, slug, review_id):
+    """
+    view to delete user review
+    """
+    queryset = Review.objects.filter(is_published=True)
+    review = get_object_or_404(queryset, slug=slug)
+    user_review = get_object_or_404(UserReview, pk=review_id)
+
+    if user_review.user == request.user:
+        user_review.delete()
+        messages.add_message(request, messages.SUCCESS, 'Review deleted!')
+    else:
+        messages.add_message(request, messages.ERROR, 'You can only delete your own reviews!')
+
+    return HttpResponseRedirect(reverse('review_detail', args=[slug]))

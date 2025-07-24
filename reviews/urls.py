@@ -8,7 +8,11 @@ urlpatterns = [
     path('developer/<int:developer_id>/', views.developer_games, name='developer_games'),
     path('<slug:slug>/', views.review_details, name='review_detail'),
     path('<slug:slug>/edit_comment/<int:comment_id>',
-         views.comment_edit, name='comment_edit'),
+         views.user_comment_edit, name='user_comment_edit'),
     path('<slug:slug>/delete_comment/<int:comment_id>',
-         views.comment_delete, name='comment_delete'),
+         views.user_comment_delete, name='user_comment_delete'),
+    path('<slug:slug>/edit_review/<int:review_id>',
+         views.user_review_edit, name='user_review_edit'),
+    path('<slug:slug>/delete_review/<int:review_id>',
+         views.user_review_delete, name='user_review_delete'),
 ]

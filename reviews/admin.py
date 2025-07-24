@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Review, Publisher, Developer, Comment, UserReview
+from .models import Review, Publisher, Developer, UserComment, UserReview
 # Register your models here.
 
 
@@ -57,8 +57,8 @@ class ReviewAdmin(SummernoteModelAdmin):
     list_per_page = 25
 
 
-@admin.register(Comment)
-class CommentAdmin(admin.ModelAdmin):
+@admin.register(UserComment)
+class UserCommentAdmin(admin.ModelAdmin):
     list_display = ('author', 'body', 'review', 'created_on', 'approved')
     list_filter = ('approved', 'created_on')
     search_fields = ('author__username', 'body')

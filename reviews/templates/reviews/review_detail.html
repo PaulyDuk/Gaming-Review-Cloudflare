@@ -190,28 +190,28 @@
                 <div class="col-md-8 card mb-4 mt-3">
                     <div class="card-body">
                         <h3>Comments</h3>
-                      {% if comments %}
-                        {% for comment in comments %}
+                      {% if user_comments %}
+                        {% for user_comment in user_comments %}
                         <div class="p-2 comments
-                          {% if not comment.approved and comment.author == user %}
-                          faded{% elif not comment.approved %} d-none{% endif %}">
+                          {% if not user_comment.approved and user_comment.author == user %}
+                          faded{% elif not user_comment.approved %} d-none{% endif %}">
                           <p class="font-weight-bold">
-                            {{ comment.author }}
+                            {{ user_comment.author }}
                             <span class="font-weight-normal">
-                              {{ comment.created_on }}
+                              {{ user_comment.created_on }}
                             </span> wrote:
                           </p>
-                          <div id="comment{{ comment.id }}">
-                            {{ comment.body | linebreaks }}
+                          <div id="user_comment{{ user_comment.id }}">
+                            {{ user_comment.body | linebreaks }}
                           </div>
-                          {% if not comment.approved and comment.author == user %}
+                          {% if not user_comment.approved and user_comment.author == user %}
                           <p class="approval">
                             This comment is awaiting approval
                           </p>
                           {% endif %}
-                            {% if user.is_authenticated and comment.author == user %}
-                                <button class="btn btn-delete" comment_id="{{ comment.id }}">Delete</button>
-                                <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
+                            {% if user.is_authenticated and user_comment.author == user %}
+                                <button class="btn btn-delete-user-comment" comment_id="{{ user_comment.id }}">Delete</button>
+                                <button class="btn btn-edit-user-comment" comment_id="{{ user_comment.id }}">Edit</button>
                             {% endif %}
                         </div>
                         {% endfor %}
@@ -227,10 +227,10 @@
                         {% if user.is_authenticated %}
                         <h3>Leave a comment:</h3>
                         <p>Posting as: {{ user.username }}</p>
-                        <form id="commentForm" method="post" style="margin-top: 1.3em;">
-                          {{ comment_form | crispy }}
+                        <form id="userCommentForm" method="post" style="margin-top: 1.3em;">
+                          {{ user_comment_form | crispy }}
                           {% csrf_token %}
-                          <button id="submitButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
+                          <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
                         </form>
                         {% else %}
                         <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
@@ -304,12 +304,12 @@
     </div>
 </div>
 
-<!-- Delete confirmation modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+<!-- Delete user comment confirmation modal -->
+<div class="modal fade" id="deleteUserCommentModal" tabindex="-1" aria-labelledby="deleteUserCommentModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <h5 class="modal-title" id="deleteUserCommentModalLabel">Delete comment?</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -318,7 +318,27 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+        <a id="deleteUserCommentConfirm" href="#" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete review confirmation modal -->
+<div class="modal fade" id="deleteReviewModal" tabindex="-1" aria-labelledby="deleteReviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteReviewModalLabel">Delete review?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your review?
+        This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a id="deleteReviewConfirm" href="#" class="btn btn-danger">Delete</a>
       </div>
     </div>
   </div>
@@ -326,5 +346,6 @@
 {% endblock content %}
 
 {% block extras %}
-<script src="{% static 'js/comments.js' %}"></script>
+<script src="{% static 'js/user_comments.js' %}"></script>
+<script src="{% static 'js/user_reviews.js' %}"></script>
 {% endblock %}

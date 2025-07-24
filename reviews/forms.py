@@ -1,10 +1,10 @@
 from django import forms
-from .models import Comment, UserReview
+from .models import UserComment, UserReview
 
 
-class CommentForm(forms.ModelForm):
+class UserCommentForm(forms.ModelForm):
     class Meta:
-        model = Comment
+        model = UserComment
         fields = ('body',)
         widgets = {
             'body': forms.Textarea(attrs={

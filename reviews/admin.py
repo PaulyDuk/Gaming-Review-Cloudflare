@@ -73,6 +73,14 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(UserReview)
 class UserReviewAdmin(admin.ModelAdmin):
-    list_display = ('user', 'game', 'rating', 'created_on')
-    list_filter = ('rating', 'created_on')
-    search_fields = ('user__username', 'game__title')
+    list_display = ('user', 'game', 'rating', 'created_on', 'approved')
+    list_filter = ('rating', 'approved', 'created_on')
+    search_fields = ('user__username', 'game__title', 'review_text')
+    date_hierarchy = 'created_on'
+    ordering = ('-created_on',)
+    list_per_page = 25
+    actions = ['approve_reviews']
+
+    def approve_reviews(self, request, queryset):
+        queryset.update(approved=True)
+    approve_reviews.short_description = "Mark selected reviews as approved"

@@ -1,0 +1,330 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="masthead">
+    <div class="container">
+        <div class="row g-0">
+            <div class="col-md-6 masthead-text">
+                <h1 class="post-title">{{ review.title }}</h1>
+                <p class="post-subtitle">Reviewed by {{ review.reviewed_by }} on {{ review.created_on }}</p>
+            </div>
+            <div class="d-none d-md-block col-md-6 masthead-image">
+                <div class="image-container">
+                    {% if "placeholder" in review.featured_image.url %}
+                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default image">
+                    {% else %}
+                        <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Main content - takes up 2/3 of the width on large screens -->
+        <div class="col-lg-8">
+            <!-- Review Section -->
+            <div class="row">
+                <div class="col-12 card mb-4 mt-3">
+                    <div class="card-body">
+                        <h2>Review</h2>
+                        <p class="card-text">{{ review.review_text | safe }}</p>
+                        <hr>
+                        <h2>Score: {{ review.review_score | safe }}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - shows on large screens, hidden on small -->
+        <div class="col-lg-4 d-none d-lg-block">
+            <!-- Game Info  -->
+            <div class="card mb-4 mt-3">
+                <div class="card-body">
+                    <h3>Game Info</h3>
+                    {% if review.title %}
+                        <p><strong>Title:</strong> {{ review.title }}</p>
+                    {% endif %}
+                    {% if review.console %}
+                        <p><strong>Reviewed on:</strong> {{ review.console }}</p>
+                    {% endif %}
+                    {% if review.genre %}
+                        <p><strong>Genre:</strong> {{ review.get_genre_display }}</p>
+                    {% endif %}
+                    {% if review.release_date %}
+                        <p><strong>Release Date:</strong> {{ review.release_date }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Developer Information -->
+            <div class="card mb-4 mt-3">
+                <div class="card-body">
+                    <h3>Developer</h3>
+                    {% if review.developer %}
+                        <h5>{{ review.developer.name }}</h5>
+                        {% if review.developer.description %}
+                            <p>{{ review.developer.description|truncatewords:30|safe }}</p>
+                        {% endif %}
+                        {% if review.developer.founded_year %}
+                            <p><strong>Founded:</strong> {{ review.developer.founded_year }}</p>
+                        {% endif %}
+                        {% if review.developer.headquarters %}
+                            <p><strong>Headquarters:</strong> {{ review.developer.headquarters }}</p>
+                        {% endif %}
+                        <a href="{% url 'developer_games' developer_id=review.developer.id %}" class="btn btn-outline-primary">View All Games</a>
+                    {% else %}
+                        <p>No developer information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Publisher Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Publisher</h3>
+                    {% if review.publisher %}
+                        <h5>{{ review.publisher.name }}</h5>
+                        {% if review.publisher.description %}
+                            <p>{{ review.publisher.description|truncatewords:30|safe }}</p>
+                        {% endif %}
+                        {% if review.publisher.founded_year %}
+                            <p><strong>Founded:</strong> {{ review.publisher.founded_year }}</p>
+                        {% endif %}
+                        {% if review.publisher.headquarters %}
+                            <p><strong>Headquarters:</strong> {{ review.publisher.headquarters }}</p>
+                        {% endif %}
+                        <a href="{% url 'publisher_games' publisher_id=review.publisher.id %}" class="btn btn-outline-primary">View All Games</a>
+                    {% else %}
+                        <p>No publisher information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer & Publisher Info for small screens - shows below review on small screens only -->
+    <div class="row d-lg-none">
+        <div class="col-12">
+            <!-- Game Info -->
+            <div class="card mb-4 mt-3">
+                <div class="card-body">
+                    <h3>Game Info</h3>
+                    <h5>{{ review.title }}</h5>
+                    {% if review.console %}
+                        <p><strong>Console:</strong> {{ review.console }}</p>
+                    {% endif %}
+                    {% if review.genre %}
+                        <p><strong>Genre:</strong> {{ review.get_genre_display }}</p>
+                    {% endif %}
+                    {% if review.release_date %}
+                        <p><strong>Release Date:</strong> {{ review.release_date }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Developer Information -->
+            <div class="card mb-4 mt-3">
+                <div class="card-body">
+                    <h3>Developer</h3>
+                    {% if review.developer %}
+                        <h5>{{ review.developer.name }}</h5>
+                        {% if review.developer.description %}
+                            <p>{{ review.developer.description|truncatewords:30|safe }}</p>
+                        {% endif %}
+                        {% if review.developer.founded_year %}
+                            <p><strong>Founded:</strong> {{ review.developer.founded_year }}</p>
+                        {% endif %}
+                        {% if review.developer.headquarters %}
+                            <p><strong>Headquarters:</strong> {{ review.developer.headquarters }}</p>
+                        {% endif %}
+                        <a href="{% url 'developer_games' developer_id=review.developer.id %}" class="btn btn-outline-primary">View All Games</a>
+                    {% else %}
+                        <p>No developer information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Publisher Information -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h3>Publisher</h3>
+                    {% if review.publisher %}
+                        <h5>{{ review.publisher.name }}</h5>
+                        {% if review.publisher.description %}
+                            <p>{{ review.publisher.description|truncatewords:30|safe }}</p>
+                        {% endif %}
+                        {% if review.publisher.founded_year %}
+                            <p><strong>Founded:</strong> {{ review.publisher.founded_year }}</p>
+                        {% endif %}
+                        {% if review.publisher.headquarters %}
+                            <p><strong>Headquarters:</strong> {{ review.publisher.headquarters }}</p>
+                        {% endif %}
+                        <a href="{% url 'publisher_games' publisher_id=review.publisher.id %}" class="btn btn-outline-primary">View All Games</a>
+                    {% else %}
+                        <p>No publisher information available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments and User Reviews - Full width below main content on all screens -->
+    <div class="row">
+        <div class="col-12">
+            <!-- Comments count -->
+            <div class="row">
+                <div class="col-12">
+                    <strong class="text-secondary">
+                        <i class="far fa-comments"></i> {{ comment_count }} comments
+                    </strong>
+                    <hr>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="row">
+                <div class="col-md-8 card mb-4 mt-3">
+                    <div class="card-body">
+                        <h3>Comments</h3>
+                      {% if comments %}
+                        {% for comment in comments %}
+                        <div class="p-2 comments
+                          {% if not comment.approved and comment.author == user %}
+                          faded{% elif not comment.approved %} d-none{% endif %}">
+                          <p class="font-weight-bold">
+                            {{ comment.author }}
+                            <span class="font-weight-normal">
+                              {{ comment.created_on }}
+                            </span> wrote:
+                          </p>
+                          <div id="comment{{ comment.id }}">
+                            {{ comment.body | linebreaks }}
+                          </div>
+                          {% if not comment.approved and comment.author == user %}
+                          <p class="approval">
+                            This comment is awaiting approval
+                          </p>
+                          {% endif %}
+                            {% if user.is_authenticated and comment.author == user %}
+                                <button class="btn btn-delete" comment_id="{{ comment.id }}">Delete</button>
+                                <button class="btn btn-edit" comment_id="{{ comment.id }}">Edit</button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No comments yet. Be the first to comment on this game!</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="col-md-4 card mb-4 mt-3">
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                        <h3>Leave a comment:</h3>
+                        <p>Posting as: {{ user.username }}</p>
+                        <form id="commentForm" method="post" style="margin-top: 1.3em;">
+                          {{ comment_form | crispy }}
+                          {% csrf_token %}
+                          <button id="submitButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
+                        </form>
+                        {% else %}
+                        <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Reviews Section -->
+            <div class="row">
+                <div class="col-12">
+                    <strong class="text-secondary">
+                        <i class="fas fa-star"></i> {{ user_review_count }} User Review{% if user_review_count != 1 %}s{% endif %}
+                        {% if average_review_score %}
+                            - Average Score: <span class="badge bg-warning text-dark">{{ average_review_score }}/10</span>
+                        {% endif %}
+                    </strong>
+                    <hr>
+                </div>
+            </div>
+
+            <!-- User Reviews Display -->
+            <div class="row">
+                <div class="col-md-8 card mb-4 mt-3">
+                    <div class="card-body">
+                        <h3>User Reviews</h3>
+                        {% if user_reviews %}
+                            {% for user_review in user_reviews %}
+                            <div class="p-2 border-bottom mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <p class="font-weight-bold mb-0">
+                                        {{ user_review.user.username }}
+                                    </p>
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
+                                        <small class="text-muted">{{ user_review.created_on }}</small>
+                                    </div>
+                                </div>
+                                <p class="mb-0">{{ user_review.review_text|linebreaks }}</p>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No user reviews yet. Be the first to review this game!</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- User Review Form -->
+                <div class="col-md-4 card mb-4 mt-3">
+                    <div class="card-body">
+                        {% if user.is_authenticated %}
+                            {% if not user_has_reviewed %}
+                                <h3>Write a Review:</h3>
+                                <p>Posting as: {{ user.username }}</p>
+                                <form method="post" style="margin-top: 1.3em;">
+                                    {{ user_review_form | crispy }}
+                                    {% csrf_token %}
+                                    <button name="review_submit" type="submit" class="btn btn-primary btn-lg">Submit Review</button>
+                                </form>
+                            {% else %}
+                                <h3>Your Review</h3>
+                                <p class="text-info">You have already reviewed this game. Thank you for your feedback!</p>
+                            {% endif %}
+                        {% else %}
+                            <p><a href="{% url 'account_login' %}">Log in</a> to write a review</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Delete comment?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete your comment?
+        This action cannot be undone.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a id="deleteConfirm" href="#" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extras %}
+<script src="{% static 'js/comments.js' %}"></script>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
-from .models import Review, Publisher, Developer, Comment
+from .models import Review, Publisher, Developer, Comment, UserReview
 # Register your models here.
 
 
@@ -70,3 +70,9 @@ class CommentAdmin(admin.ModelAdmin):
     def approve_comments(self, request, queryset):
         queryset.update(approved=True)
     approve_comments.short_description = "Mark selected comments as approved"
+
+@admin.register(UserReview)
+class UserReviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'game', 'rating', 'created_on')
+    list_filter = ('rating', 'created_on')
+    search_fields = ('user__username', 'game__title')

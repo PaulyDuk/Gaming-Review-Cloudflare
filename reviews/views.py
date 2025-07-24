@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
+from django.shortcuts import render
+from django.views import generic
+from .models import Review, Publisher, Developer, Comment
 
 
-def my_reviews(request):
-    return HttpResponse("Hello, Reviews!")
+class ReviewList(generic.ListView):
+    queryset = Review.objects.filter(is_published=True)
+    template_name = "reviews/index.html"
+    paginate_by = 6

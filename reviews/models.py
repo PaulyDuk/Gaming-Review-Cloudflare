@@ -142,3 +142,22 @@ class Comment(models.Model):
     def __str__(self):
         review_title = self.review.title if self.review else "Unknown Review"
         return f"Comment by {self.author} on {review_title}"
+
+class UserReview(models.Model):
+    game = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name='user_reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.IntegerField(
+        choices=[(i, i) for i in range(1, 11)])  # 1-10 rating
+    review_text = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+    helpful_votes = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        unique_together = ('game', 'user')  # One review per user per game
+        verbose_name = 'User Review'
+        verbose_name_plural = 'User Reviews'
+
+    def __str__(self):
+        return f"{self.user.username}'s review of {self.game.title}"

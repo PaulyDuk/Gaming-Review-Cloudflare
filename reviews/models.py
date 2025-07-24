@@ -115,14 +115,18 @@ class Review(models.Model):
         verbose_name_plural = 'Games'
 
     def __str__(self):
-        return f"{self.title} | Score:  {self.review_score}/10"
+        if self.review_score is not None:
+            score_display = f"{self.review_score}/10"
+        else:
+            score_display = "No Score"
+        return f"{self.title} | Score: {score_display}"
 
     def number_of_likes(self):
         return self.likes.count()
     
 
 class Comment(models.Model):
-    Review = models.ForeignKey(
+    review = models.ForeignKey(
         Review, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="commenter")
@@ -136,4 +140,5 @@ class Comment(models.Model):
         verbose_name_plural = 'User Comments'
 
     def __str__(self):
-        return f"Comment: {self.body} by {self.author} on {self.Review.title}"
+        review_title = self.review.title if self.review else "Unknown Review"
+        return f"Comment by {self.author} on {review_title}"

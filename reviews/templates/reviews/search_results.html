@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mt-3 left">
+            <div class="row">
+                <div class="col-md-12">
+                    {% if query %}
+                        <h1>Search Results for "{{ query }}"</h1>
+                        
+                        {% if games or publishers or developers %}
+                            <!-- Games Section -->
+                            {% if games %}
+                                <h2 class="mt-4">Games ({{ games.count }})</h2>
+                                <div class="row">
+                                    {% for game in games %}
+                                        <div class="col-md-4 mb-4">
+                                            <div class="card h-100">
+                                                <div class="image-container">
+                                                    {% if "placeholder" in game.featured_image.url %}
+                                                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default image">
+                                                    {% else %}
+                                                        <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
+                                                    {% endif %}
+                                                </div>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ game.title }}</h5>
+                                                    <p class="card-text">{{ game.description|truncatewords:50|safe }}</p>
+                                                    <p class="card-text"><small class="text-muted">
+                                                        Score: {{ game.review_score|default:"Not rated" }}/10
+                                                    </small></p>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <a href="{% url 'review_detail' slug=game.slug %}" class="btn btn-primary">Read Review</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <!-- Publishers Section -->
+                            {% if publishers %}
+                                <h2 class="mt-4">Publishers ({{ publishers.count }})</h2>
+                                <div class="row">
+                                    {% for publisher in publishers %}
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ publisher.name }}</h5>
+                                                    <p class="card-text">{{ publisher.description|truncatewords:50|safe }}</p>
+                                                    <a href="{% url 'publisher_games' publisher_id=publisher.id %}" class="btn btn-outline-primary">View Games</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            <!-- Developers Section -->
+                            {% if developers %}
+                                <h2 class="mt-4">Developers ({{ developers.count }})</h2>
+                                <div class="row">
+                                    {% for developer in developers %}
+                                        <div class="col-md-6 mb-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ developer.name }}</h5>
+                                                    <p class="card-text">{{ developer.description|truncatewords:50|safe }}</p>
+                                                    <a href="{% url 'developer_games' developer_id=developer.id %}" class="btn btn-outline-primary">View Games</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-info mt-4" role="alert">
+                                <h4 class="alert-heading">No results found</h4>
+                                <p>Sorry, no games, publishers, or developers match your search for "{{ query }}".</p>
+                                <hr>
+                                <p class="mb-0">Try searching with different keywords or check your spelling.</p>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-warning mt-4" role="alert">
+                            <h4 class="alert-heading">Enter a search term</h4>
+                            <p>Please enter a search term to find games, publishers, or developers.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

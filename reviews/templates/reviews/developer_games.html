@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 mt-3 left">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-body">
+                    <h1>{{ developer.name }}</h1>
+                    {% if developer.description %}
+                        <p class="lead">{{ developer.description | safe }}</p>
+                    {% endif %}
+                    </div>
+                    {% if games %}
+                    
+                        <h2 class="mt-4">Games ({{ games.count }})</h2>
+                        <div class="row">
+                            {% for game in games %}
+                                <div class="col-md-4 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <div class="image-container">
+                                                <a href="{% url 'review_detail' slug=game.slug %}">
+                                                    {% if "placeholder" in game.featured_image.url %}
+                                                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default image">
+                                                    {% else %}
+                                                        <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
+                                                    {% endif %}
+                                                </a>
+                                                <div class="image-flash">
+                                                    <p class="author">{{ game.console }}</p>
+                                                </div>
+                                            </div>
+                                            <a href="{% url 'review_detail' slug=game.slug %}" class="post-link">
+                                                <h2 class="card-title">{{ game.title }}</h2>
+                                                <p class="card-text">{{ game.description|striptags|truncatewords:50 }}</p>
+                                            </a>
+                                            <hr />
+                                            <p class="card-text text-muted h6">Reviewed on: {{ game.created_on}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info mt-4" role="alert">
+                            <h4 class="alert-heading">No games found</h4>
+                            <p>{{ developer.name }} doesn't have any published games yet.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -123,7 +123,7 @@ class Review(models.Model):
 
     def number_of_likes(self):
         return self.likes.count()
-    
+
 
 class UserComment(models.Model):
     review = models.ForeignKey(
@@ -142,6 +142,7 @@ class UserComment(models.Model):
     def __str__(self):
         review_title = self.review.title if self.review else "Unknown Review"
         return f"Comment by {self.author} on {review_title}"
+
 
 class UserReview(models.Model):
     game = models.ForeignKey(

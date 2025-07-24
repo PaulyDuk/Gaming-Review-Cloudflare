@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from .models import Review, Publisher, Developer, UserComment, UserReview
 from .forms import UserCommentForm, UserReviewForm
 
@@ -35,14 +35,26 @@ def review_details(request, slug):
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
 
-    # Get user reviews
-    user_reviews = review.user_reviews.all().order_by("-created_on")
-    user_review_count = user_reviews.count()
+    # Get user reviews - show approved ones + current user's unapproved ones
+    if request.user.is_authenticated:
+        user_reviews = review.user_reviews.filter(
+            Q(approved=True) | Q(user=request.user)
+        ).order_by("-created_on")
+    else:
+        user_reviews = review.user_reviews.filter(
+            approved=True
+        ).order_by("-created_on")
+    
+    # Count only approved reviews for the public count
+    user_review_count = review.user_reviews.filter(approved=True).count()
 
-    # Calculate average review score
+    # Calculate average review score - only from approved reviews
     average_review_score = None
     if user_review_count > 0:
-        average_review_score = user_reviews.aggregate(Avg('rating'))['rating__avg']
+        approved_reviews = review.user_reviews.filter(approved=True)
+        average_review_score = approved_reviews.aggregate(
+            Avg('rating')
+        )['rating__avg']
         # Round to 1 decimal place
         average_review_score = round(average_review_score, 1)
 
@@ -80,7 +92,7 @@ def review_details(request, slug):
                 user_review.save()
                 messages.add_message(
                     request, messages.SUCCESS,
-                    'Your review has been submitted successfully!'
+                    'Review submitted and awaiting approval'
                 )
                 user_review_form = UserReviewForm()
                 user_has_reviewed = True
@@ -111,16 +123,23 @@ def user_comment_edit(request, slug, comment_id):
         queryset = Review.objects.filter(is_published=True)
         review = get_object_or_404(queryset, slug=slug)
         user_comment = get_object_or_404(UserComment, pk=comment_id)
-        user_comment_form = UserCommentForm(data=request.POST, instance=user_comment)
+        user_comment_form = UserCommentForm(
+            data=request.POST, instance=user_comment
+        )
 
-        if user_comment_form.is_valid() and user_comment.author == request.user:
+        if (user_comment_form.is_valid() and
+                user_comment.author == request.user):
             user_comment = user_comment_form.save(commit=False)
             user_comment.review = review
             user_comment.approved = False
             user_comment.save()
-            messages.add_message(request, messages.SUCCESS, 'Comment Updated!')
+            messages.add_message(
+                request, messages.SUCCESS, 'Comment Updated!'
+            )
         else:
-            messages.add_message(request, messages.ERROR, 'Error updating comment!')
+            messages.add_message(
+                request, messages.ERROR, 'Error updating comment!'
+            )
 
     return HttpResponseRedirect(reverse('review_detail', args=[slug]))
 
@@ -133,11 +152,73 @@ def user_comment_delete(request, slug, comment_id):
     review = get_object_or_404(queryset, slug=slug)
     user_comment = get_object_or_404(UserComment, pk=comment_id)
 
+    # Ensure the comment belongs to this review
+    if user_comment.review != review:
+        messages.add_message(request, messages.ERROR, 'Comment not found!')
+        return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
     if user_comment.author == request.user:
         user_comment.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own comments!')
+        messages.add_message(
+            request, messages.ERROR, 'You can only delete your own comments!'
+        )
+
+    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
+
+def user_review_edit(request, slug, review_id):
+    """
+    view to edit user reviews
+    """
+    if request.method == "POST":
+
+        queryset = Review.objects.filter(is_published=True)
+        review = get_object_or_404(queryset, slug=slug)
+        user_review = get_object_or_404(UserReview, pk=review_id)
+        user_review_form = UserReviewForm(
+            data=request.POST, instance=user_review
+        )
+
+        # Ensure the review belongs to this game
+        if user_review.game != review:
+            messages.add_message(request, messages.ERROR, 'Review not found!')
+            return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
+        if user_review_form.is_valid() and user_review.user == request.user:
+            user_review = user_review_form.save(commit=False)
+            user_review.game = review
+            user_review.save()
+            messages.add_message(request, messages.SUCCESS, 'Review Updated!')
+        else:
+            messages.add_message(
+                request, messages.ERROR, 'Error updating review!'
+            )
+
+    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
+
+def user_review_delete(request, slug, review_id):
+    """
+    view to delete user review
+    """
+    queryset = Review.objects.filter(is_published=True)
+    review = get_object_or_404(queryset, slug=slug)
+    user_review = get_object_or_404(UserReview, pk=review_id)
+
+    # Ensure the review belongs to this game
+    if user_review.game != review:
+        messages.add_message(request, messages.ERROR, 'Review not found!')
+        return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+
+    if user_review.user == request.user:
+        user_review.delete()
+        messages.add_message(request, messages.SUCCESS, 'Review deleted!')
+    else:
+        messages.add_message(
+            request, messages.ERROR, 'You can only delete your own reviews!'
+        )
 
     return HttpResponseRedirect(reverse('review_detail', args=[slug]))
 
@@ -198,42 +279,3 @@ def search_games(request):
         })
 
     return render(request, 'reviews/search_results.html', {'query': query})
-
-
-def user_review_edit(request, slug, review_id):
-    """
-    view to edit user reviews
-    """
-    if request.method == "POST":
-        queryset = Review.objects.filter(is_published=True)
-        review = get_object_or_404(queryset, slug=slug)
-        user_review = get_object_or_404(UserReview, pk=review_id)
-        user_review_form = UserReviewForm(data=request.POST, instance=user_review)
-
-        if user_review_form.is_valid() and user_review.user == request.user:
-            user_review = user_review_form.save(commit=False)
-            user_review.game = review
-            user_review.approved = False
-            user_review.save()
-            messages.add_message(request, messages.SUCCESS, 'Review Updated!')
-        else:
-            messages.add_message(request, messages.ERROR, 'Error updating review!')
-
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
-
-
-def user_review_delete(request, slug, review_id):
-    """
-    view to delete user review
-    """
-    queryset = Review.objects.filter(is_published=True)
-    review = get_object_or_404(queryset, slug=slug)
-    user_review = get_object_or_404(UserReview, pk=review_id)
-
-    if user_review.user == request.user:
-        user_review.delete()
-        messages.add_message(request, messages.SUCCESS, 'Review deleted!')
-    else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own reviews!')
-
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))

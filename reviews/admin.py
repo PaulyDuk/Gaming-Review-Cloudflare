@@ -71,6 +71,7 @@ class UserCommentAdmin(admin.ModelAdmin):
         queryset.update(approved=True)
     approve_comments.short_description = "Mark selected comments as approved"
 
+
 @admin.register(UserReview)
 class UserReviewAdmin(admin.ModelAdmin):
     list_display = ('user', 'game', 'rating', 'created_on', 'approved')

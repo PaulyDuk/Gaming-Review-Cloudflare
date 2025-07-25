@@ -4,6 +4,7 @@ from django.urls import path
 urlpatterns = [
     path('', views.ReviewList.as_view(), name='home'),
     path('search/', views.search_games, name='search_games'),
+    path('accounts/profile/', views.profile, name='profile'),
     path('publisher/<int:publisher_id>/', views.publisher_games, name='publisher_games'),
     path('developer/<int:developer_id>/', views.developer_games, name='developer_games'),
     path('<slug:slug>/', views.review_details, name='review_detail'),

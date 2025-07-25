@@ -1,5 +1,10 @@
 """
-URL configuration for config project.
+URL configuratiurlpatterns = [
+    path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    path('summernote/', include('django_summernote.urls')),
+    path('', include('reviews.urls'), name='reviews-urls'),
+]config project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -20,6 +25,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')),
     path('summernote/', include('django_summernote.urls')),
     path("", include("reviews.urls"), name="review-urls"),

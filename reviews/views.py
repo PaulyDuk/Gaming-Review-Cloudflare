@@ -3,6 +3,7 @@ from django.views import generic
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Q
+from django.contrib.auth.decorators import login_required
 from .models import Review, Publisher, Developer, UserComment, UserReview
 from .forms import UserCommentForm, UserReviewForm
 
@@ -280,3 +281,16 @@ def search_games(request):
         })
 
     return render(request, 'reviews/search_results.html', {'query': query})
+
+
+@login_required
+def profile(request):
+    """Display user profile with account management links"""
+    user_reviews = UserReview.objects.filter(user=request.user).order_by('-created_on')
+    user_comments = UserComment.objects.filter(author=request.user).order_by('-created_on')
+    
+    context = {
+        'user_reviews': user_reviews,
+        'user_comments': user_comments,
+    }
+    return render(request, 'account/profile.html', context)

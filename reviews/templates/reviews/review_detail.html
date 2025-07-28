@@ -83,33 +83,28 @@
             <!-- Developer Card -->
             <div class="card mb-4 mt-3 mt-lg-0">
                 <div class="card-body">
-                    <h3>Developer</h3>
-                    {% if review.developer %}
-                        {% if review.developer.id %}
-                            <a href="{% url 'developer:developer_games' developer_id=review.developer.id %}" class="text-decoration-none">
-                                <h5 class="text-primary">{{ review.developer.name }}</h5>
-                            </a>
-                        {% else %}
-                            <h5 class="text-primary">{{ review.developer.name }}</h5>
-                        {% endif %}
-                        {% if review.developer.description %}
-                            <p>{{ review.developer.description|truncatewords:50|safe }}</p>
-                        {% endif %}
-                        {% if review.developer.founded_year %}
-                            <p><strong>Founded:</strong> {{ review.developer.founded_year }}</p>
-                        {% endif %}
-                        {% if review.developer.headquarters %}
-                            <p><strong>Headquarters:</strong> {{ review.developer.headquarters }}</p>
-                        {% endif %}
-                        {% if review.developer.website %}
-                            <p class="card-text">
-                                <a href="{{ review.developer.website }}" target="_blank" class="text-primary">
-                                    <i class="fas fa-external-link-alt"></i> Visit Developer Website
-                                </a>
-                            </p>
-                        {% endif %}
-                    {% else %}
-                        <p>No developer information available.</p>
+                    <h3>Developer Info</h3>
+                    {% if game_developers %}
+                        {% for developer in game_developers %}
+                            <div class="mb-3">
+                                {% if developer.name %}
+                                    <h5 class="text-primary">{{ developer.name }}</h5>
+                                {% endif %}
+                                {% if developer.description %}
+                                    <p class="text-muted">{{ developer.description|safe }}</p>
+                                {% endif %}
+                                {% if developer.founded_year %}
+                                    <p><strong>Established:</strong> {{ developer.founded_year }}</p>
+                                {% endif %}
+                                {% if developer.website %}
+                                    <p>
+                                        <a href="{{ developer.website }}" target="_blank" class="text-primary">
+                                            <i class="fas fa-external-link-alt"></i> Developer Website
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>
@@ -117,39 +112,32 @@
             <!-- Publisher Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h3>Publisher</h3>
-                    {% if review.publisher %}
-                        {% if review.publisher.id %}
-                            <a href="{% url 'publisher:publisher_games' publisher_id=review.publisher.id %}" class="text-decoration-none">
-                                <h5 class="text-primary">{{ review.publisher.name }}</h5>
-                            </a>
-                        {% else %}
-                            <h5 class="text-primary">{{ review.publisher.name }}</h5>
-                        {% endif %}
-                        {% if review.publisher.description %}
-                            <p>{{ review.publisher.description|truncatewords:50|safe }}</p>
-                        {% endif %}
-                        {% if review.publisher.founded_year %}
-                            <p><strong>Founded:</strong> {{ review.publisher.founded_year }}</p>
-                        {% endif %}
-                        {% if review.publisher.headquarters %}
-                            <p><strong>Headquarters:</strong> {{ review.publisher.headquarters }}</p>
-                        {% endif %}
-                        {% if review.publisher.website %}
-                            <p class="card-text">
-                                <a href="{{ review.publisher.website }}" target="_blank" class="text-primary">
-                                    <i class="fas fa-external-link-alt"></i> Visit Publisher Website
-                                </a>
-                            </p>
-                        {% endif %}
-                    {% else %}
-                        <p>No publisher information available.</p>
+                    <h3>Publisher Info</h3>
+                    {% if game_publishers %}
+                        {% with publisher=game_publishers.0 %}
+                            <div class="mb-3">
+                                {% if publisher.name %}
+                                    <h5 class="text-primary">{{ publisher.name }}</h5>
+                                {% endif %}
+                                {% if publisher.description %}
+                                    <p class="text-muted">{{ publisher.description|safe }}</p>
+                                {% endif %}
+                                {% if publisher.founded_year %}
+                                    <p><strong>Established:</strong> {{ publisher.founded_year }}</p>
+                                {% endif %}
+                                {% if publisher.website %}
+                                    <p>
+                                        <a href="{{ publisher.website }}" target="_blank" class="text-primary">
+                                            <i class="fas fa-external-link-alt"></i> Publisher Website
+                                        </a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% endwith %}
                     {% endif %}
                 </div>
             </div>
-            
         </div>
-        <!-- END OF SIDEBAR COLUMN -->
     </div>
 
     <!-- Comments and User Reviews -->

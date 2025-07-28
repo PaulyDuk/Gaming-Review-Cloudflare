@@ -79,10 +79,12 @@ def review_details(request, slug):
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
 
-    # Get platforms, release dates, and genres from IGDB for this game
+    # Get platforms, release dates, genres, and developers from IGDB for this game
     game_platforms = []
     game_release_dates = []
     game_genres = []
+    game_developers = []
+    game_publishers = []
     try:
         igdb_service = IGDBService()
         platform_data = igdb_service.get_game_platforms_by_name(review.title)
@@ -90,6 +92,10 @@ def review_details(request, slug):
             game_platforms = platform_data['platforms']
         if platform_data and platform_data.get('genres'):
             game_genres = platform_data['genres']
+        if platform_data and platform_data.get('developers'):
+            game_developers = platform_data['developers']
+        if platform_data and platform_data.get('publishers'):
+            game_publishers = platform_data['publishers']
         if (platform_data and
                 platform_data.get('game', {}).get('release_dates')):
             raw_release_dates = platform_data['game']['release_dates']
@@ -176,6 +182,8 @@ def review_details(request, slug):
             "game_platforms": game_platforms,
             "game_release_dates": game_release_dates,
             "game_genres": game_genres,
+            "game_developers": game_developers,
+            "game_publishers": game_publishers,
         },
     )
 

@@ -46,13 +46,16 @@ class IGDBService:
 
 
     def get_game_platforms_by_name(self, game_name):
-        """Get platforms and genres for a game by name (returns first match)"""
+        """Get platforms, genres, developers, and publishers for a game by name
+        (returns first match)"""
         games = self.search_games_with_platforms(game_name, limit=1)
         if games:
             return {
                 'game': games[0],
                 'platforms': games[0]['platforms'],
-                'genres': games[0]['genres']
+                'genres': games[0]['genres'],
+                'developers': games[0]['developers'],
+                'publishers': games[0]['publishers']
             }
         return None
 
@@ -64,7 +67,13 @@ class IGDBService:
         query_string = (
             f'fields id, name, summary, release_dates.date, '
             f'release_dates.platform.name, platforms.id, platforms.name, '
-            f'platforms.abbreviation, cover.url, genres.name; '
+            f'platforms.abbreviation, cover.url, genres.name, '
+            f'involved_companies.company.name, '
+            f'involved_companies.company.description, '
+            f'involved_companies.company.websites.url, '
+            f'involved_companies.company.websites.category, '
+            f'involved_companies.company.start_date, '
+            f'involved_companies.developer, involved_companies.publisher; '
             f'search "{game_name}"; limit {limit};'
         )
 
@@ -79,9 +88,12 @@ class IGDBService:
                     'id': game.get('id'),
                     'name': game.get('name'),
                     'summary': game.get('summary', ''),
-                    'cover_url': game.get('cover', {}).get('url', '') if game.get('cover') else '',
+                    'cover_url': (game.get('cover', {}).get('url', '')
+                                  if game.get('cover') else ''),
                     'platforms': [],
-                    'genres': []
+                    'genres': [],
+                    'developers': [],
+                    'publishers': []
                 }
 
                 # Extract platform information
@@ -102,6 +114,90 @@ class IGDBService:
                             'name': genre.get('name')
                         }
                         formatted_game['genres'].append(genre_info)
+
+                # Extract developer information
+                if 'involved_companies' in game:
+                    for company_data in game['involved_companies']:
+                        if (company_data.get('developer') and
+                                'company' in company_data):
+                            company = company_data['company']
+                            
+                            # Extract website URL
+                            website_url = ''
+                            if 'websites' in company:
+                                for website in company['websites']:
+                                    # Category 1 is official website
+                                    if website.get('category') == 1:
+                                        website_url = website.get('url', '')
+                                        break
+                                # If no official site, take the first one
+                                if not website_url and company['websites']:
+                                    first_site = company['websites'][0]
+                                    website_url = first_site.get('url', '')
+                            
+                            # Convert start_date timestamp to year
+                            founded_year = ''
+                            if company.get('start_date'):
+                                try:
+                                    import datetime
+                                    timestamp = company['start_date']
+                                    # IGDB timestamps are in seconds
+                                    date_obj = datetime.datetime.fromtimestamp(
+                                        timestamp)
+                                    founded_year = date_obj.year
+                                except (ValueError, TypeError):
+                                    founded_year = ''
+                            
+                            developer_info = {
+                                'id': company.get('id'),
+                                'name': company.get('name', ''),
+                                'description': company.get('description', ''),
+                                'website': website_url,
+                                'founded_year': founded_year
+                            }
+                            formatted_game['developers'].append(developer_info)
+
+                # Extract publisher information
+                if 'involved_companies' in game:
+                    for company_data in game['involved_companies']:
+                        if (company_data.get('publisher') and
+                                'company' in company_data):
+                            company = company_data['company']
+                            
+                            # Extract website URL
+                            website_url = ''
+                            if 'websites' in company:
+                                for website in company['websites']:
+                                    # Category 1 is official website
+                                    if website.get('category') == 1:
+                                        website_url = website.get('url', '')
+                                        break
+                                # If no official site, take the first one
+                                if not website_url and company['websites']:
+                                    first_site = company['websites'][0]
+                                    website_url = first_site.get('url', '')
+                            
+                            # Convert start_date timestamp to year
+                            founded_year = ''
+                            if company.get('start_date'):
+                                try:
+                                    import datetime
+                                    timestamp = company['start_date']
+                                    # IGDB timestamps are in seconds
+                                    date_obj = datetime.datetime.fromtimestamp(
+                                        timestamp)
+                                    founded_year = date_obj.year
+                                except (ValueError, TypeError):
+                                    founded_year = ''
+                            
+                            publisher_info = {
+                                'id': company.get('id'),
+                                'name': company.get('name', ''),
+                                'description': company.get('description', ''),
+                                'website': website_url,
+                                'founded_year': founded_year
+                            }
+                            formatted_game['publishers'].append(publisher_info)
 
                 # Extract release dates with platform information
                 if 'release_dates' in game:

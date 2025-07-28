@@ -73,6 +73,7 @@ class IGDBService:
             f'involved_companies.company.websites.url, '
             f'involved_companies.company.websites.category, '
             f'involved_companies.company.start_date, '
+            f'involved_companies.company.logo.url, '
             f'involved_companies.developer, involved_companies.publisher; '
             f'search "{game_name}"; limit {limit};'
         )
@@ -148,12 +149,23 @@ class IGDBService:
                                 except (ValueError, TypeError):
                                     founded_year = ''
                             
+                            # Extract logo URL
+                            logo_url = ''
+                            if company.get('logo') and company['logo'].get('url'):
+                                logo_url = company['logo']['url']
+                                # Convert to HTTPS and larger size
+                                if logo_url.startswith('//'):
+                                    logo_url = 'https:' + logo_url
+                                # Replace t_thumb with t_logo_med for better quality
+                                logo_url = logo_url.replace('t_thumb', 't_logo_med')
+                            
                             developer_info = {
                                 'id': company.get('id'),
                                 'name': company.get('name', ''),
                                 'description': company.get('description', ''),
                                 'website': website_url,
-                                'founded_year': founded_year
+                                'founded_year': founded_year,
+                                'logo_url': logo_url
                             }
                             formatted_game['developers'].append(developer_info)
 
@@ -190,12 +202,23 @@ class IGDBService:
                                 except (ValueError, TypeError):
                                     founded_year = ''
                             
+                            # Extract logo URL
+                            logo_url = ''
+                            if company.get('logo') and company['logo'].get('url'):
+                                logo_url = company['logo']['url']
+                                # Convert to HTTPS and larger size
+                                if logo_url.startswith('//'):
+                                    logo_url = 'https:' + logo_url
+                                # Replace t_thumb with t_logo_med for better quality
+                                logo_url = logo_url.replace('t_thumb', 't_logo_med')
+                            
                             publisher_info = {
                                 'id': company.get('id'),
                                 'name': company.get('name', ''),
                                 'description': company.get('description', ''),
                                 'website': website_url,
-                                'founded_year': founded_year
+                                'founded_year': founded_year,
+                                'logo_url': logo_url
                             }
                             formatted_game['publishers'].append(publisher_info)
 

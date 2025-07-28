@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from developer.models import Developer
+from publisher.models import Publisher
 from reviews.igdb_service import IGDBService
 import json
 import requests
@@ -11,19 +11,19 @@ import os
 
 
 class Command(BaseCommand):
-    help = 'Populate developer database with information from IGDB API'
+    help = 'Populate publisher database with information from IGDB API'
 
     def add_arguments(self, parser):
         parser.add_argument(
             '--limit',
             type=int,
             default=100,
-            help='Number of popular games to fetch developers from (default: 100)'
+            help='Number of popular games to fetch publishers from (default: 100)'
         )
         parser.add_argument(
             '--update-existing',
             action='store_true',
-            help='Update existing developers with IGDB data'
+            help='Update existing publishers with IGDB data'
         )
 
     def handle(self, *args, **options):
@@ -31,28 +31,28 @@ class Command(BaseCommand):
         update_existing = options['update_existing']
         
         self.stdout.write(
-            self.style.SUCCESS(f'Starting IGDB developer population (limit: {limit})')
+            self.style.SUCCESS(f'Starting IGDB publisher population (limit: {limit})')
         )
 
         try:
             igdb_service = IGDBService()
             
-            # Get popular games to extract developers from
-            developers_data = self.fetch_developers_from_popular_games(
+            # Get popular games to extract publishers from
+            publishers_data = self.fetch_publishers_from_popular_games(
                 igdb_service, limit
             )
             
-            # Save developers to database
-            created_count, updated_count = self.save_developers(
-                developers_data, update_existing
+            # Save publishers to database
+            created_count, updated_count = self.save_publishers(
+                publishers_data, update_existing
             )
             
             self.stdout.write(
                 self.style.SUCCESS(
-                    f'Successfully processed developers:\n'
+                    f'Successfully processed publishers:\n'
                     f'- Created: {created_count}\n'
                     f'- Updated: {updated_count}\n'
-                    f'- Total unique developers found: {len(developers_data)}'
+                    f'- Total unique publishers found: {len(publishers_data)}'
                 )
             )
 
@@ -61,9 +61,9 @@ class Command(BaseCommand):
                 self.style.ERROR(f'Error: {str(e)}')
             )
 
-    def fetch_developers_from_popular_games(self, igdb_service, limit):
-        """Fetch developers from popular games"""
-        # Use a list of popular games to extract developers from
+    def fetch_publishers_from_popular_games(self, igdb_service, limit):
+        """Fetch publishers from popular games"""
+        # Use a list of popular games to extract publishers from
         popular_games = [
             "God of War", "The Last of Us", "Horizon Zero Dawn",
             "Spider-Man", "Ghost of Tsushima", "Uncharted 4",
@@ -75,41 +75,41 @@ class Command(BaseCommand):
             "Mario", "Sekiro", "Bloodborne", "Elden Ring"
         ]
         
-        developers_dict = {}
+        publishers_dict = {}
         
         # Limit the number of games we process
         games_to_process = popular_games[:min(limit // 5, len(popular_games))]
         
         for game_name in games_to_process:
             try:
-                self.stdout.write(f'Fetching developers from: {game_name}')
+                self.stdout.write(f'Fetching publishers from: {game_name}')
                 game_data = igdb_service.get_game_platforms_by_name(game_name)
                 
-                if game_data and 'developers' in game_data:
-                    for developer in game_data['developers']:
-                        dev_name = developer.get('name', '').strip()
-                        if dev_name and dev_name not in developers_dict:
-                            developers_dict[dev_name] = {
-                                'name': dev_name,
-                                'description': developer.get('description', ''),
-                                'website': developer.get('website', ''),
-                                'founded_year': developer.get('founded_year') if developer.get('founded_year') else None,
-                                'igdb_id': developer.get('id'),
-                                'logo_url': developer.get('logo_url', '')
+                if game_data and 'publishers' in game_data:
+                    for publisher in game_data['publishers']:
+                        pub_name = publisher.get('name', '').strip()
+                        if pub_name and pub_name not in publishers_dict:
+                            publishers_dict[pub_name] = {
+                                'name': pub_name,
+                                'description': publisher.get('description', ''),
+                                'website': publisher.get('website', ''),
+                                'founded_year': publisher.get('founded_year') if publisher.get('founded_year') else None,
+                                'igdb_id': publisher.get('id'),
+                                'logo_url': publisher.get('logo_url', '')
                             }
-                            self.stdout.write(f'Found developer: {dev_name}')
+                            self.stdout.write(f'Found publisher: {pub_name}')
                             
             except Exception as e:
                 self.stdout.write(
                     self.style.WARNING(
-                        f'Error fetching developers from {game_name}: {str(e)}'
+                        f'Error fetching publishers from {game_name}: {str(e)}'
                     )
                 )
                 continue
         
-        return list(developers_dict.values())
+        return list(publishers_dict.values())
 
-    def download_and_save_logo(self, logo_url, developer_name):
+    def download_and_save_logo(self, logo_url, publisher_name):
         """Download logo from URL and save to Cloudinary"""
         if not logo_url:
             return None
@@ -126,11 +126,11 @@ class Command(BaseCommand):
             
             try:
                 # Upload to Cloudinary with a clean public_id
-                public_id = f"developer_logos/{developer_name.lower().replace(' ', '_')}"
+                public_id = f"publisher_logos/{publisher_name.lower().replace(' ', '_')}"
                 result = upload(
                     temp_file_path,
                     public_id=public_id,
-                    folder="developer_logos",
+                    folder="publisher_logos",
                     overwrite=True,
                     resource_type="image"
                 )
@@ -144,87 +144,87 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(
                 self.style.WARNING(
-                    f'Failed to download logo for {developer_name}: {str(e)}'
+                    f'Failed to download logo for {publisher_name}: {str(e)}'
                 )
             )
             return None
 
-    def save_developers(self, developers_data, update_existing):
-        """Save developers to database"""
+    def save_publishers(self, publishers_data, update_existing):
+        """Save publishers to database"""
         created_count = 0
         updated_count = 0
         
         with transaction.atomic():
-            for dev_data in developers_data:
+            for pub_data in publishers_data:
                 try:
-                    developer, created = Developer.objects.get_or_create(
-                        name=dev_data['name'],
+                    publisher, created = Publisher.objects.get_or_create(
+                        name=pub_data['name'],
                         defaults={
-                            'description': dev_data['description'],
-                            'website': dev_data['website'],
-                            'founded_year': dev_data['founded_year'],
+                            'description': pub_data['description'],
+                            'website': pub_data['website'],
+                            'founded_year': pub_data['founded_year'],
                         }
                     )
                     
                     if created:
                         created_count += 1
                         self.stdout.write(
-                            self.style.SUCCESS(f'✓ Created: {developer.name}')
+                            self.style.SUCCESS(f'✓ Created: {publisher.name}')
                         )
                         
-                        # Download and set logo for new developers
-                        if dev_data.get('logo_url'):
-                            self.stdout.write(f'Downloading logo for {developer.name}...')
+                        # Download and set logo for new publishers
+                        if pub_data.get('logo_url'):
+                            self.stdout.write(f'Downloading logo for {publisher.name}...')
                             logo_public_id = self.download_and_save_logo(
-                                dev_data['logo_url'], 
-                                developer.name
+                                pub_data['logo_url'], 
+                                publisher.name
                             )
                             if logo_public_id:
-                                developer.logo = logo_public_id
-                                developer.save()
-                                self.stdout.write(f'✓ Logo saved for {developer.name}')
+                                publisher.logo = logo_public_id
+                                publisher.save()
+                                self.stdout.write(f'✓ Logo saved for {publisher.name}')
                         
                     elif update_existing:
-                        # Update existing developer with IGDB data
+                        # Update existing publisher with IGDB data
                         updated = False
-                        if dev_data['description'] and not developer.description:
-                            developer.description = dev_data['description']
+                        if pub_data['description'] and not publisher.description:
+                            publisher.description = pub_data['description']
                             updated = True
-                        if dev_data['website'] and not developer.website:
-                            developer.website = dev_data['website']
+                        if pub_data['website'] and not publisher.website:
+                            publisher.website = pub_data['website']
                             updated = True
-                        if dev_data['founded_year'] and not developer.founded_year:
-                            developer.founded_year = dev_data['founded_year']
+                        if pub_data['founded_year'] and not publisher.founded_year:
+                            publisher.founded_year = pub_data['founded_year']
                             updated = True
                         
-                        # Update logo if developer doesn't have one
-                        if (dev_data.get('logo_url') and 
-                            (not developer.logo or developer.logo == 'placeholder')):
-                            self.stdout.write(f'Downloading logo for {developer.name}...')
+                        # Update logo if publisher doesn't have one
+                        if (pub_data.get('logo_url') and 
+                            (not publisher.logo or publisher.logo == 'placeholder')):
+                            self.stdout.write(f'Downloading logo for {publisher.name}...')
                             logo_public_id = self.download_and_save_logo(
-                                dev_data['logo_url'], 
-                                developer.name
+                                pub_data['logo_url'], 
+                                publisher.name
                             )
                             if logo_public_id:
-                                developer.logo = logo_public_id
+                                publisher.logo = logo_public_id
                                 updated = True
-                                self.stdout.write(f'✓ Logo updated for {developer.name}')
+                                self.stdout.write(f'✓ Logo updated for {publisher.name}')
                         
                         if updated:
-                            developer.save()
+                            publisher.save()
                             updated_count += 1
                             self.stdout.write(
-                                self.style.WARNING(f'↻ Updated: {developer.name}')
+                                self.style.WARNING(f'↻ Updated: {publisher.name}')
                             )
                         else:
-                            self.stdout.write(f'- Skipped: {developer.name} (no new data)')
+                            self.stdout.write(f'- Skipped: {publisher.name} (no new data)')
                     else:
-                        self.stdout.write(f'- Exists: {developer.name}')
+                        self.stdout.write(f'- Exists: {publisher.name}')
                         
                 except Exception as e:
                     self.stdout.write(
                         self.style.ERROR(
-                            f'Error saving developer {dev_data["name"]}: {str(e)}'
+                            f'Error saving publisher {pub_data["name"]}: {str(e)}'
                         )
                     )
         

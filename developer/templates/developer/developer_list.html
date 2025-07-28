@@ -16,15 +16,15 @@
                             <div class="image-container">
                                 <a href="{% url 'developer:developer_games' developer_id=developer.id %}">
                                     {% if "placeholder" in developer.logo.url %}
-                                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default developer logo">
+                                        <img class="card-img-top developer-logo-fixed" src="{% static 'images/default.jpg' %}" alt="Default developer logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
                                     {% else %}
-                                        <img class="card-img-top" src="{{ developer.logo.url }}" alt="{{ developer.name }} logo">
+                                        <img class="card-img-top developer-logo-fixed" src="{{ developer.logo.url }}" alt="{{ developer.name }} logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
                                     {% endif %}
                                 </a>
                             </div>
                             <a href="{% url 'developer:developer_games' developer_id=developer.id %}" class="post-link">
                                 <h2 class="card-title">{{ developer.name }}</h2>
-                                <p class="card-text">{{ developer.description|striptags|truncatewords:100 }}</p>
+                                <p class="card-text">{{ developer.description|striptags|truncatewords:30 }}</p>
                             </a>
 
                             <hr />

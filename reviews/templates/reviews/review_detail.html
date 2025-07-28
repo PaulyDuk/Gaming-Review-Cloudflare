@@ -27,21 +27,23 @@
         <!-- Main content - takes up full width on small screens, 2/3 on large screens -->
         <div class="col-12 col-lg-8 order-1 order-lg-1">
             <!-- Review Section -->
-            <div class="row">
-                <div class="col-12 card mb-4 mt-3">
-                    <div class="card-body">
-                        <h2>Review</h2>
-                        <p class="card-text">{{ review.review_text | safe }}</p>
-                        <hr>
-                        <h2>Score: {{ review.review_score | safe }}</h2>
-                    </div>
+            <div class="card mb-4 mt-3">
+                <div class="card-body">
+                    <h2>Description</h2>
+                    <p class="card-text">{{ review.description | safe }}</p>
+                    <hr>
+                    <h2>Review</h2>
+                    <p class="card-text">{{ review.review_text | safe }}</p>
+                    <hr>
+                    <h2>Score: {{ review.review_score | safe }}</h2>
                 </div>
             </div>
         </div>
 
         <!-- Right Sidebar - shows on right on large screens, below review on small screens -->
         <div class="col-12 col-lg-4 order-2 order-lg-2">
-            <!-- Game Info - single responsive section -->
+            
+            <!-- Game Info Card -->
             <div class="card mb-4 mt-3">
                 <div class="card-body">
                     <h3>Game Info</h3>
@@ -59,17 +61,21 @@
                     {% endif %}
                 </div>
             </div>
-
-            <!-- Developer Information -->
+            
+            <!-- Developer Card -->
             <div class="card mb-4 mt-3 mt-lg-0">
                 <div class="card-body">
                     <h3>Developer</h3>
                     {% if review.developer %}
-                        <a href="{% url 'developer:developer_games' developer_id=review.developer.id %}" class="text-decoration-none">
+                        {% if review.developer.id %}
+                            <a href="{% url 'developer:developer_games' developer_id=review.developer.id %}" class="text-decoration-none">
+                                <h5 class="text-primary">{{ review.developer.name }}</h5>
+                            </a>
+                        {% else %}
                             <h5 class="text-primary">{{ review.developer.name }}</h5>
-                        </a>
+                        {% endif %}
                         {% if review.developer.description %}
-                            <p>{{ review.developer.description|truncatewords:30|safe }}</p>
+                            <p>{{ review.developer.description|truncatewords:50|safe }}</p>
                         {% endif %}
                         {% if review.developer.founded_year %}
                             <p><strong>Founded:</strong> {{ review.developer.founded_year }}</p>
@@ -82,17 +88,21 @@
                     {% endif %}
                 </div>
             </div>
-
-            <!-- Publisher Information -->
+            
+            <!-- Publisher Card -->
             <div class="card mb-4">
                 <div class="card-body">
                     <h3>Publisher</h3>
                     {% if review.publisher %}
-                        <a href="{% url 'publisher:publisher_games' publisher_id=review.publisher.id %}" class="text-decoration-none">
+                        {% if review.publisher.id %}
+                            <a href="{% url 'publisher:publisher_games' publisher_id=review.publisher.id %}" class="text-decoration-none">
+                                <h5 class="text-primary">{{ review.publisher.name }}</h5>
+                            </a>
+                        {% else %}
                             <h5 class="text-primary">{{ review.publisher.name }}</h5>
-                        </a>
+                        {% endif %}
                         {% if review.publisher.description %}
-                            <p>{{ review.publisher.description|truncatewords:30|safe }}</p>
+                            <p>{{ review.publisher.description|truncatewords:50|safe }}</p>
                         {% endif %}
                         {% if review.publisher.founded_year %}
                             <p><strong>Founded:</strong> {{ review.publisher.founded_year }}</p>
@@ -105,7 +115,9 @@
                     {% endif %}
                 </div>
             </div>
+            
         </div>
+        <!-- END OF SIDEBAR COLUMN -->
     </div>
 
     <!-- Comments and User Reviews -->
@@ -123,54 +135,58 @@
 
             <!-- User Comments Display -->
             <div class="row">
-                <div class="col-md-8 card mb-4 mt-3">
-                    <div class="card-body">
-                        <h3>Comments</h3>
-                      {% if user_comments %}
-                        {% for user_comment in user_comments %}
-                        <div class="p-2 comments
-                          {% if not user_comment.approved and user_comment.author == user %}
-                          faded{% elif not user_comment.approved %} d-none{% endif %}">
-                          <p class="font-weight-bold">
-                            {{ user_comment.author }}
-                            <span class="font-weight-normal">
-                              {{ user_comment.created_on }}
-                            </span> wrote:
-                          </p>
-                          <div id="user_comment{{ user_comment.id }}">
-                            {{ user_comment.body | linebreaks }}
-                          </div>
-                          {% if not user_comment.approved and user_comment.author == user %}
-                          <p class="approval">
-                            This comment is awaiting approval
-                          </p>
-                          {% endif %}
-                            {% if user.is_authenticated and user_comment.author == user %}
-                                <button class="btn btn-delete-user-comment" comment_id="{{ user_comment.id }}">Delete</button>
-                                <button class="btn btn-edit-user-comment" comment_id="{{ user_comment.id }}">Edit</button>
+                <div class="col-md-8">
+                    <div class="card mb-4 mt-3">
+                        <div class="card-body">
+                            <h3>Comments</h3>
+                          {% if user_comments %}
+                            {% for user_comment in user_comments %}
+                            <div class="p-2 comments
+                              {% if not user_comment.approved and user_comment.author == user %}
+                              faded{% elif not user_comment.approved %} d-none{% endif %}">
+                              <p class="font-weight-bold">
+                                {{ user_comment.author }}
+                                <span class="font-weight-normal">
+                                  {{ user_comment.created_on }}
+                                </span> wrote:
+                              </p>
+                              <div id="user_comment{{ user_comment.id }}">
+                                {{ user_comment.body | linebreaks }}
+                              </div>
+                              {% if not user_comment.approved and user_comment.author == user %}
+                              <p class="approval">
+                                This comment is awaiting approval
+                              </p>
+                              {% endif %}
+                                {% if user.is_authenticated and user_comment.author == user %}
+                                    <button class="btn btn-delete-user-comment" comment_id="{{ user_comment.id }}">Delete</button>
+                                    <button class="btn btn-edit-user-comment" comment_id="{{ user_comment.id }}">Edit</button>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No comments yet. Be the first to comment on this game!</p>
                             {% endif %}
                         </div>
-                        {% endfor %}
-                        {% else %}
-                            <p class="text-muted">No comments yet. Be the first to comment on this game!</p>
-                        {% endif %}
                     </div>
                 </div>
 
                 <!-- User Comment Form -->
-                <div class="col-md-4 card mb-4 mt-3">
-                    <div class="card-body">
-                        {% if user.is_authenticated %}
-                        <h3>Leave a comment:</h3>
-                        <p>Posting as: {{ user.username }}</p>
-                        <form id="userCommentForm" method="post" style="margin-top: 1.3em;">
-                          {{ user_comment_form | crispy }}
-                          {% csrf_token %}
-                          <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
-                        </form>
-                        {% else %}
-                        <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
-                        {% endif %}
+                <div class="col-md-4">
+                    <div class="card mb-4 mt-3">
+                        <div class="card-body">
+                            {% if user.is_authenticated %}
+                            <h3>Leave a comment:</h3>
+                            <p>Posting as: {{ user.username }}</p>
+                            <form id="userCommentForm" method="post" style="margin-top: 1.3em;">
+                              {{ user_comment_form | crispy }}
+                              {% csrf_token %}
+                              <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
+                            </form>
+                            {% else %}
+                            <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -190,73 +206,77 @@
 
             <!-- User Reviews Display -->
             <div class="row">
-                <div class="col-md-8 card mb-4 mt-3">
-                    <div class="card-body">
-                        <h3>User Reviews</h3>
-                        {% if user_reviews %}
-                            {% for user_review in user_reviews %}
-                            <div class="p-2 reviews
-                              {% if not user_review.approved and user_review.user == user %}
-                              faded{% elif not user_review.approved %} d-none{% endif %}">
-                                <p class="font-weight-bold">
-                                    {{ user_review.user.username }}
-                                    <span class="font-weight-normal">
-                                        {{ user_review.created_on }}
-                                    </span> wrote:
-                                </p>
-                                <div class="d-flex align-items-center mb-2">
-                                    <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
+                <div class="col-md-8">
+                    <div class="card mb-4 mt-3">
+                        <div class="card-body">
+                            <h3>User Reviews</h3>
+                            {% if user_reviews %}
+                                {% for user_review in user_reviews %}
+                                <div class="p-2 reviews
+                                  {% if not user_review.approved and user_review.user == user %}
+                                  faded{% elif not user_review.approved %} d-none{% endif %}">
+                                    <p class="font-weight-bold">
+                                        {{ user_review.user.username }}
+                                        <span class="font-weight-normal">
+                                            {{ user_review.created_on }}
+                                        </span> wrote:
+                                    </p>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
+                                    </div>
+                                    <div id="user_review{{ user_review.id }}">
+                                        {{ user_review.review_text | linebreaks }}
+                                    </div>
+                                    {% if not user_review.approved and user_review.user == user %}
+                                    <p class="approval">
+                                        This review is awaiting approval
+                                    </p>
+                                    {% endif %}
+                                    {% if user.is_authenticated and user_review.user == user %}
+                                        <button class="btn btn-delete-user-review" review_id="{{ user_review.id }}">Delete</button>
+                                        <button class="btn btn-edit-user-review" review_id="{{ user_review.id }}" review_rating="{{ user_review.rating }}">Edit</button>
+                                    {% endif %}
                                 </div>
-                                <div id="user_review{{ user_review.id }}">
-                                    {{ user_review.review_text | linebreaks }}
-                                </div>
-                                {% if not user_review.approved and user_review.user == user %}
-                                <p class="approval">
-                                    This review is awaiting approval
-                                </p>
-                                {% endif %}
-                                {% if user.is_authenticated and user_review.user == user %}
-                                    <button class="btn btn-delete-user-review" review_id="{{ user_review.id }}">Delete</button>
-                                    <button class="btn btn-edit-user-review" review_id="{{ user_review.id }}" review_rating="{{ user_review.rating }}">Edit</button>
-                                {% endif %}
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted">No user reviews yet. Be the first to review this game!</p>
-                        {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                <p class="text-muted">No user reviews yet. Be the first to review this game!</p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
 
                 <!-- User Review Form -->
-                <div class="col-md-4 card mb-4 mt-3">
-                    <div class="card-body">
-                        {% if user.is_authenticated %}
-                            {% if not user_has_reviewed %}
-                                <h3>Leave a review:</h3>
-                                <p>Posting as: {{ user.username }}</p>
-                                <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
-                                  {{ user_review_form | crispy }}
-                                  {% csrf_token %}
-                                  <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
-                                </form>
-                            {% else %}
-                                <div id="reviewCompleteMessage">
-                                    <h3>Your Review</h3>
-                                    <p class="text-info">You have already reviewed this game. You can edit or delete your review above.</p>
-                                </div>
-                                <div id="userReviewFormContainer" style="display: none;">
-                                    <h3>Edit Your Review:</h3>
+                <div class="col-md-4">
+                    <div class="card mb-4 mt-3">
+                        <div class="card-body">
+                            {% if user.is_authenticated %}
+                                {% if not user_has_reviewed %}
+                                    <h3>Leave a review:</h3>
                                     <p>Posting as: {{ user.username }}</p>
                                     <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
                                       {{ user_review_form | crispy }}
                                       {% csrf_token %}
-                                      <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Update</button>
+                                      <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
                                     </form>
-                                </div>
+                                {% else %}
+                                    <div id="reviewCompleteMessage">
+                                        <h3>Your Review</h3>
+                                        <p class="text-info">You have already reviewed this game. You can edit or delete your review above.</p>
+                                    </div>
+                                    <div id="userReviewFormContainer" style="display: none;">
+                                        <h3>Edit Your Review:</h3>
+                                        <p>Posting as: {{ user.username }}</p>
+                                        <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
+                                          {{ user_review_form | crispy }}
+                                          {% csrf_token %}
+                                          <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Update</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            {% else %}
+                                <p><a href="{% url 'account_login' %}">Log in</a> to leave a review</p>
                             {% endif %}
-                        {% else %}
-                            <p><a href="{% url 'account_login' %}">Log in</a> to leave a review</p>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>

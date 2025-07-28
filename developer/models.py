@@ -3,6 +3,7 @@ from cloudinary.models import CloudinaryField
 
 # Create your models here.
 
+
 class Developer(models.Model):
     name = models.CharField(max_length=200, unique=True)
     founded_year = models.IntegerField(blank=True, null=True)

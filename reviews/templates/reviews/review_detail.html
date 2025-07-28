@@ -83,6 +83,13 @@
                         {% if review.developer.headquarters %}
                             <p><strong>Headquarters:</strong> {{ review.developer.headquarters }}</p>
                         {% endif %}
+                        {% if review.developer.website %}
+                            <p class="card-text">
+                                <a href="{{ review.developer.website }}" target="_blank" class="text-primary">
+                                    <i class="fas fa-external-link-alt"></i> Visit Developer Website
+                                </a>
+                            </p>
+                        {% endif %}
                     {% else %}
                         <p>No developer information available.</p>
                     {% endif %}
@@ -109,6 +116,13 @@
                         {% endif %}
                         {% if review.publisher.headquarters %}
                             <p><strong>Headquarters:</strong> {{ review.publisher.headquarters }}</p>
+                        {% endif %}
+                        {% if review.publisher.website %}
+                            <p class="card-text">
+                                <a href="{{ review.publisher.website }}" target="_blank" class="text-primary">
+                                    <i class="fas fa-external-link-alt"></i> Visit Publisher Website
+                                </a>
+                            </p>
                         {% endif %}
                     {% else %}
                         <p>No publisher information available.</p>

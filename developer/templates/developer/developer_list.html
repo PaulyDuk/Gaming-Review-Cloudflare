@@ -21,15 +21,10 @@
                                         <img class="card-img-top" src="{{ developer.logo.url }}" alt="{{ developer.name }} logo">
                                     {% endif %}
                                 </a>
-                                {% if developer.founded_year %}
-                                <div class="image-flash">
-                                    <p class="author">Founded {{ developer.founded_year }}</p>
-                                </div>
-                                {% endif %}
                             </div>
                             <a href="{% url 'developer:developer_games' developer_id=developer.id %}" class="post-link">
                                 <h2 class="card-title">{{ developer.name }}</h2>
-                                <p class="card-text">{{ developer.description|striptags|truncatewords:30 }}</p>
+                                <p class="card-text">{{ developer.description|striptags|truncatewords:100 }}</p>
                             </a>
 
                             <hr />
@@ -76,6 +71,5 @@
     </nav>
     {% endif %}
 </div>
-
 <!-- developer_list.html content ends here -->
 {% endblock %}

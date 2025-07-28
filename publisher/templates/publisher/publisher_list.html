@@ -21,15 +21,11 @@
                                         <img class="card-img-top" src="{{ publisher.logo.url }}" alt="{{ publisher.name }} logo">
                                     {% endif %}
                                 </a>
-                                {% if publisher.founded_year %}
-                                <div class="image-flash">
-                                    <p class="author">Founded {{ publisher.founded_year }}</p>
-                                </div>
-                                {% endif %}
+
                             </div>
                             <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}" class="post-link">
                                 <h2 class="card-title">{{ publisher.name }}</h2>
-                                <p class="card-text">{{ publisher.description|striptags|truncatewords:30 }}</p>
+                                <p class="card-text">{{ publisher.description|striptags|truncatewords:100 }}</p>
                             </a>
 
                             <hr />

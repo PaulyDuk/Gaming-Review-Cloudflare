@@ -49,7 +49,7 @@
                                         <div class="col-md-6 mb-3">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <a href="{% url 'publisher_games' publisher_id=publisher.id %}" class="text-decoration-none">
+                                                    <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}" class="text-decoration-none">
                                                         <h5 class="card-title text-primary">{{ publisher.name }}</h5>
                                                     </a>
                                                     <p class="card-text">{{ publisher.description|truncatewords:50|safe }}</p>
@@ -68,7 +68,7 @@
                                         <div class="col-md-6 mb-3">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <a href="{% url 'developer_games' developer_id=developer.id %}" class="text-decoration-none">
+                                                    <a href="{% url 'developer:developer_games' developer_id=developer.id %}" class="text-decoration-none">
                                                         <h5 class="card-title text-primary">{{ developer.name }}</h5>
                                                     </a>
                                                     <p class="card-text">{{ developer.description|truncatewords:50|safe }}</p>

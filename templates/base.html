@@ -45,6 +45,14 @@
             <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page"
                 href="{% url 'home' %}">Home</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link {% if '/developers/' in request.path %}active{% endif %}" aria-current="page"
+                href="{% url 'developer:developer_list' %}">Developers</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if '/publishers/' in request.path %}active{% endif %}" aria-current="page"
+                href="{% url 'publisher:publisher_list' %}">Publishers</a>
+        </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
             <a class="nav-link {% if '/accounts/profile/' in request.path %}active{% endif %}" aria-current="page" 
@@ -73,8 +81,6 @@
                 <span class="navbar-text text-muted">
                         {% if user.is_authenticated %}
     <p class="text-end m-1">Welcome back {{ user }}</p>
-    {% else %}
-    <p class="text-end m-1">You are not logged in</p>
     {% endif %}
                 </span>
             </div>

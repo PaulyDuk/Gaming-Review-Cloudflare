@@ -25,8 +25,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')),
     path('summernote/', include('django_summernote.urls')),
+    path('publishers/', include('publisher.urls')),
+    path('developers/', include('developer.urls')),
     path("", include("reviews.urls"), name="review-urls"),
 ]

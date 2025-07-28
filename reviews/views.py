@@ -4,7 +4,9 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Q
 from django.contrib.auth.decorators import login_required
-from .models import Review, Publisher, Developer, UserComment, UserReview
+from .models import Review, UserComment, UserReview
+from publisher.models import Publisher
+from developer.models import Developer
 from .forms import UserCommentForm, UserReviewForm
 
 
@@ -225,28 +227,6 @@ def user_review_delete(request, slug, review_id):
     return HttpResponseRedirect(reverse('review_detail', args=[slug]))
 
 
-def publisher_games(request, publisher_id):
-    """Show all games (reviews) by a specific publisher"""
-    publisher = get_object_or_404(Publisher, id=publisher_id)
-    games = Review.objects.filter(publisher=publisher, is_published=True)
-
-    return render(request, 'reviews/publisher_games.html', {
-        'publisher': publisher,
-        'games': games
-    })
-
-
-def developer_games(request, developer_id):
-    """Show all games (reviews) by a specific developer"""
-    developer = get_object_or_404(Developer, id=developer_id)
-    games = Review.objects.filter(developer=developer, is_published=True)
-
-    return render(request, 'reviews/developer_games.html', {
-        'developer': developer,
-        'games': games
-    })
-
-
 def search_games(request):
     """Search for games, publishers, developers and genres"""
     query = request.GET.get('q', '')
@@ -288,7 +268,7 @@ def profile(request):
     """Display user profile with account management links"""
     user_reviews = UserReview.objects.filter(user=request.user).order_by('-created_on')
     user_comments = UserComment.objects.filter(author=request.user).order_by('-created_on')
-    
+
     context = {
         'user_reviews': user_reviews,
         'user_comments': user_comments,

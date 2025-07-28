@@ -25,7 +25,7 @@
 <div class="container">
     <div class="row">
         <!-- Main content - takes up full width on small screens, 2/3 on large screens -->
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-8 order-1 order-lg-1">
             <!-- Review Section -->
             <div class="row">
                 <div class="col-12 card mb-4 mt-3">
@@ -37,33 +37,12 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Game Info for small screens - shows below review on small screens only -->
-            <div class="row d-lg-none">
-                <div class="col-12">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h3>Game Info</h3>
-                            <h5>{{ review.title }}</h5>
-                            {% if review.console %}
-                                <p><strong>Console:</strong> {{ review.console }}</p>
-                            {% endif %}
-                            {% if review.genre %}
-                                <p><strong>Genre:</strong> {{ review.get_genre_display }}</p>
-                            {% endif %}
-                            {% if review.release_date %}
-                                <p><strong>Release Date:</strong> {{ review.release_date }}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- Right Sidebar - shows on large screens, content moves below on small -->
-        <div class="col-12 col-lg-4">
-            <!-- Game Info for large screens -->
-            <div class="card mb-4 mt-3 d-none d-lg-block">
+        <!-- Right Sidebar - shows on right on large screens, below review on small screens -->
+        <div class="col-12 col-lg-4 order-2 order-lg-2">
+            <!-- Game Info - single responsive section -->
+            <div class="card mb-4 mt-3">
                 <div class="card-body">
                     <h3>Game Info</h3>
                     {% if review.title %}
@@ -86,7 +65,7 @@
                 <div class="card-body">
                     <h3>Developer</h3>
                     {% if review.developer %}
-                        <a href="{% url 'developer_games' developer_id=review.developer.id %}" class="text-decoration-none">
+                        <a href="{% url 'developer:developer_games' developer_id=review.developer.id %}" class="text-decoration-none">
                             <h5 class="text-primary">{{ review.developer.name }}</h5>
                         </a>
                         {% if review.developer.description %}
@@ -109,7 +88,7 @@
                 <div class="card-body">
                     <h3>Publisher</h3>
                     {% if review.publisher %}
-                        <a href="{% url 'publisher_games' publisher_id=review.publisher.id %}" class="text-decoration-none">
+                        <a href="{% url 'publisher:publisher_games' publisher_id=review.publisher.id %}" class="text-decoration-none">
                             <h5 class="text-primary">{{ review.publisher.name }}</h5>
                         </a>
                         {% if review.publisher.description %}

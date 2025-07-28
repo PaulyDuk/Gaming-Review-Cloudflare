@@ -1,3 +1,33 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from .models import Developer
+from reviews.models import Review
 
 # Create your views here.
+
+
+from django.shortcuts import render, get_object_or_404
+from django.views import generic
+from .models import Developer
+from reviews.models import Review
+
+# Create your views here.
+
+
+class DeveloperList(generic.ListView):
+    """List all developers with pagination"""
+    model = Developer
+    template_name = "developer/developer_list.html"
+    context_object_name = 'developer_list'
+    paginate_by = 6
+    ordering = ['name']
+
+
+def developer_games(request, developer_id):
+    """Show all games (reviews) by a specific developer"""
+    developer = get_object_or_404(Developer, id=developer_id)
+    games = Review.objects.filter(developer=developer, is_published=True)
+
+    return render(request, 'reviews/developer_games.html', {
+        'developer': developer,
+        'games': games
+    })

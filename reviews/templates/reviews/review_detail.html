@@ -50,9 +50,6 @@
                     {% if review.title %}
                         <p><strong>Title:</strong> {{ review.title }}</p>
                     {% endif %}
-                    {% if review.console %}
-                        <p><strong>Reviewed on:</strong> {{ review.console }}</p>
-                    {% endif %}
                     {% if game_platforms %}
                         <p><strong>Available on:</strong> 
                             {% for platform in game_platforms %}

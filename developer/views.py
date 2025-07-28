@@ -1,11 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Developer
-from reviews.models import Review
-
-# Create your views here.
-
-
-from django.shortcuts import render, get_object_or_404
 from django.views import generic
 from .models import Developer
 from reviews.models import Review
@@ -27,7 +20,7 @@ def developer_games(request, developer_id):
     developer = get_object_or_404(Developer, id=developer_id)
     games = Review.objects.filter(developer=developer, is_published=True)
 
-    return render(request, 'reviews/developer_games.html', {
+    return render(request, 'developer/developer_games.html', {
         'developer': developer,
         'games': games
     })

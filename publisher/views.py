@@ -20,7 +20,7 @@ def publisher_games(request, publisher_id):
     publisher = get_object_or_404(Publisher, id=publisher_id)
     games = Review.objects.filter(publisher=publisher, is_published=True)
 
-    return render(request, 'reviews/publisher_games.html', {
+    return render(request, 'publisher/publisher_games.html', {
         'publisher': publisher,
         'games': games
     })

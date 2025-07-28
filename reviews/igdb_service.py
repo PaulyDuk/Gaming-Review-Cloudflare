@@ -44,75 +44,29 @@ class IGDBService:
             self.wrapper = IGDBWrapper(self.client_id, self.access_token)
         return self.wrapper
 
-    def search_games(self, query, limit=10, offset=0, platform=None):
-        """Search for games by name"""
-        wrapper = self.initialize_wrapper()
 
-        # Build the query string
-        query_parts = [
-            f'fields id, name, summary, release_dates.date, platforms.name, cover.url',
-            f'search "{query}"',
-            f'limit {limit}',
-            f'offset {offset}'
-        ]
+    def get_game_platforms_by_name(self, game_name):
+        """Get platforms and genres for a game by name (returns first match)"""
+        games = self.search_games_with_platforms(game_name, limit=1)
+        if games:
+            return {
+                'game': games[0],
+                'platforms': games[0]['platforms'],
+                'genres': games[0]['genres']
+            }
+        return None
 
-        if platform:
-            query_parts.append(f'where platforms = {platform}')
-
-        query_string = '; '.join(query_parts) + ';'
-
-        try:
-            byte_array = wrapper.api_request('games', query_string)
-            return json.loads(byte_array)
-        except Exception as e:
-            print(f"Error searching games: {e}")
-            return []
-
-    def get_game_by_id(self, game_id):
-        """Get a specific game by ID"""
-        wrapper = self.initialize_wrapper()
-
-        query_string = f'fields id, name, summary, storyline, release_dates.date, platforms.name, cover.url, screenshots.url, genres.name, involved_companies.company.name, involved_companies.developer, involved_companies.publisher; where id = {game_id};'
-
-        try:
-            byte_array = wrapper.api_request('games', query_string)
-            games = json.loads(byte_array)
-            return games[0] if games else None
-        except Exception as e:
-            print(f"Error getting game by ID: {e}")
-            return None
-
-    def get_games_by_platform(self, platform_id, limit=50, offset=0):
-        """Get games by platform ID"""
-        wrapper = self.initialize_wrapper()
-
-        query_string = f'fields id, name, summary, release_dates.date, cover.url; where platforms = {platform_id}; limit {limit}; offset {offset};'
-
-        try:
-            byte_array = wrapper.api_request('games', query_string)
-            return json.loads(byte_array)
-        except Exception as e:
-            print(f"Error getting games by platform: {e}")
-            return []
-
-    def get_platforms(self):
-        """Get list of gaming platforms"""
-        wrapper = self.initialize_wrapper()
-
-        query_string = 'fields id, name, abbreviation; sort id asc; limit 200;'
-
-        try:
-            byte_array = wrapper.api_request('platforms', query_string)
-            return json.loads(byte_array)
-        except Exception as e:
-            print(f"Error getting platforms: {e}")
-            return []
 
     def search_games_with_platforms(self, game_name, limit=10):
         """Search for games by name and return with detailed platform information"""
         wrapper = self.initialize_wrapper()
 
-        query_string = f'fields id, name, summary, release_dates.date, platforms.id, platforms.name, platforms.abbreviation, cover.url; search "{game_name}"; limit {limit};'
+        query_string = (
+            f'fields id, name, summary, release_dates.date, '
+            f'release_dates.platform.name, platforms.id, platforms.name, '
+            f'platforms.abbreviation, cover.url, genres.name; '
+            f'search "{game_name}"; limit {limit};'
+        )
 
         try:
             byte_array = wrapper.api_request('games', query_string)
@@ -126,7 +80,8 @@ class IGDBService:
                     'name': game.get('name'),
                     'summary': game.get('summary', ''),
                     'cover_url': game.get('cover', {}).get('url', '') if game.get('cover') else '',
-                    'platforms': []
+                    'platforms': [],
+                    'genres': []
                 }
 
                 # Extract platform information
@@ -139,7 +94,16 @@ class IGDBService:
                         }
                         formatted_game['platforms'].append(platform_info)
 
-                # Extract release dates
+                # Extract genre information
+                if 'genres' in game:
+                    for genre in game['genres']:
+                        genre_info = {
+                            'id': genre.get('id'),
+                            'name': genre.get('name')
+                        }
+                        formatted_game['genres'].append(genre_info)
+
+                # Extract release dates with platform information
                 if 'release_dates' in game:
                     formatted_game['release_dates'] = game['release_dates']
 
@@ -149,17 +113,7 @@ class IGDBService:
         except Exception as e:
             print(f"Error searching games with platforms: {e}")
             return []
-
-    def get_game_platforms_by_name(self, game_name):
-        """Get all platforms for a specific game by name (returns first match)"""
-        games = self.search_games_with_platforms(game_name, limit=1)
-        if games:
-            return {
-                'game': games[0],
-                'platforms': games[0]['platforms']
-            }
-        return None
-
+        
 
 # Convenience function for quick testing
 def test_igdb_connection():

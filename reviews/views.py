@@ -4,13 +4,54 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db.models import Avg, Q
 from django.contrib.auth.decorators import login_required
-from .models import Review, UserComment, UserReview
 from publisher.models import Publisher
 from developer.models import Developer
+from .models import Review, UserComment, UserReview
 from .forms import UserCommentForm, UserReviewForm
+from .igdb_service import IGDBService
+from datetime import datetime
 
 
 # Create your views here.
+
+
+def process_release_dates(release_dates_data):
+    """Process IGDB release dates data to get earliest date per platform"""
+    if not release_dates_data:
+        return []
+    
+    # Group release dates by platform, keeping only the earliest date
+    platform_releases = {}
+    for release_date in release_dates_data:
+        if 'date' in release_date:
+            platform_name = "Unknown Platform"
+            if ('platform' in release_date and
+                    'name' in release_date['platform']):
+                platform_name = release_date['platform']['name']
+            
+            try:
+                timestamp = release_date['date']
+                date_obj = datetime.fromtimestamp(timestamp)
+                formatted_date = date_obj.strftime('%B %d, %Y')
+                
+                # Keep only the earliest date for each platform
+                if (platform_name not in platform_releases or
+                        timestamp <
+                        platform_releases[platform_name]['timestamp']):
+                    platform_releases[platform_name] = {
+                        'platform': platform_name,
+                        'date': formatted_date,
+                        'timestamp': timestamp
+                    }
+            except (ValueError, OSError):
+                continue
+    
+    # Sort by timestamp and return list
+    sorted_releases = sorted(
+        platform_releases.values(),
+        key=lambda x: x['timestamp']
+    )
+    return sorted_releases
 
 
 class ReviewList(generic.ListView):
@@ -37,6 +78,25 @@ def review_details(request, slug):
     review = get_object_or_404(queryset, slug=slug)
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
+
+    # Get platforms, release dates, and genres from IGDB for this game
+    game_platforms = []
+    game_release_dates = []
+    game_genres = []
+    try:
+        igdb_service = IGDBService()
+        platform_data = igdb_service.get_game_platforms_by_name(review.title)
+        if platform_data and platform_data.get('platforms'):
+            game_platforms = platform_data['platforms']
+        if platform_data and platform_data.get('genres'):
+            game_genres = platform_data['genres']
+        if (platform_data and
+                platform_data.get('game', {}).get('release_dates')):
+            raw_release_dates = platform_data['game']['release_dates']
+            game_release_dates = process_release_dates(raw_release_dates)
+    except Exception as e:
+        # If IGDB fails, we'll just show without platform data
+        print(f"IGDB platform lookup failed: {e}")
 
     # Get user reviews - show approved ones + current user's unapproved ones
     if request.user.is_authenticated:
@@ -113,6 +173,9 @@ def review_details(request, slug):
             "average_review_score": average_review_score,
             "user_review_form": user_review_form,
             "user_has_reviewed": user_has_reviewed,
+            "game_platforms": game_platforms,
+            "game_release_dates": game_release_dates,
+            "game_genres": game_genres,
         },
     )
 

@@ -53,11 +53,29 @@
                     {% if review.console %}
                         <p><strong>Reviewed on:</strong> {{ review.console }}</p>
                     {% endif %}
-                    {% if review.genre %}
-                        <p><strong>Genre:</strong> {{ review.get_genre_display }}</p>
+                    {% if game_platforms %}
+                        <p><strong>Available on:</strong> 
+                            {% for platform in game_platforms %}
+                                <span class="badge bg-secondary me-1">{{ platform.name }}</span>{% if not forloop.last %} {% endif %}
+                            {% endfor %}
+                        </p>
                     {% endif %}
-                    {% if review.release_date %}
-                        <p><strong>Release Date:</strong> {{ review.release_date }}</p>
+                    {% if game_genres %}
+                        <p><strong>Genres:</strong> 
+                            {% for genre in game_genres %}
+                                <span class="badge bg-success me-1">{{ genre.name }}</span>{% if not forloop.last %} {% endif %}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                    {% if game_release_dates %}
+                        <p><strong>Release Dates:</strong></p>
+                        <div class="mb-2">
+                            {% for release in game_release_dates %}
+                                <div class="d-flex align-items-center mb-1">
+                                    <span><b>{{ release.platform }}</b> - {{ release.date }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
                     {% endif %}
                 </div>
             </div>

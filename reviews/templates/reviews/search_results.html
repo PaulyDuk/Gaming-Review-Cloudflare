@@ -20,7 +20,7 @@
                                             <div class="card h-100">
                                                 <div class="image-container">
                                                     {% if "placeholder" in game.featured_image.url %}
-                                                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default image">
+                                                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
                                                     {% else %}
                                                         <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
                                                     {% endif %}

@@ -29,24 +29,24 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         limit = options['limit']
         update_existing = options['update_existing']
-        
+
         self.stdout.write(
             self.style.SUCCESS(f'Starting IGDB developer population (limit: {limit})')
         )
 
         try:
             igdb_service = IGDBService()
-            
+
             # Get popular games to extract developers from
             developers_data = self.fetch_developers_from_popular_games(
                 igdb_service, limit
             )
-            
+
             # Save developers to database
             created_count, updated_count = self.save_developers(
                 developers_data, update_existing
             )
-            
+
             self.stdout.write(
                 self.style.SUCCESS(
                     f'Successfully processed developers:\n'
@@ -74,17 +74,17 @@ class Command(BaseCommand):
             "Counter-Strike", "Overwatch", "Halo", "Zelda",
             "Mario", "Sekiro", "Bloodborne", "Elden Ring"
         ]
-        
+
         developers_dict = {}
-        
+
         # Limit the number of games we process
         games_to_process = popular_games[:min(limit // 5, len(popular_games))]
-        
+
         for game_name in games_to_process:
             try:
                 self.stdout.write(f'Fetching developers from: {game_name}')
                 game_data = igdb_service.get_game_platforms_by_name(game_name)
-                
+
                 if game_data and 'developers' in game_data:
                     for developer in game_data['developers']:
                         dev_name = developer.get('name', '').strip()
@@ -98,7 +98,7 @@ class Command(BaseCommand):
                                 'logo_url': developer.get('logo_url', '')
                             }
                             self.stdout.write(f'Found developer: {dev_name}')
-                            
+
             except Exception as e:
                 self.stdout.write(
                     self.style.WARNING(
@@ -106,24 +106,24 @@ class Command(BaseCommand):
                     )
                 )
                 continue
-        
+
         return list(developers_dict.values())
 
     def download_and_save_logo(self, logo_url, developer_name):
         """Download logo from URL and save to Cloudinary"""
         if not logo_url:
             return None
-            
+
         try:
             # Download the image
             response = requests.get(logo_url, timeout=10)
             response.raise_for_status()
-            
+
             # Create a temporary file
             with tempfile.NamedTemporaryFile(delete=False) as temp_file:
                 temp_file.write(response.content)
                 temp_file_path = temp_file.name
-            
+
             try:
                 # Upload to Cloudinary with a clean public_id
                 public_id = f"developer_logos/{developer_name.lower().replace(' ', '_')}"
@@ -135,12 +135,12 @@ class Command(BaseCommand):
                     resource_type="image"
                 )
                 return result['public_id']
-                
+
             finally:
                 # Clean up temp file
                 if os.path.exists(temp_file_path):
                     os.unlink(temp_file_path)
-                    
+
         except Exception as e:
             self.stdout.write(
                 self.style.WARNING(
@@ -153,7 +153,7 @@ class Command(BaseCommand):
         """Save developers to database"""
         created_count = 0
         updated_count = 0
-        
+
         with transaction.atomic():
             for dev_data in developers_data:
                 try:
@@ -165,25 +165,25 @@ class Command(BaseCommand):
                             'founded_year': dev_data['founded_year'],
                         }
                     )
-                    
+
                     if created:
                         created_count += 1
                         self.stdout.write(
                             self.style.SUCCESS(f'✓ Created: {developer.name}')
                         )
-                        
+
                         # Download and set logo for new developers
                         if dev_data.get('logo_url'):
                             self.stdout.write(f'Downloading logo for {developer.name}...')
                             logo_public_id = self.download_and_save_logo(
-                                dev_data['logo_url'], 
+                                dev_data['logo_url'],
                                 developer.name
                             )
                             if logo_public_id:
                                 developer.logo = logo_public_id
                                 developer.save()
                                 self.stdout.write(f'✓ Logo saved for {developer.name}')
-                        
+
                     elif update_existing:
                         # Update existing developer with IGDB data
                         updated = False
@@ -196,20 +196,20 @@ class Command(BaseCommand):
                         if dev_data['founded_year'] and not developer.founded_year:
                             developer.founded_year = dev_data['founded_year']
                             updated = True
-                        
+
                         # Update logo if developer doesn't have one
-                        if (dev_data.get('logo_url') and 
-                            (not developer.logo or developer.logo == 'placeholder')):
+                        if (dev_data.get('logo_url') and
+                                (not developer.logo or developer.logo == 'placeholder')):
                             self.stdout.write(f'Downloading logo for {developer.name}...')
                             logo_public_id = self.download_and_save_logo(
-                                dev_data['logo_url'], 
+                                dev_data['logo_url'],
                                 developer.name
                             )
                             if logo_public_id:
                                 developer.logo = logo_public_id
                                 updated = True
                                 self.stdout.write(f'✓ Logo updated for {developer.name}')
-                        
+
                         if updated:
                             developer.save()
                             updated_count += 1
@@ -220,12 +220,12 @@ class Command(BaseCommand):
                             self.stdout.write(f'- Skipped: {developer.name} (no new data)')
                     else:
                         self.stdout.write(f'- Exists: {developer.name}')
-                        
+
                 except Exception as e:
                     self.stdout.write(
                         self.style.ERROR(
                             f'Error saving developer {dev_data["name"]}: {str(e)}'
                         )
                     )
-        
+
         return created_count, updated_count

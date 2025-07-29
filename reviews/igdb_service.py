@@ -122,7 +122,7 @@ class IGDBService:
                         if (company_data.get('developer') and
                                 'company' in company_data):
                             company = company_data['company']
-                            
+
                             # Extract website URL
                             website_url = ''
                             if 'websites' in company:
@@ -135,7 +135,7 @@ class IGDBService:
                                 if not website_url and company['websites']:
                                     first_site = company['websites'][0]
                                     website_url = first_site.get('url', '')
-                            
+
                             # Convert start_date timestamp to year
                             founded_year = ''
                             if company.get('start_date'):
@@ -148,7 +148,7 @@ class IGDBService:
                                     founded_year = date_obj.year
                                 except (ValueError, TypeError):
                                     founded_year = ''
-                            
+
                             # Extract logo URL
                             logo_url = ''
                             if company.get('logo') and company['logo'].get('url'):
@@ -158,7 +158,7 @@ class IGDBService:
                                     logo_url = 'https:' + logo_url
                                 # Replace t_thumb with t_logo_med for better quality
                                 logo_url = logo_url.replace('t_thumb', 't_logo_med')
-                            
+
                             developer_info = {
                                 'id': company.get('id'),
                                 'name': company.get('name', ''),
@@ -175,7 +175,7 @@ class IGDBService:
                         if (company_data.get('publisher') and
                                 'company' in company_data):
                             company = company_data['company']
-                            
+
                             # Extract website URL
                             website_url = ''
                             if 'websites' in company:
@@ -188,7 +188,7 @@ class IGDBService:
                                 if not website_url and company['websites']:
                                     first_site = company['websites'][0]
                                     website_url = first_site.get('url', '')
-                            
+
                             # Convert start_date timestamp to year
                             founded_year = ''
                             if company.get('start_date'):
@@ -201,7 +201,7 @@ class IGDBService:
                                     founded_year = date_obj.year
                                 except (ValueError, TypeError):
                                     founded_year = ''
-                            
+
                             # Extract logo URL
                             logo_url = ''
                             if company.get('logo') and company['logo'].get('url'):
@@ -211,7 +211,7 @@ class IGDBService:
                                     logo_url = 'https:' + logo_url
                                 # Replace t_thumb with t_logo_med for better quality
                                 logo_url = logo_url.replace('t_thumb', 't_logo_med')
-                            
+
                             publisher_info = {
                                 'id': company.get('id'),
                                 'name': company.get('name', ''),
@@ -232,7 +232,7 @@ class IGDBService:
         except Exception as e:
             print(f"Error searching games with platforms: {e}")
             return []
-        
+
 
 # Convenience function for quick testing
 def test_igdb_connection():

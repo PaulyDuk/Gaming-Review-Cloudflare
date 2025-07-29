@@ -19,7 +19,7 @@ def process_release_dates(release_dates_data):
     """Process IGDB release dates data to get earliest date per platform"""
     if not release_dates_data:
         return []
-    
+
     # Group release dates by platform, keeping only the earliest date
     platform_releases = {}
     for release_date in release_dates_data:
@@ -28,12 +28,12 @@ def process_release_dates(release_dates_data):
             if ('platform' in release_date and
                     'name' in release_date['platform']):
                 platform_name = release_date['platform']['name']
-            
+
             try:
                 timestamp = release_date['date']
                 date_obj = datetime.fromtimestamp(timestamp)
                 formatted_date = date_obj.strftime('%B %d, %Y')
-                
+
                 # Keep only the earliest date for each platform
                 if (platform_name not in platform_releases or
                         timestamp <
@@ -45,7 +45,7 @@ def process_release_dates(release_dates_data):
                     }
             except (ValueError, OSError):
                 continue
-    
+
     # Sort by timestamp and return list
     sorted_releases = sorted(
         platform_releases.values(),

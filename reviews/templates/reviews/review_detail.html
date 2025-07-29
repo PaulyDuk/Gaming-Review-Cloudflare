@@ -12,7 +12,7 @@
             <div class="d-none d-md-block col-md-6 masthead-image">
                 <div class="image-container">
                     {% if "placeholder" in review.featured_image.url %}
-                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default image">
+                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
                     {% else %}
                         <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
                     {% endif %}

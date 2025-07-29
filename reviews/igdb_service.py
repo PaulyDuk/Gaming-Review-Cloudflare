@@ -85,12 +85,14 @@ class IGDBService:
             # Format the results to make platforms easier to work with
             formatted_games = []
             for game in games:
+                cover_url = (game.get('cover', {}).get('url', '') if game.get('cover') else '')
+                if cover_url:
+                    cover_url = cover_url.replace('t_thumb', 't_cover_big')
                 formatted_game = {
                     'id': game.get('id'),
                     'name': game.get('name'),
                     'summary': game.get('summary', ''),
-                    'cover_url': (game.get('cover', {}).get('url', '')
-                                  if game.get('cover') else ''),
+                    'cover_url': cover_url,
                     'platforms': [],
                     'genres': [],
                     'developers': [],
@@ -233,39 +235,3 @@ class IGDBService:
             print(f"Error searching games with platforms: {e}")
             return []
 
-
-# Convenience function for quick testing
-def test_igdb_connection():
-    """Test function to verify IGDB connection"""
-    try:
-        service = IGDBService()
-        # Test with a simple search
-        games = service.search_games("Mario", limit=5)
-        print(f"IGDB Connection Test: Found {len(games)} games")
-        for game in games[:3]:
-            print(f"- {game.get('name', 'Unknown')}")
-        return True
-    except Exception as e:
-        print(f"IGDB Connection Test Failed: {e}")
-        return False
-
-
-if __name__ == "__main__":
-    # For testing purposes
-    def print_all_fields_for_game(game_name):
-        service = IGDBService()
-        wrapper = service.initialize_wrapper()
-        query_string = f'search "{game_name}"; limit 1; fields *;'
-        try:
-            byte_array = wrapper.api_request('games', query_string)
-            games = json.loads(byte_array)
-            if games:
-                print(f"All fields for '{game_name}':")
-                for key, value in games[0].items():
-                    print(f"{key}: {value}")
-            else:
-                print(f"No results found for '{game_name}'")
-        except Exception as e:
-            print(f"Error: {e}")
-
-    print_all_fields_for_game("Doom Eternal")

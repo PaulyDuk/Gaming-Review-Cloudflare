@@ -10,10 +10,40 @@ import random
 import datetime
 
 class Command(BaseCommand):
+    def upload_cover_to_cloudinary(self, cover_url, game_title):
+        """Download cover image and upload to Cloudinary, return public_id or None"""
+        import requests
+        import tempfile
+        from cloudinary.uploader import upload
+        import os
+        if not cover_url:
+            return None
+        try:
+            response = requests.get(cover_url, timeout=10)
+            response.raise_for_status()
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(response.content)
+                temp_file_path = temp_file.name
+            try:
+                public_id = f"game_covers/{game_title.lower().replace(' ', '_')}"
+                result = upload(
+                    temp_file_path,
+                    public_id=public_id,
+                    folder="game_covers",
+                    overwrite=True,
+                    resource_type="image"
+                )
+                return result['public_id']
+            finally:
+                if os.path.exists(temp_file_path):
+                    os.unlink(temp_file_path)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"Failed to upload cover for {game_title}: {str(e)}"))
+            return None
     help = 'Populate reviews, developers, and publishers from IGDB API'
 
     def add_arguments(self, parser):
-        parser.add_argument('--limit', type=int, default=10, help='Number of games to process (default: 10)')
+        parser.add_argument('--limit', type=int, default=30, help='Number of games to process (default: 30)')
         parser.add_argument('--search', type=str, help='Search for a specific game name')
 
     def handle(self, *args, **options):
@@ -107,6 +137,13 @@ class Command(BaseCommand):
                     review_text = f"Auto-generated review for {title}."
                     review_date = datetime.datetime.now()
 
+                    # Download and upload cover image
+                    cover_url = game.get('cover_url', '')
+                    if cover_url.startswith('//'):
+                        cover_url = 'https:' + cover_url
+                    cloudinary_id = self.upload_cover_to_cloudinary(cover_url, title)
+                    featured_image = cloudinary_id if cloudinary_id else 'placeholder'
+
                     review, created = Review.objects.get_or_create(
                         title=title,
                         slug=slug,
@@ -119,7 +156,7 @@ class Command(BaseCommand):
                             'review_text': review_text,
                             'reviewed_by': user,
                             'review_date': review_date,
-                            'featured_image': 'placeholder',
+                            'featured_image': featured_image,
                             'is_featured': False,
                             'is_published': True
                         }

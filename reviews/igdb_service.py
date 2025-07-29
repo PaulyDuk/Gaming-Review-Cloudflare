@@ -76,7 +76,6 @@ class IGDBService:
             f'search "{game_name}"; limit {limit};'
         )
 
-        print(f"IGDB Query String: {query_string}")
         try:
             byte_array = wrapper.api_request('games', query_string)
             games = json.loads(byte_array)

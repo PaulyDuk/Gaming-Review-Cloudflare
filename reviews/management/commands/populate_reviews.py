@@ -149,6 +149,7 @@ class Command(BaseCommand):
                 continue
 
         created_reviews = 0
+        from reviews.models import Genre
         with transaction.atomic():
             for idx, game in enumerate(games, 1):
                 if idx not in selected_indices:
@@ -231,6 +232,15 @@ class Command(BaseCommand):
                             'is_published': True
                         }
                     )
+                    # Add genres to review
+                    genre_objs = []
+                    for genre in game.get('genres', []):
+                        genre_name = genre.get('name')
+                        if genre_name:
+                            genre_obj, _ = Genre.objects.get_or_create(name=genre_name)
+                            genre_objs.append(genre_obj)
+                    if genre_objs:
+                        review.genres.set(genre_objs)
                     if created:
                         created_reviews += 1
                         self.stdout.write(self.style.SUCCESS(f'✓ Created review: {title}'))

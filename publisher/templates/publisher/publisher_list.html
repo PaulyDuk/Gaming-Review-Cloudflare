@@ -14,7 +14,7 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="image-container">
-                                <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}">
+                                <a href="{% url 'publisher:publisher_games' publisher.slug %}">
                                     <!-- {% if "placeholder" in publisher.logo.url %}
                                         <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default publisher logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
                                     {% else %}
@@ -23,17 +23,15 @@
                                 </a>
 
                             </div>
-                            <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}" class="post-link">
+                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="post-link">
                                 <h2 class="card-title">{{ publisher.name }}</h2>
-                                <p class="card-text">{{ publisher.description|striptags|truncatewords:30 }}</p>
+                                {% if publisher.description %}
+                                    <p class="card-text">{{ publisher.description|striptags|truncatewords:30 }}</p>
+                                {% else %}
+                                    <p class="card-text text-muted">No publisher information available</p>
+                                {% endif %}
                             </a>
-
                             <hr />
-                            {% if publisher.headquarters %}
-                            <p class="card-text text-muted h6">
-                                <i class="fas fa-map-marker-alt"></i> {{ publisher.headquarters }}
-                            </p>
-                            {% endif %}
                             {% if publisher.website %}
                             <p class="card-text">
                                 <a href="{{ publisher.website }}" target="_blank" class="text-primary">

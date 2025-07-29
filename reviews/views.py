@@ -92,10 +92,28 @@ def review_details(request, slug):
             game_platforms = platform_data['platforms']
         if platform_data and platform_data.get('genres'):
             game_genres = platform_data['genres']
+        # Map IGDB developers to Django Developer objects
         if platform_data and platform_data.get('developers'):
-            game_developers = platform_data['developers']
+            igdb_developers = platform_data['developers']
+            game_developers = []
+            for dev in igdb_developers:
+                db_dev = Developer.objects.filter(name__iexact=dev.get('name')).first()
+                if db_dev:
+                    game_developers.append(db_dev)
+                else:
+                    # fallback: add dict with name/description only
+                    game_developers.append(dev)
+        # Map IGDB publishers to Django Publisher objects
         if platform_data and platform_data.get('publishers'):
-            game_publishers = platform_data['publishers']
+            igdb_publishers = platform_data['publishers']
+            game_publishers = []
+            for pub in igdb_publishers:
+                db_pub = Publisher.objects.filter(name__iexact=pub.get('name')).first()
+                if db_pub:
+                    game_publishers.append(db_pub)
+                else:
+                    # fallback: add dict with name/description only
+                    game_publishers.append(pub)
         if (platform_data and
                 platform_data.get('game', {}).get('release_dates')):
             raw_release_dates = platform_data['game']['release_dates']

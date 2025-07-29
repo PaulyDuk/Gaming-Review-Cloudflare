@@ -15,9 +15,9 @@ class DeveloperList(generic.ListView):
     ordering = ['name']
 
 
-def developer_games(request, developer_id):
+def developer_games(request, slug):
     """Show all games (reviews) by a specific developer"""
-    developer = get_object_or_404(Developer, id=developer_id)
+    developer = get_object_or_404(Developer, slug=slug)
     games = Review.objects.filter(developer=developer, is_published=True)
 
     return render(request, 'developer/developer_games.html', {

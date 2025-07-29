@@ -6,6 +6,7 @@ from cloudinary.models import CloudinaryField
 
 class Publisher(models.Model):
     name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True, blank=True)
     founded_year = models.IntegerField(blank=True, null=True)
     website = models.URLField(blank=True)
     description = models.TextField(blank=True)
@@ -18,3 +19,9 @@ class Publisher(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        from django.utils.text import slugify
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)

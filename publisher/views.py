@@ -15,9 +15,9 @@ class PublisherList(generic.ListView):
     ordering = ['name']
 
 
-def publisher_games(request, publisher_id):
+def publisher_games(request, slug):
     """Show all games (reviews) by a specific publisher"""
-    publisher = get_object_or_404(Publisher, id=publisher_id)
+    publisher = get_object_or_404(Publisher, slug=slug)
     games = Review.objects.filter(publisher=publisher, is_published=True)
 
     return render(request, 'publisher/publisher_games.html', {

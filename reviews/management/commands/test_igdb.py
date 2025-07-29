@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from reviews.igdb_service import IGDBService
 import json
 
+
 class Command(BaseCommand):
     help = 'Test IGDB API connection and print all fields for Doom Eternal'
 

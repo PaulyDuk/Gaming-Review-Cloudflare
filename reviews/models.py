@@ -7,17 +7,6 @@ from publisher.models import Publisher
 # Create your models here.
 
 
-class Genre(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        verbose_name = 'Genre'
-        verbose_name_plural = 'Genres'
-        ordering = ['name']
-
-    def __str__(self):
-        return self.name
-
 class Review(models.Model):
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
@@ -64,6 +53,18 @@ class Review(models.Model):
 
     def number_of_likes(self):
         return self.likes.count()
+
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        verbose_name = 'Genre'
+        verbose_name_plural = 'Genres'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
 
 
 class UserComment(models.Model):

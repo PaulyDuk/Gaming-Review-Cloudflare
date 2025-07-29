@@ -72,6 +72,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.WARNING(f"Failed to upload publisher logo for {publisher_name}: {str(e)}"))
             return None
+
     def upload_cover_to_cloudinary(self, cover_url, game_title):
         """Download cover image and upload to Cloudinary, return public_id or None"""
         import requests

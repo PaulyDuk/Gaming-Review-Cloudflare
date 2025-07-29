@@ -11,6 +11,8 @@
                     <h1>{{ developer.name }}</h1>
                     {% if developer.description %}
                         <p class="lead">{{ developer.description | safe }}</p>
+                    {% else %}
+                        <p class="lead">No developer information available.</p>
                     {% endif %}
                     </div>
                     {% if games %}

@@ -7,52 +7,12 @@ from publisher.models import Publisher
 
 
 class Review(models.Model):
-    GENRE_CHOICES = [
-        ('action', 'Action'),
-        ('adventure', 'Adventure'),
-        ('fighting', 'Fighting'),
-        ('first-person shooter', 'First-Person Shooter'),
-        ('horror', 'Horror'),
-        ('indie', 'Indie'),
-        ('platformer', 'Platformer'),
-        ('puzzle', 'Puzzle'),
-        ('racing', 'Racing'),
-        ('role-playing', 'Role-Playing'),
-        ('rpg', 'RPG'),
-        ('shooter', 'Shooter'),
-        ('simulation', 'Simulation'),
-        ('sports', 'Sports'),
-        ('strategy', 'Strategy'),
-    ]
-
-    CONSOLES = [
-        ('Playstation', 'Playstation'),
-        ('Playstation 2', 'Playstation 2'),
-        ('Playstation 3', 'Playstation 3'),
-        ('Playstation 4', 'Playstation 4'),
-        ('Playstation 5', 'Playstation 5'),
-        ('Nintendo 64', 'Nintendo 64'),
-        ('Nintendo GameCube', 'Nintendo GameCube'),
-        ('Nintendo Wii', 'Nintendo Wii'),
-        ('Nintendo Wii U', 'Nintendo Wii U'),
-        ('Nintendo Switch', 'Nintendo Switch'),
-        ('Nintendo Switch 2', 'Nintendo Switch 2'),
-        ('Xbox', 'Xbox'),
-        ('Xbox 360', 'Xbox 360'),
-        ('Xbox One', 'Xbox One'),
-        ('Xbox Series X', 'Xbox Series X'),
-        ('PC', 'PC'),
-        ('Other', 'Other'),
-    ]
-
     title = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True)
     publisher = models.ForeignKey(
         Publisher, on_delete=models.CASCADE, related_name='reviews')
     developer = models.ForeignKey(
         Developer, on_delete=models.CASCADE, related_name='games')
-    genre = models.CharField(max_length=20, choices=GENRE_CHOICES)
-    console = models.CharField(max_length=50, choices=CONSOLES, default='PC')
     description = models.TextField()
     release_date = models.DateField()
 

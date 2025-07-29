@@ -9,7 +9,7 @@ class ReviewInline(admin.TabularInline):
     model = Review
     extra = 0  # Don't show extra empty forms
     fields = (
-        'title', 'genre', 'console', 'review_score', 'is_published',
+        'title', 'review_score', 'is_published',
         'is_featured', 'created_on'
     )
     readonly_fields = ('created_on',)
@@ -19,9 +19,9 @@ class ReviewInline(admin.TabularInline):
 @admin.register(Publisher)
 class PublisherAdmin(SummernoteModelAdmin):
     summernote_fields = ('description',)
-    list_display = ('name', 'founded_year', 'headquarters', 'created_on')
+    list_display = ('name', 'founded_year', 'created_on')
     list_filter = ('founded_year', 'created_on')
-    search_fields = ('name', 'headquarters')
+    search_fields = ('name',)
     date_hierarchy = 'created_on'
     ordering = ('name',)
     list_per_page = 25
@@ -31,9 +31,9 @@ class PublisherAdmin(SummernoteModelAdmin):
 @admin.register(Developer)
 class DeveloperAdmin(SummernoteModelAdmin):
     summernote_fields = ('description',)
-    list_display = ('name', 'founded_year', 'headquarters', 'created_on')
+    list_display = ('name', 'founded_year', 'created_on')
     list_filter = ('founded_year', 'created_on')
-    search_fields = ('name', 'headquarters')
+    search_fields = ('name',)
     date_hierarchy = 'created_on'
     ordering = ('name',)
     list_per_page = 25
@@ -44,11 +44,11 @@ class DeveloperAdmin(SummernoteModelAdmin):
 class ReviewAdmin(SummernoteModelAdmin):
     summernote_fields = ('description', 'review_text')
     list_display = (
-        'title', 'publisher', 'developer', 'genre', 'console',
+        'title', 'publisher', 'developer',
         'review_score', 'is_published'
     )
     list_filter = (
-        'genre', 'console', 'is_published', 'publisher', 'developer'
+        'is_published', 'publisher', 'developer'
     )
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}

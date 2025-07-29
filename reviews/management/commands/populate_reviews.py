@@ -41,8 +41,7 @@ class Command(BaseCommand):
                         release_date = datetime.datetime.fromtimestamp(timestamp).date()
                     except Exception:
                         release_date = None
-                genre = game['genres'][0]['name'] if game.get('genres') else 'Other'
-                console = game['platforms'][0]['name'] if game.get('platforms') else 'Other'
+                # genre and console fields removed from Review model
 
                 # Handle developer
                 developer_obj = None
@@ -72,36 +71,36 @@ class Command(BaseCommand):
                         }
                     )
 
-                # Pick a random user for reviewed_by
-                user = User.objects.order_by('?').first()
-                review_score = round(random.uniform(6, 10), 1)
-                review_text = f"Auto-generated review for {title}."
-                review_date = datetime.datetime.now()
+                # Only create review if both developer and publisher exist
+                if developer_obj and publisher_obj:
+                    user = User.objects.order_by('?').first()
+                    review_score = round(random.uniform(6, 10), 1)
+                    review_text = f"Auto-generated review for {title}."
+                    review_date = datetime.datetime.now()
 
-                # Create review
-                review, created = Review.objects.get_or_create(
-                    title=title,
-                    slug=slug,
-                    defaults={
-                        'publisher': publisher_obj,
-                        'developer': developer_obj,
-                        'genre': genre,
-                        'console': console,
-                        'description': description,
-                        'release_date': release_date or datetime.date.today(),
-                        'review_score': review_score,
-                        'review_text': review_text,
-                        'reviewed_by': user,
-                        'review_date': review_date,
-                        'featured_image': 'placeholder',
-                        'is_featured': False,
-                        'is_published': True
-                    }
-                )
-                if created:
-                    created_reviews += 1
-                    self.stdout.write(self.style.SUCCESS(f'✓ Created review: {title}'))
+                    review, created = Review.objects.get_or_create(
+                        title=title,
+                        slug=slug,
+                        defaults={
+                            'publisher': publisher_obj,
+                            'developer': developer_obj,
+                            'description': description,
+                            'release_date': release_date or datetime.date.today(),
+                            'review_score': review_score,
+                            'review_text': review_text,
+                            'reviewed_by': user,
+                            'review_date': review_date,
+                            'featured_image': 'placeholder',
+                            'is_featured': False,
+                            'is_published': True
+                        }
+                    )
+                    if created:
+                        created_reviews += 1
+                        self.stdout.write(self.style.SUCCESS(f'✓ Created review: {title}'))
+                    else:
+                        self.stdout.write(f'- Exists: {title}')
                 else:
-                    self.stdout.write(f'- Exists: {title}')
+                    self.stdout.write(self.style.WARNING(f'Skipped: {title} (missing developer or publisher)'))
 
         self.stdout.write(self.style.SUCCESS(f'Total reviews created: {created_reviews}'))

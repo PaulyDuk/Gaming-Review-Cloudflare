@@ -6,7 +6,6 @@ from cloudinary.models import CloudinaryField
 class Publisher(models.Model):
     name = models.CharField(max_length=200, unique=True)
     founded_year = models.IntegerField(blank=True, null=True)
-    headquarters = models.CharField(max_length=200, blank=True)
     website = models.URLField(blank=True)
     description = models.TextField(blank=True)
     logo = CloudinaryField('image', default='placeholder')

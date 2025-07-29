@@ -305,19 +305,10 @@ def search_games(request):
 
     if query:
         # Search games by title
-        games_by_title = Review.objects.filter(
+        games = Review.objects.filter(
             title__icontains=query,
             is_published=True
         )
-
-        # Search games by genre
-        games_by_genre = Review.objects.filter(
-            genre__icontains=query,
-            is_published=True
-        )
-
-        # Combine and remove duplicates
-        games = (games_by_title | games_by_genre).distinct()
 
         # Search publishers
         publishers = Publisher.objects.filter(name__icontains=query)

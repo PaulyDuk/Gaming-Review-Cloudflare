@@ -105,7 +105,7 @@ class Command(BaseCommand):
     help = 'Populate reviews, developers, and publishers from IGDB API'
 
     def add_arguments(self, parser):
-        parser.add_argument('--limit', type=int, default=30, help='Number of games to process (default: 30)')
+        parser.add_argument('--limit', type=int, default=50, help='Number of games to process (default: 50)')
         parser.add_argument('--search', type=str, help='Search for a specific game name')
 
     def handle(self, *args, **options):

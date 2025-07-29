@@ -11,7 +11,7 @@
         <div class="col-12 mt-3 left">
             <div class="row">
                 {% for review in review_list %}
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mb-4">
 <div class="card-body">
     <div class="image-container">
@@ -22,9 +22,6 @@
                 <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
             {% endif %}
         </a>
-        <div class="image-flash">
-            <p class="author">{{ review.console }}</p>
-        </div>
     </div>
 <a href="{% url 'review_detail' review.slug %}" class="post-link">
     <h2 class="card-title">{{ review.title }}</h2>
@@ -37,7 +34,7 @@
 </div>
                     </div>
                 </div>
-                {% if forloop.counter|divisibleby:3 %}
+                {% if forloop.counter|divisibleby:4 %}
             </div>
             <div class="row">
                 {% endif %}

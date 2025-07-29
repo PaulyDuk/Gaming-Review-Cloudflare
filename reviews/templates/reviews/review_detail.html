@@ -47,9 +47,6 @@
             <div class="card mb-4 mt-3">
                 <div class="card-body">
                     <h3>Game Info</h3>
-                    {% if review.title %}
-                        <p><strong>Title:</strong> {{ review.title }}</p>
-                    {% endif %}
                     {% if game_platforms %}
                         <p><strong>Available on:</strong> 
                             {% for platform in game_platforms %}

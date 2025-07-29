@@ -23,25 +23,54 @@ class Command(BaseCommand):
         igdb_service = IGDBService()
 
         if search:
-            games = igdb_service.search_games_with_platforms(search, limit=1)
+            games = igdb_service.search_games_with_platforms(search, limit=limit)
         else:
             games = igdb_service.search_games_with_platforms('', limit=limit)
 
+        if not games:
+            self.stdout.write(self.style.WARNING('No games found matching your search.'))
+            return
+
+        # List all matching games with details
+        self.stdout.write(self.style.SUCCESS('Matching games:'))
+        for idx, game in enumerate(games, 1):
+            title = game.get('name', 'Unknown')
+            # Get first release year
+            year = None
+            if 'release_dates' in game and game['release_dates']:
+                try:
+                    timestamp = game['release_dates'][0]['date']
+                    year = datetime.datetime.fromtimestamp(timestamp).year
+                except Exception:
+                    year = 'Unknown'
+            platforms = ', '.join([p.get('name', 'Unknown') for p in game.get('platforms', [])])
+            self.stdout.write(f"[{idx}] {title} | Year: {year} | Platforms: {platforms}")
+
+        # Prompt user to select games to add
+        self.stdout.write(self.style.WARNING('Enter the numbers of the games to add, separated by commas (e.g. 1,3):'))
+        selection = input('Selection: ')
+        selected_indices = set()
+        for part in selection.split(','):
+            try:
+                selected_indices.add(int(part.strip()))
+            except ValueError:
+                continue
+
         created_reviews = 0
         with transaction.atomic():
-            for game in games:
+            for idx, game in enumerate(games, 1):
+                if idx not in selected_indices:
+                    continue
                 title = game.get('name')
                 slug = slugify(title)
                 description = game.get('summary', '')
                 release_date = None
                 if 'release_dates' in game and game['release_dates']:
-                    # Use first release date
                     try:
                         timestamp = game['release_dates'][0]['date']
                         release_date = datetime.datetime.fromtimestamp(timestamp).date()
                     except Exception:
                         release_date = None
-                # genre and console fields removed from Review model
 
                 # Handle developer
                 developer_obj = None

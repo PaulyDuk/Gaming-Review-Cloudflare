@@ -252,4 +252,20 @@ def test_igdb_connection():
 
 if __name__ == "__main__":
     # For testing purposes
-    test_igdb_connection()
+    def print_all_fields_for_game(game_name):
+        service = IGDBService()
+        wrapper = service.initialize_wrapper()
+        query_string = f'search "{game_name}"; limit 1; fields *;'
+        try:
+            byte_array = wrapper.api_request('games', query_string)
+            games = json.loads(byte_array)
+            if games:
+                print(f"All fields for '{game_name}':")
+                for key, value in games[0].items():
+                    print(f"{key}: {value}")
+            else:
+                print(f"No results found for '{game_name}'")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    print_all_fields_for_game("Doom Eternal")

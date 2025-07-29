@@ -184,6 +184,7 @@ def review_details(request, slug):
             "game_genres": game_genres,
             "game_developers": game_developers,
             "game_publishers": game_publishers,
+            "developer_db": Developer.objects.all(),
         },
     )
 

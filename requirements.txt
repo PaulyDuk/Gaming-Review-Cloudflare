@@ -12,8 +12,9 @@ django-crispy-forms==2.4
 django-summernote==0.8.20.0
 gunicorn==23.0.0
 idna==3.10
-igdb_api_python==1.0
+igdb-api-v4==0.3.3
 packaging==25.0
+protobuf==6.31.1
 psycopg2==2.9.10
 requests==2.32.4
 six==1.17.0

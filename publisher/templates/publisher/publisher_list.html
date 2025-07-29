@@ -16,7 +16,7 @@
                             <div class="image-container">
                                 <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}">
                                     {% if "placeholder" in publisher.logo.url %}
-                                        <img class="card-img-top" src="https://via.placeholder.com/300x200/6c757d/ffffff?text=No+Logo" alt="Default publisher logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
+                                        <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="Default publisher logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
                                     {% else %}
                                         <img class="card-img-top" src="{{ publisher.logo.url }}" alt="{{ publisher.name }} logo" style="height: 200px !important; width: 100% !important; object-fit: contain !important;">
                                     {% endif %}

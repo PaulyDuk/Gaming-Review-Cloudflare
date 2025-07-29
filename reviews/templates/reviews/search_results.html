@@ -16,24 +16,27 @@
                                 <h2 class="mt-4">Games ({{ games.count }})</h2>
                                 <div class="row">
                                     {% for game in games %}
-                                        <div class="col-md-4 mb-4">
-                                            <div class="card h-100">
-                                                <div class="image-container">
-                                                    {% if "placeholder" in game.featured_image.url %}
-                                                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
-                                                    {% else %}
-                                                        <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
-                                                    {% endif %}
-                                                </div>
+                                        <div class="col-md-4">
+                                            <div class="card mb-4">
                                                 <div class="card-body">
-                                                    <h5 class="card-title">{{ game.title }}</h5>
-                                                    <p class="card-text">{{ game.description|truncatewords:50|safe }}</p>
-                                                    <p class="card-text"><small class="text-muted">
-                                                        Score: {{ game.review_score|default:"Not rated" }}/10
-                                                    </small></p>
-                                                </div>
-                                                <div class="card-footer">
-                                                    <a href="{% url 'review_detail' slug=game.slug %}" class="btn btn-primary">Read Review</a>
+                                                    <div class="image-container">
+                                                        <a href="{% url 'review_detail' game.slug %}">
+                                                            {% if "placeholder" in game.featured_image.url %}
+                                                                <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                                                            {% else %}
+                                                                <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
+                                                            {% endif %}
+                                                        </a>
+                                                        <div class="image-flash">
+                                                            <p class="author">{{ game.console }}</p>
+                                                        </div>
+                                                    </div>
+                                                    <a href="{% url 'review_detail' game.slug %}" class="post-link">
+                                                        <h2 class="card-title">{{ game.title }}</h2>
+                                                        <p class="card-text">{{ game.description|striptags|truncatewords:50 }}</p>
+                                                    </a>
+                                                    <hr />
+                                                    <p class="card-text text-muted h6">Reviewed on: {{ game.created_on }}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -49,10 +52,14 @@
                                         <div class="col-md-6 mb-3">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <a href="{% url 'publisher:publisher_games' publisher_id=publisher.id %}" class="text-decoration-none">
+                                                    <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="text-decoration-none">
                                                         <h5 class="card-title text-primary">{{ publisher.name }}</h5>
                                                     </a>
-                                                    <p class="card-text">{{ publisher.description|truncatewords:50|safe }}</p>
+                                                    {% if publisher.description %}
+                                                        <p class="card-text">{{ publisher.description|truncatewords:50|safe }}</p>
+                                                    {% else %}
+                                                        <p class="card-text">No publisher information available.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
@@ -68,10 +75,14 @@
                                         <div class="col-md-6 mb-3">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <a href="{% url 'developer:developer_games' developer_id=developer.id %}" class="text-decoration-none">
+                                                    <a href="{% url 'developer:developer_games' developer.slug %}" class="text-decoration-none">
                                                         <h5 class="card-title text-primary">{{ developer.name }}</h5>
                                                     </a>
-                                                    <p class="card-text">{{ developer.description|truncatewords:50|safe }}</p>
+                                                    {% if developer.description %}
+                                                        <p class="card-text">{{ developer.description|truncatewords:50|safe }}</p>
+                                                    {% else %}
+                                                        <p class="card-text">No developer information available.</p>
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>

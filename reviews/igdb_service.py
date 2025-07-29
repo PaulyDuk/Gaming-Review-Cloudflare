@@ -44,7 +44,6 @@ class IGDBService:
             self.wrapper = IGDBWrapper(self.client_id, self.access_token)
         return self.wrapper
 
-
     def get_game_platforms_by_name(self, game_name):
         """Get platforms, genres, developers, and publishers for a game by name
         (returns first match)"""
@@ -58,7 +57,6 @@ class IGDBService:
                 'publishers': games[0]['publishers']
             }
         return None
-
 
     def search_games_with_platforms(self, game_name, limit=10):
         """Search for games by name and return with detailed platform information"""
@@ -234,4 +232,3 @@ class IGDBService:
         except Exception as e:
             print(f"Error searching games with platforms: {e}")
             return []
-

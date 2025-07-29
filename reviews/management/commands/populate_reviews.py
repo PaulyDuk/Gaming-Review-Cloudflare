@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 import random
 import datetime
 
+
 class Command(BaseCommand):
     def upload_cover_to_cloudinary(self, cover_url, game_title):
         """Download cover image and upload to Cloudinary, return public_id or None"""

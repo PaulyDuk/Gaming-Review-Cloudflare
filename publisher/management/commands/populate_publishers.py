@@ -2,9 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from publisher.models import Publisher
 from reviews.igdb_service import IGDBService
-import json
 import requests
-from django.core.files.base import ContentFile
 from cloudinary.uploader import upload
 import tempfile
 import os

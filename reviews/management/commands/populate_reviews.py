@@ -11,6 +11,67 @@ import datetime
 
 
 class Command(BaseCommand):
+    def upload_developer_logo_to_cloudinary(self, logo_url, developer_name):
+        """Download developer logo and upload to Cloudinary, return public_id or None"""
+        import requests
+        import tempfile
+        from cloudinary.uploader import upload
+        import os
+        if not logo_url:
+            return None
+        try:
+            response = requests.get(logo_url, timeout=10)
+            response.raise_for_status()
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(response.content)
+                temp_file_path = temp_file.name
+            try:
+                public_id = f"developer_logos/{developer_name.lower().replace(' ', '_')}"
+                result = upload(
+                    temp_file_path,
+                    public_id=public_id,
+                    folder="developer_logos",
+                    overwrite=True,
+                    resource_type="image"
+                )
+                return result['public_id']
+            finally:
+                if os.path.exists(temp_file_path):
+                    os.unlink(temp_file_path)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"Failed to upload developer logo for {developer_name}: {str(e)}"))
+            return None
+
+    def upload_publisher_logo_to_cloudinary(self, logo_url, publisher_name):
+        """Download publisher logo and upload to Cloudinary, return public_id or None"""
+        import requests
+        import tempfile
+        from cloudinary.uploader import upload
+        import os
+        if not logo_url:
+            return None
+        try:
+            response = requests.get(logo_url, timeout=10)
+            response.raise_for_status()
+            with tempfile.NamedTemporaryFile(delete=False) as temp_file:
+                temp_file.write(response.content)
+                temp_file_path = temp_file.name
+            try:
+                public_id = f"publisher_logos/{publisher_name.lower().replace(' ', '_')}"
+                result = upload(
+                    temp_file_path,
+                    public_id=public_id,
+                    folder="publisher_logos",
+                    overwrite=True,
+                    resource_type="image"
+                )
+                return result['public_id']
+            finally:
+                if os.path.exists(temp_file_path):
+                    os.unlink(temp_file_path)
+        except Exception as e:
+            self.stdout.write(self.style.WARNING(f"Failed to upload publisher logo for {publisher_name}: {str(e)}"))
+            return None
     def upload_cover_to_cloudinary(self, cover_url, game_title):
         """Download cover image and upload to Cloudinary, return public_id or None"""
         import requests
@@ -107,13 +168,17 @@ class Command(BaseCommand):
                 developer_obj = None
                 if game.get('developers'):
                     dev_data = game['developers'][0]
+                    logo_url = dev_data.get('logo_url', '')
+                    if logo_url and logo_url.startswith('//'):
+                        logo_url = 'https:' + logo_url
+                    cloudinary_logo_id = self.upload_developer_logo_to_cloudinary(logo_url, dev_data['name'])
                     developer_obj, _ = Developer.objects.get_or_create(
                         name=dev_data['name'],
                         defaults={
                             'description': dev_data.get('description', ''),
                             'website': dev_data.get('website', ''),
                             'founded_year': dev_data.get('founded_year') or None,
-                            'logo': dev_data.get('logo_url', '')
+                            'logo': cloudinary_logo_id if cloudinary_logo_id else logo_url
                         }
                     )
 
@@ -121,13 +186,17 @@ class Command(BaseCommand):
                 publisher_obj = None
                 if game.get('publishers'):
                     pub_data = game['publishers'][0]
+                    logo_url = pub_data.get('logo_url', '')
+                    if logo_url and logo_url.startswith('//'):
+                        logo_url = 'https:' + logo_url
+                    cloudinary_logo_id = self.upload_publisher_logo_to_cloudinary(logo_url, pub_data['name'])
                     publisher_obj, _ = Publisher.objects.get_or_create(
                         name=pub_data['name'],
                         defaults={
                             'description': pub_data.get('description', ''),
                             'website': pub_data.get('website', ''),
                             'founded_year': pub_data.get('founded_year') or None,
-                            'logo': pub_data.get('logo_url', '')
+                            'logo': cloudinary_logo_id if cloudinary_logo_id else logo_url
                         }
                     )
 

@@ -76,6 +76,7 @@ class IGDBService:
             f'search "{game_name}"; limit {limit};'
         )
 
+        print(f"IGDB Query String: {query_string}")
         try:
             byte_array = wrapper.api_request('games', query_string)
             games = json.loads(byte_array)
@@ -142,11 +143,12 @@ class IGDBService:
                                 try:
                                     import datetime
                                     timestamp = company['start_date']
-                                    # IGDB timestamps are in seconds
-                                    date_obj = datetime.datetime.fromtimestamp(
-                                        timestamp)
-                                    founded_year = date_obj.year
-                                except (ValueError, TypeError):
+                                    if isinstance(timestamp, (int, float)) and timestamp > 0:
+                                        date_obj = datetime.datetime.fromtimestamp(timestamp)
+                                        founded_year = date_obj.year
+                                    else:
+                                        founded_year = ''
+                                except (ValueError, TypeError, OSError):
                                     founded_year = ''
 
                             # Extract logo URL
@@ -195,11 +197,12 @@ class IGDBService:
                                 try:
                                     import datetime
                                     timestamp = company['start_date']
-                                    # IGDB timestamps are in seconds
-                                    date_obj = datetime.datetime.fromtimestamp(
-                                        timestamp)
-                                    founded_year = date_obj.year
-                                except (ValueError, TypeError):
+                                    if isinstance(timestamp, (int, float)) and timestamp > 0:
+                                        date_obj = datetime.datetime.fromtimestamp(timestamp)
+                                        founded_year = date_obj.year
+                                    else:
+                                        founded_year = ''
+                                except (ValueError, TypeError, OSError):
                                     founded_year = ''
 
                             # Extract logo URL
@@ -231,4 +234,6 @@ class IGDBService:
             return formatted_games
         except Exception as e:
             print(f"Error searching games with platforms: {e}")
+            import traceback
+            traceback.print_exc()
             return []

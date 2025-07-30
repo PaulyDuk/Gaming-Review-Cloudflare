@@ -1,4 +1,6 @@
 asgiref==3.9.1
+azure-ai-inference==1.0.0b9
+azure-core==1.35.0
 bleach==6.2.0
 certifi==2025.7.14
 charset-normalizer==3.4.2
@@ -13,12 +15,14 @@ django-summernote==0.8.20.0
 gunicorn==23.0.0
 idna==3.10
 igdb-api-v4==0.3.3
+isodate==0.7.2
 packaging==25.0
 protobuf==6.31.1
 psycopg2==2.9.10
 requests==2.32.4
 six==1.17.0
 sqlparse==0.5.3
+typing_extensions==4.14.1
 tzdata==2025.2
 urllib3==2.5.0
 webencodings==0.5.1

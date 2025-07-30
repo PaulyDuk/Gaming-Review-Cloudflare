@@ -1,3 +1,9 @@
+import random
+import datetime
+import os
+import sys
+from turtle import title
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from reviews.models import Review
@@ -6,11 +12,36 @@ from publisher.models import Publisher
 from reviews.igdb_service import IGDBService
 from django.utils.text import slugify
 from django.contrib.auth.models import User
-import random
-import datetime
+from azure.ai.inference import ChatCompletionsClient
+from azure.ai.inference.models import SystemMessage, UserMessage
+from azure.core.credentials import AzureKeyCredential
 
+# AI Client for review generation
+endpoint = "https://models.github.ai/inference"
+model = "openai/gpt-4.1"
+token = os.environ.get("GITHUB_TOKEN")
+
+client = ChatCompletionsClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(token),
+)
 
 class Command(BaseCommand):
+    def generate_ai_review(self, title):
+
+        prompt = f"write 5-7 paragraphs including a conclusion on {title}. Do not include a heading, break each paragraph with a <p> tag, Please ensure the review has appropriate spacing for the paragraphs to display as HTML."
+        response = client.complete(
+            messages=[
+                SystemMessage("You are a game reviewer and need to create professional gaming reviews"),
+                UserMessage(prompt),
+            ],
+            temperature=1,
+            top_p=1,
+            model=model
+        )
+        content = response.choices[0].message.content
+        return content
+
     def upload_developer_logo_to_cloudinary(self, logo_url, developer_name):
         """Download developer logo and upload to Cloudinary, return public_id or None"""
         import requests
@@ -205,8 +236,20 @@ class Command(BaseCommand):
                 # Only create review if both developer and publisher exist
                 if developer_obj and publisher_obj:
                     user = User.objects.order_by('?').first()
-                    review_score = round(random.uniform(6, 10), 1)
-                    review_text = f"Auto-generated review for {title}."
+                    # Prompt user for review_score
+                    while True:
+                        review_score_input = input(f"Enter review score for '{title}' (0-10.0): ").strip()
+                        try:
+                            review_score = float(review_score_input)
+                            if 0 <= review_score <= 10:
+                                break
+                            else:
+                                print("Score must be between 0 and 10.0.")
+                        except ValueError:
+                            print("Invalid input. Please enter a number between 0 and 10.0.")
+
+                    ai_review_text = self.generate_ai_review(title)
+                    review_text = ai_review_text if ai_review_text else f"Auto-generated review for {title}."
                     review_date = datetime.datetime.now()
 
                     # Download and upload cover image

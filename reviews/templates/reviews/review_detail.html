@@ -39,7 +39,7 @@
                     <p class="card-text">{{ review.description | safe }}</p>
                     <hr>
                     <div class="d-flex align-items-center mb-2"><img src="/static/images/arrows.png" style="height: 1.5em; margin-right: 0.5em;"><h2 class="mb-0">Review</h2></div>
-                    <p class="card-text">{{ review.review_text | safe }}</p>
+                    <div class="card-text">{{ review.review_text | safe }}</div>
                     <hr>
                     <div class="d-flex align-items-center mb-2"><img src="/static/images/arrows.png" style="height: 1.5em; margin-right: 0.5em;"><h2 class="mb-0">Score: {{ review.review_score | safe }}</h2></div>
                 </div>

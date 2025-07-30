@@ -27,14 +27,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
-<body class="d-flex flex-column min-vh-100 main-bg">
+<body class="d-flex flex-column min-vh-100">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <nav class="navbar navbar-expand-lg dark-bg">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand"><span
-                        class="thin">The</span><span class="red-o"> Gaming</span><span
-                        class="thin"> Verdict</span></span></a>
+            <img src="/static/images/logo.png" alt="The Gaming Verdict" class="navbar-brand">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -77,10 +75,10 @@
                     <input class="form-control me-2" type="search" name="q" aria-label="Search" value="{{ request.GET.q|default:'' }}">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
-                
-                <span class="navbar-text text-muted">
+
+                <span class="navbar-text-custom">
                         {% if user.is_authenticated %}
-    <p class="text-end m-1">Welcome back {{ user }}</p>
+    <p class="text-end m-1">Welcome back, {{ user }}</p>
     {% else %}
     <p class="text-end m-1">You are not logged in</p>
     {% endif %}

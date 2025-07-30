@@ -1,32 +1,24 @@
-body {
-    background-color: #F9FAFC;
+/* Pagination next/prev buttons styled like search button */
+.pagination .page-link {
+    border-color: #ffb703 !important;
+    color: #ffb703 !important;
+    background-color: transparent !important;
+    transition: background 0.2s, color 0.2s;
 }
-
-.brand {
-    font-family: Lato, sans-serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: #4A4A4F;
+.pagination .page-link:hover,
+.pagination .page-link:focus {
+    background-color: #ffb703 !important;
+    color: #fff !important;
+    border-color: #ffb703 !important;
 }
-
-.red-o {
-    color: #E84610;
+/* Set .alert-info background to #457b9d */
+.alert-info {
+    background-color: #457b9d !important;
+    color: #fff !important;
 }
-
-.thin {
-    font-weight: 300;
-}
-
-.light-bg {
-    background-color: #fff;
-}
-
-.dark-bg {
-    background-color: #445261;
-}
-
-.main-bg {
-    background-color: #dee2e6;
+/* Duplicates restored as requested */
+.dark-bg{
+    background-color: #2a2a2a;
 }
 
 .card {
@@ -35,10 +27,20 @@ body {
 }
 
 .card-body {
-    background-color: #f8f9fa;
+    background-color: #457b9d;
     border-radius: 10px; 
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 15px 0 #888888;
     padding: 1.5rem;
+}
+
+/* Card grid for 5 per row */
+
+.card-text {
+    color: #e5e5e5;
+}
+
+h1, h2, h3 {
+    color: #ffb703;
 }
 
 .image-container img {
@@ -48,8 +50,71 @@ body {
     object-fit: scale-down;
 }
 
+.external-link {
+    color: #ffb703;
+    text-decoration: none;
+}
+.external-link:hover,
+.external-link:focus {
+    color: #fff;
+}
+
 .image-container {
     position: relative;
+}
+/* Make navbar toggler (burger menu) icon white */
+.navbar-toggler {
+    border-color: #fff !important;
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+.card-body:hover,
+.card-body:hover h2.card-title,
+.card-body:hover h3 {
+    color: #ffb703 !important;
+}
+/* Search button custom style */
+.btn-outline-success {
+    border-color: #ffb703 !important;
+    color: #ffb703 !important;
+    background-color: transparent !important;
+    transition: background 0.2s, color 0.2s;
+}
+.btn-outline-success:hover,
+.btn-outline-success:focus {
+    background-color: #ffb703 !important;
+    color: #fff !important;
+    border-color: #ffb703 !important;
+}
+
+/* Navbar */
+.navbar-nav .nav-link {
+    color: #fff !important;
+    transition: color 0.2s;
+    font-size: 1.1rem;
+}
+/* Make <strong> tags white */
+strong {
+    color: #fff !important;
+}
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color: #ffb703 !important;
+    font-size: 1.1rem;
+}
+
+.navbar-text-custom {
+    color: #fff !important;
+    font-size: 1.1rem;
+}
+
+hr {
+    border-top: 2px solid #fff;
+}
+
+body {
+    background-color: #1e1e2f;
 }
 
 .image-flash {
@@ -106,7 +171,7 @@ body {
 
 .post-link {
     text-decoration: none;
-    color: #445261;
+    color: #ffb703;
 }
 
 .post-link:hover,
@@ -170,5 +235,5 @@ body {
 }
 
 .approval {
-    color: rgb(222, 146, 168);
+    color: #ffb703;
 }

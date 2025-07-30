@@ -66,7 +66,7 @@
                         <div class="mb-2">
                             {% for release in game_release_dates %}
                                 <div class="d-flex align-items-center mb-1">
-                                    <span><b>{{ release.platform }}</b> - {{ release.date }}</span>
+                                    <span><strong>{{ release.platform }} - </strong><span class="card-text">{{ release.date }}</span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -83,20 +83,20 @@
                             <div class="mb-3">
                     {% if developer.name %}
                         <h5 class="text-primary">
-                            <a href="{% url 'developer:developer_games' developer.slug %}" class="text-primary text-decoration-none">{{ developer.name }}</a>
+                            <a href="{% url 'developer:developer_games' developer.slug %}" class="external-link text-decoration-none">{{ developer.name }}</a>
                         </h5>
                                 {% endif %}
                                 {% if developer.description %}
-                                    <p class="text-muted">{{ developer.description|safe }}</p>
+                                    <p class="card-text">{{ developer.description|safe }}</p>
                                 {% else %}
-                                    <p class="text-muted">No developer information available.</p>
+                                    <p class="card-text">No developer information available.</p>
                                 {% endif %}
                                 {% if developer.founded_year %}
-                                    <p><strong>Established:</strong> {{ developer.founded_year }}</p>
+                                    <p><strong>Established:</strong> <span class="card-text">{{ developer.founded_year }}</span></p>
                                 {% endif %}
                                 {% if developer.website %}
                                     <p>
-                                        <a href="{{ developer.website }}" target="_blank" class="text-primary">
+                                        <a href="{{ developer.website }}" target="_blank" class="external-link">
                                             <i class="fas fa-external-link-alt"></i> Developer Website
                                         </a>
                                     </p>
@@ -116,20 +116,20 @@
                             <div class="mb-3">
                     {% if publisher.name %}
                         <h5 class="text-primary">
-                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="text-primary text-decoration-none">{{ publisher.name }}</a>
+                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="external-link text-decoration-none">{{ publisher.name }}</a>
                         </h5>
                                 {% endif %}
                                 {% if publisher.description %}
-                                    <p class="text-muted">{{ publisher.description|safe }}</p>
+                                    <p class="card-text">{{ publisher.description|safe }}</p>
                                 {% else %}
-                                    <p class="text-muted">No publisher information available.</p>
+                                    <p class="card-text">No publisher information available.</p>
                                 {% endif %}
                                 {% if publisher.founded_year %}
-                                    <p><strong>Established:</strong> {{ publisher.founded_year }}</p>
+                                    <p><strong>Established:</strong> <span class="card-text">{{ publisher.founded_year }}</span></p>
                                 {% endif %}
                                 {% if publisher.website %}
                                     <p>
-                                        <a href="{{ publisher.website }}" target="_blank" class="text-primary">
+                                        <a href="{{ publisher.website }}" target="_blank" class="external-link">
                                             <i class="fas fa-external-link-alt"></i> Publisher Website
                                         </a>
                                     </p>
@@ -148,7 +148,7 @@
             <!-- User Comments count -->
             <div class="row">
                 <div class="col-12">
-                    <strong class="text-secondary">
+                    <strong>
                         <i class="far fa-comments"></i> {{ comment_count }} comments
                     </strong>
                     <hr>
@@ -166,13 +166,9 @@
                             <div class="p-2 comments
                               {% if not user_comment.approved and user_comment.author == user %}
                               faded{% elif not user_comment.approved %} d-none{% endif %}">
-                              <p class="font-weight-bold">
-                                {{ user_comment.author }}
-                                <span class="font-weight-normal">
-                                  {{ user_comment.created_on }}
-                                </span> wrote:
+                              <p class="card-text"><strong>{{ user_comment.author }} - {{ user_comment.created_on }} wrote:</strong>
                               </p>
-                              <div id="user_comment{{ user_comment.id }}">
+                              <div class="card-text" id="user_comment{{ user_comment.id }}">
                                 {{ user_comment.body | linebreaks }}
                               </div>
                               {% if not user_comment.approved and user_comment.author == user %}
@@ -187,7 +183,7 @@
                             </div>
                             {% endfor %}
                             {% else %}
-                                <p class="text-muted">No comments yet. Be the first to comment on this game!</p>
+                                <p class="card-text">No comments yet. Be the first to comment on this game!</p>
                             {% endif %}
                         </div>
                     </div>
@@ -199,14 +195,14 @@
                         <div class="card-body">
                             {% if user.is_authenticated %}
                             <h3>Leave a comment:</h3>
-                            <p>Posting as: {{ user.username }}</p>
-                            <form id="userCommentForm" method="post" style="margin-top: 1.3em;">
+                            <p class="card-text">Posting as: {{ user.username }}</p>
+                            <form id="userCommentForm" method="post" style="margin-top: 1.3em;" class="card-text">
                               {{ user_comment_form | crispy }}
                               {% csrf_token %}
                               <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
                             </form>
                             {% else %}
-                            <p><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
+                            <p class="card-text"><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
                             {% endif %}
                         </div>
                     </div>
@@ -216,7 +212,7 @@
             <!-- User Reviews Section -->
             <div class="row">
                 <div class="col-12">
-                    <strong class="text-secondary">
+                    <strong>
                         <i class="fas fa-star"></i> {{ user_review_count }} User Review{% if user_review_count != 1 %}s{% endif %}
                         {% if average_review_score %}
                             - Average Score: <span class="badge bg-warning text-dark">{{ average_review_score }}/10</span>
@@ -237,16 +233,13 @@
                                 <div class="p-2 reviews
                                   {% if not user_review.approved and user_review.user == user %}
                                   faded{% elif not user_review.approved %} d-none{% endif %}">
-                                    <p class="font-weight-bold">
-                                        {{ user_review.user.username }}
-                                        <span class="font-weight-normal">
-                                            {{ user_review.created_on }}
-                                        </span> wrote:
+                                    <p class="card-text"><strong>
+                                        {{ user_review.user.username }} - {{ user_review.created_on }} wrote:</strong>
                                     </p>
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
                                     </div>
-                                    <div id="user_review{{ user_review.id }}">
+                                    <div class="card-text" id="user_review{{ user_review.id }}">
                                         {{ user_review.review_text | linebreaks }}
                                     </div>
                                     {% if not user_review.approved and user_review.user == user %}
@@ -261,7 +254,7 @@
                                 </div>
                                 {% endfor %}
                             {% else %}
-                                <p class="text-muted">No user reviews yet. Be the first to review this game!</p>
+                                <p class="card-text">No user reviews yet. Be the first to review this game!</p>
                             {% endif %}
                         </div>
                     </div>
@@ -274,8 +267,13 @@
                             {% if user.is_authenticated %}
                                 {% if not user_has_reviewed %}
                                     <h3>Leave a review:</h3>
-                                    <p>Posting as: {{ user.username }}</p>
-                                    <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
+                                    <p class="card-text">Posting as: {{ user.username }}</p>
+                                    <form id="userReviewForm" method="post" style="margin-top: 1.3em;" class="card-text">
+                                      {% if user_review_form.errors %}
+                                          <div class="alert alert-danger" role="alert">
+                                              Please correct the errors below.
+                                          </div>
+                                      {% endif %}
                                       {{ user_review_form | crispy }}
                                       {% csrf_token %}
                                       <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
@@ -283,11 +281,11 @@
                                 {% else %}
                                     <div id="reviewCompleteMessage">
                                         <h3>Your Review</h3>
-                                        <p class="text-info">You have already reviewed this game. You can edit or delete your review above.</p>
+                                        <p class="text-white">You have already reviewed this game. You can edit or delete your review above.</p>
                                     </div>
                                     <div id="userReviewFormContainer" style="display: none;">
                                         <h3>Edit Your Review:</h3>
-                                        <p>Posting as: {{ user.username }}</p>
+                                        <p class="card-text">Posting as: {{ user.username }}</p>
                                         <form id="userReviewForm" method="post" style="margin-top: 1.3em;">
                                           {{ user_review_form | crispy }}
                                           {% csrf_token %}

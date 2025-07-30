@@ -27,13 +27,13 @@
                                 {% if developer.description %}
                                     <p class="card-text">{{ developer.description|striptags|truncatewords:30 }}</p>
                                 {% else %}
-                                    <p class="card-text text-muted">No developer information available</p>
+                                    <p class="card-text">No developer information available</p>
                                 {% endif %}
                             </a>
                             <hr />
                             {% if developer.website %}
                             <p class="card-text">
-                                <a href="{{ developer.website }}" target="_blank" class="text-primary">
+                                <a href="{{ developer.website }}" target="_blank" class="external-link">
                                     <i class="fas fa-external-link-alt"></i> Visit Website
                                 </a>
                             </p>

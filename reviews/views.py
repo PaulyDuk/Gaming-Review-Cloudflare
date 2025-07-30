@@ -57,7 +57,7 @@ def process_release_dates(release_dates_data):
 class ReviewList(generic.ListView):
     queryset = Review.objects.filter(is_published=True)
     template_name = "reviews/index.html"
-    paginate_by = 6
+    paginate_by = 8
 
 
 def review_details(request, slug):

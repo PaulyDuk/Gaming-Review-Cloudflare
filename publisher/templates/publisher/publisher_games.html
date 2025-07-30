@@ -10,9 +10,9 @@
                     <div class="card-body">
                         <h1>{{ publisher.name }}</h1>
                         {% if publisher.description %}
-                            <p class="lead">{{ publisher.description | safe }}</p>
+                            <p class="lead card-text">{{ publisher.description | safe }}</p>
                         {% else %}
-                            <p class="lead">No publisher information available.</p>
+                            <p class="lead card-text">No publisher information available.</p>
                         {% endif %}
                     </div>
                     {% if games %}

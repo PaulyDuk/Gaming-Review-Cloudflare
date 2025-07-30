@@ -209,7 +209,10 @@
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
                             {% if user.is_authenticated %}
-                            <h3>Leave a comment:</h3>
+                            <div class="d-flex align-items-center mb-2">
+                              <img src="/static/images/arrows.png" class="arrows">
+                              <h3 class="info-heading mb-0">Leave a comment:</h3>
+                            </div>
                             <p class="card-text">Posting as: {{ user.username }}</p>
                             <form id="userCommentForm" method="post" class="card-text form-layout">
                               {{ user_comment_form | crispy }}
@@ -281,7 +284,10 @@
                         <div class="card-body">
                             {% if user.is_authenticated %}
                                 {% if not user_has_reviewed %}
-                                    <h3>Leave a review:</h3>
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="/static/images/arrows.png" class="arrows">
+                                <h3 class="info-heading mb-0">Leave a review:</h3>
+                                </div>
                                     <p class="card-text">Posting as: {{ user.username }}</p>
                                     <form id="userReviewForm" method="post" class="card-text form-layout">
                                       {% if user_review_form.errors %}

@@ -24,7 +24,7 @@
         </a>
     </div>
 <a href="{% url 'review_detail' review.slug %}" class="post-link">
-    <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1.5em; margin: 0.5em 0.5em;"><h2 class="card-title m-0">{{ review.title }}</h2></span>
+    <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1.5em; margin: 0.5em 0.5em;"><h2 class="card-title m-0 info-heading">{{ review.title }}</h2></span>
     <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
 </a>
 

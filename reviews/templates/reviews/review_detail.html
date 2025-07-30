@@ -202,7 +202,7 @@
                               <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-signup btn-lg">Submit</button>
                             </form>
                             {% else %}
-                            <p class="card-text"><a href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
+                            <p class="card-text"><a class="external-link" href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
                             {% endif %}
                         </div>
                     </div>
@@ -294,7 +294,7 @@
                                     </div>
                                 {% endif %}
                             {% else %}
-                                <p><a href="{% url 'account_login' %}">Log in</a> to leave a review</p>
+                                <p class="card-text"><a class="external-link="{% url 'account_login' %}">Log in</a> to leave a review</p>
                             {% endif %}
                         </div>
                     </div>

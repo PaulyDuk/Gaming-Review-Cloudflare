@@ -98,6 +98,7 @@ h1, h2, h3 {
 /* Only apply rollover to h3 without .info-heading */
 .card-body:hover,
 .card-body:hover h2.card-title,
+.card-body:hover h5.card-title,
 .card-body:hover h3:not(.info-heading) {
     color: #ffb703 !important;
 }

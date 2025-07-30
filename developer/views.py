@@ -11,7 +11,7 @@ class DeveloperList(generic.ListView):
     model = Developer
     template_name = "developer/developer_list.html"
     context_object_name = 'developer_list'
-    paginate_by = 6
+    paginate_by = 12
     ordering = ['name']
 
 

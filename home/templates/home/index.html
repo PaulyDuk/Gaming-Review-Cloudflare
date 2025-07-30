@@ -2,17 +2,53 @@
 {% load static %}
 
 {% block content %}
-
 <!-- index.html content starts here -->
 
 <!-- Featured Reviews Carousel JS -->
 <script src="{% static 'js/featured_reviews_carousel.js' %}"></script>
 <div class="container-fluid">
-
-
-<!-- All Reviews Row -->
+    <!-- Featured Reviews Row -->
+    <div class="row mb-4">
+        <h1 class="mb-3">Featured Reviews</h1>
+        <div class="col-12">
+            <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for review in featured_reviews %}
+                    <div class="carousel-item active {% if forloop.first %}active{% endif %}">
+                        <div class="d-flex justify-content-center">
+                            <div class="card-carousel" style="width: 22rem;">
+                                <a href="{% url 'reviews:review_detail' review.slug %}">
+                                    {% if "placeholder" in review.featured_image.url %}
+                                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                                    {% else %}
+                                        <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                                    {% endif %}
+                                </a>
+                                <div class="card-body">
+                                    <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
+                                        <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1.5em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
+                                        <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- All Reviews Row -->
     <div class="row">
-        <h1 class="mb-3">All Reviews</h1>
+        <h1 class="mb-3">Recent Reviews</h1>
         <!-- Blog Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">
@@ -37,7 +73,7 @@
                                 <p class="card-text h6">Reviewed on: {{ review.review_date|date:'F j, Y' }}
                                 </p>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                     {% if forloop.counter|divisibleby:4 %}
                         </div>
@@ -66,6 +102,5 @@
     </nav>
     {% endif %}
 </div>
-
 <!-- index.html content ends here -->
 {% endblock %}

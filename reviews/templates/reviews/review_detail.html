@@ -91,7 +91,7 @@
                     {% if developer.name %}
                         <h5 class="text-primary">
                             {% if developer.slug %}
-                                <a href="{% url 'developer:developer_games' developer.slug %}" class="external-link text-decoration-none">{{ developer.name }}</a>
+                                <a href="{% url 'developer:developer_games' developer.slug %}" class="info-heading text-decoration-none">{{ developer.name }}</a>
                             {% else %}
                                 <span class="no-link">{{ developer.name }}</span>
                             {% endif %}
@@ -126,7 +126,7 @@
                         {% with publisher=game_publishers.0 %}
                             <div class="mb-3">
                     {% if publisher.name %}
-                        <h5 class="text-primary">
+                        <h5 class="text-primary ">
                             {% if publisher.slug %}
                                 <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="external-link text-decoration-none">{{ publisher.name }}</a>
                             {% else %}

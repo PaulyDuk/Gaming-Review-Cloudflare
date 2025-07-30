@@ -11,7 +11,7 @@ class PublisherList(generic.ListView):
     model = Publisher
     template_name = "publisher/publisher_list.html"
     context_object_name = 'publisher_list'
-    paginate_by = 6
+    paginate_by = 12
     ordering = ['name']
 
 

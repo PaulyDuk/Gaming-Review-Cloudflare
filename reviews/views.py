@@ -55,9 +55,12 @@ def process_release_dates(release_dates_data):
 
 
 class ReviewList(generic.ListView):
-    queryset = Review.objects.filter(is_published=True)
     template_name = "reviews/index.html"
     paginate_by = 8
+
+    def get_queryset(self):
+        # Show all published reviews
+        return Review.objects.filter(is_published=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

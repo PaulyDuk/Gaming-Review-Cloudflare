@@ -41,7 +41,11 @@
     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
             <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page"
-                href="{% url 'home' %}">Home</a>
+                href="{% url 'home:home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if '/reviews/' in request.path %}active{% endif %}" aria-current="page"
+                href="{% url 'reviews:review_list' %}">Reviews</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {% if '/developers/' in request.path %}active{% endif %}" aria-current="page"
@@ -54,7 +58,7 @@
         {% if user.is_authenticated %}
         <li class="nav-item">
             <a class="nav-link {% if '/accounts/profile/' in request.path %}active{% endif %}" aria-current="page" 
-                href="{% url 'profile' %}">Profile</a>
+                href="{% url 'accounts:profile' %}">Profile</a>
         </li>
         <li class="nav-item">
             <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
@@ -71,7 +75,7 @@
                 </ul>
                 
                 <!-- Search Form -->
-                <form class="d-flex me-3" method="GET" action="{% url 'search_games' %}">
+                <form class="d-flex me-3" method="GET" action="{% url 'reviews:search_games' %}">
                     <input class="form-control me-2" type="search" name="q" aria-label="Search" value="{{ request.GET.q|default:'' }}">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>

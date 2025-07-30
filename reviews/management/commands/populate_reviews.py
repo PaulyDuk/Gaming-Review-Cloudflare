@@ -1,9 +1,3 @@
-import random
-import datetime
-import os
-import sys
-from turtle import title
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from reviews.models import Review
@@ -15,6 +9,11 @@ from django.contrib.auth.models import User
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
+import datetime
+import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+
 
 # AI Client for review generation
 endpoint = "https://models.github.ai/inference"
@@ -25,6 +24,7 @@ client = ChatCompletionsClient(
     endpoint=endpoint,
     credential=AzureKeyCredential(token),
 )
+
 
 class Command(BaseCommand):
     def generate_ai_review(self, title):

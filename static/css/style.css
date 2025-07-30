@@ -11,12 +11,12 @@
     color: #fff !important;
     border-color: #ffb703 !important;
 }
-/* Set .alert-info background to #457b9d */
+
 .alert-info {
     background-color: #457b9d !important;
     color: #fff !important;
 }
-/* Duplicates restored as requested */
+
 .dark-bg{
     background-color: #2a2a2a;
 }
@@ -48,6 +48,11 @@ h1, h2, h3 {
     width: 100%;
     height: auto;
     object-fit: scale-down;
+}
+
+.no-link {
+    color: #ffb703;
+    text-decoration: none;
 }
 
 .external-link {
@@ -145,7 +150,6 @@ body {
 }
 
 .masthead-text {
-    background-color: #445261;
     color: white;
     position: relative;
 }
@@ -153,20 +157,6 @@ body {
 .masthead-image {
     position: relative;
     overflow: hidden;
-}
-
-.masthead-image:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 90%;
-    height: 100%;
-    width: 150%;
-    background: #445261;
-    -webkit-transform: skew(15deg);
-    -moz-transform: skew(15deg);
-    transform: skew(15deg);
-    z-index: 100;
 }
 
 .post-link {

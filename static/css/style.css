@@ -28,7 +28,7 @@ body {
 }
 
 .card-text {
-    color: #e5e5e5;
+    color: #FAF9F6;
 }
 
 .info-heading {
@@ -62,6 +62,16 @@ h1, h2, h3 {
 .external-link:hover,
 .external-link:focus {
     color: #fff;
+}
+
+.arrows {
+    height: 1.5em; 
+    margin-right: 0.5em;
+}
+
+.arrows-large {
+    height: 200px; 
+    opacity: 0.5;
 }
 
 /* Pagination next/prev buttons styled like search button */
@@ -127,6 +137,10 @@ h1, h2, h3 {
 /* Make <strong> tags white */
 strong {
     color: #fff !important;
+}
+
+.form-layout {
+    margin-top: 1.3em;
 }
 
 .image-flash {

@@ -59,6 +59,10 @@ class ReviewList(generic.ListView):
     template_name = "reviews/index.html"
     paginate_by = 8
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['featured_reviews'] = Review.objects.filter(is_featured=True, is_published=True)
+        return context
 
 def review_details(request, slug):
     """
@@ -78,6 +82,7 @@ def review_details(request, slug):
     review = get_object_or_404(queryset, slug=slug)
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
+
 
     # Get platforms, release dates, genres, and developers from IGDB for this game
     game_platforms = []

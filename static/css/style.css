@@ -321,3 +321,19 @@ strong {
     transform: rotate(-90deg);
   }
 }
+
+/* Dropdown menu background and text color to match navbar */
+.dropdown-menu {
+    background-color: #2a2a2a !important;
+}
+.dropdown-menu .dropdown-item {
+    color: #fff !important;
+}
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #ffb703 !important;
+    color: #fff !important;
+}
+.dropdown-divider {
+    border-top: 1px solid #fff;
+}

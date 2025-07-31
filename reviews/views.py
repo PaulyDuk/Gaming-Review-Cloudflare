@@ -56,14 +56,20 @@ def process_release_dates(release_dates_data):
 
 class ReviewList(generic.ListView):
     template_name = "reviews/review_list.html"
-    paginate_by = 8
+    paginate_by = 16
 
     def get_queryset(self):
-        # Show all published reviews, optionally filtered by genre
+        # Show all published reviews, optionally filtered by genre and sorted
         queryset = Review.objects.filter(is_published=True)
         genre = self.request.GET.get('genre')
         if genre:
             queryset = queryset.filter(genres__name__iexact=genre)
+
+        sort = self.request.GET.get('sort')
+        if sort == 'az':
+            queryset = queryset.order_by('title')
+        elif sort == 'za':
+            queryset = queryset.order_by('-title')
         return queryset
 
     def get_context_data(self, **kwargs):

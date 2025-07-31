@@ -9,7 +9,18 @@
         {% if request.GET.genre %}
             <h1 class="mb-3">{{ request.GET.genre|title }} Games</h1>
         {% else %}
-            <h1 class="mb-3">All Reviews</h1>
+            <div class="d-flex align-items-center mb-3">
+                <h1 class="mb-0 me-3">All Reviews</h1>
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle mt-2" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Sort By
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                        <li><a class="dropdown-item" href="?sort=az{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Alphabetical (A-Z)</a></li>
+                        <li><a class="dropdown-item" href="?sort=za{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}">Alphabetical (Z-A)</a></li>
+                    </ul>
+                </div>
+            </div>
         {% endif %}
         <!-- Blog Entries Column -->
         <div class="col-12 mt-3 left">
@@ -50,13 +61,13 @@
         <ul class="pagination justify-content-center">
     {% if page_obj.has_previous %}
     <li>
-        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}"
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
           class="page-link">&laquo; PREV</a>
     </li>
     {% endif %}
     {% if page_obj.has_next %}
     <li>
-        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}"
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
           class="page-link">NEXT &raquo;</a>
     </li>
     {% endif %}

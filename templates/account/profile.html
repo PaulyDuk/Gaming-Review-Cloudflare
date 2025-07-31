@@ -65,7 +65,7 @@
                 <div class="card-body">
                     {% for review in user_reviews|slice:":5" %}
                     <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'review_detail' slug=review.game.slug %}" class="text-decoration-none">{{ review.game.title }}</a></h6>
+                        <h6><a href="{% url 'reviews:review_detail' slug=review.game.slug %}" class="text-decoration-none">{{ review.game.title }}</a></h6>
                         <div class="d-flex align-items-center mb-1">
                             <span class="badge bg-primary me-2">{{ review.rating }}/10</span>
                             <small class="text-muted">{{ review.created_on|date:"M d, Y" }}</small>
@@ -96,7 +96,7 @@
                 <div class="card-body">
                     {% for comment in user_comments|slice:":5" %}
                     <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'review_detail' slug=comment.review.slug %}" class="text-decoration-none">{{ comment.review.title }}</a></h6>
+                        <h6><a href="{% url 'reviews:review_detail' slug=comment.review.slug %}" class="text-decoration-none">{{ comment.review.title }}</a></h6>
                         <div class="d-flex align-items-center mb-1">
                             <small class="text-muted">{{ comment.created_on|date:"M d, Y" }}</small>
                             {% if not comment.approved %}

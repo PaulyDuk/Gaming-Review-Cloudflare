@@ -315,3 +315,9 @@ strong {
     height: 17em;
   }
 }
+
+@media (max-width: 576px) {
+  .dropdown-item::before{
+    transform: rotate(-90deg);
+  }
+}

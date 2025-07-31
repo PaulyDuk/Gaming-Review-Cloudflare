@@ -59,13 +59,18 @@ class ReviewList(generic.ListView):
     paginate_by = 8
 
     def get_queryset(self):
-        # Show all published reviews
-        return Review.objects.filter(is_published=True)
+        # Show all published reviews, optionally filtered by genre
+        queryset = Review.objects.filter(is_published=True)
+        genre = self.request.GET.get('genre')
+        if genre:
+            queryset = queryset.filter(genres__name__iexact=genre)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['featured_reviews'] = Review.objects.filter(is_featured=True, is_published=True)
         return context
+
 
 def review_details(request, slug):
     """
@@ -85,7 +90,6 @@ def review_details(request, slug):
     review = get_object_or_404(queryset, slug=slug)
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
-
 
     # Get platforms, release dates, genres, and developers from IGDB for this game
     game_platforms = []

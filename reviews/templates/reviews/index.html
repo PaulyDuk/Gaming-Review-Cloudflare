@@ -8,11 +8,12 @@
 <!-- Featured Reviews Carousel JS -->
 <script src="{% static 'js/featured_reviews_carousel.js' %}"></script>
 <div class="container-fluid">
-
-
-<!-- All Reviews Row -->
     <div class="row">
-        <h1 class="mb-3">All Reviews</h1>
+        {% if request.GET.genre %}
+            <h1 class="mb-3">{{ request.GET.genre|title }} Games</h1>
+        {% else %}
+            <h1 class="mb-3">All Reviews</h1>
+        {% endif %}
         <!-- Blog Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">

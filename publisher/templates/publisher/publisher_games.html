@@ -24,7 +24,7 @@
                                     <div class="card h-100">
                                         <div class="card-body">
                                             <div class="image-container">
-                                                <a href="{% url 'review_detail' slug=game.slug %}">
+                                                <a href="{% url 'reviews:review_detail' slug=game.slug %}">
                                                     {% if "placeholder" in game.featured_image.url %}
                                                         <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
                                                     {% else %}
@@ -35,7 +35,7 @@
                                                     <p class="author">{{ game.console }}</p>
                                                 </div>
                                             </div>
-                                            <a href="{% url 'review_detail' slug=game.slug %}" class="post-link">
+                                            <a href="{% url 'reviews:review_detail' slug=game.slug %}" class="post-link">
                                                 <h2 class="card-title">{{ game.title }}</h2>
                                                 <p class="card-text">{{ game.description|striptags|truncatewords:50 }}</p>
                                             </a>

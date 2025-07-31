@@ -16,12 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -32,7 +28,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg dark-bg">
         <div class="container-fluid">
-            <img src="/static/images/logo.png" alt="The Gaming Verdict" class="navbar-brand">
+            <img src="{% static 'images/logo.png' %}" alt="The Gaming Verdict" class="navbar-brand">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -43,17 +39,37 @@
             <a class="nav-link {% if request.path == home_url %}active{% endif %}" aria-current="page"
                 href="{% url 'home:home' %}">Home</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {% if '/reviews/' in request.path %}active{% endif %}" aria-current="page"
-                href="{% url 'reviews:review_list' %}">Reviews</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if '/reviews/' in request.path %}active{% endif %}" href="#" id="navbarReviewsDropdown" role="button" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false">
+                Reviews
+            </a>
+            <ul class="dropdown-menu " aria-labelledby="navbarReviewsDropdown">
+                <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}">All Reviews</a></li>
+                <li><hr class="dropdown-divider"></li>
+                {% for genre in genres %}
+                    <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}?genre={{ genre.name }}">{{ genre.name }}</a></li>
+                {% endfor %}
+            </ul>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {% if '/developers/' in request.path %}active{% endif %}" aria-current="page"
-                href="{% url 'developer:developer_list' %}">Developers</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if '/developers/' in request.path %}active{% endif %}" href="#" id="navbarDevelopersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Developers
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDevelopersDropdown">
+                {% for developer in all_developers %}
+                    <li><a class="dropdown-item" href="{% url 'developer:developer_games' developer.slug %}">{{ developer.name }}</a></li>
+                {% endfor %}
+            </ul>
         </li>
-        <li class="nav-item">
-            <a class="nav-link {% if '/publishers/' in request.path %}active{% endif %}" aria-current="page"
-                href="{% url 'publisher:publisher_list' %}">Publishers</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if '/publishers/' in request.path %}active{% endif %}" href="#" id="navbarPublishersDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Publishers
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarPublishersDropdown">
+                {% for publisher in all_publishers %}
+                    <li><a class="dropdown-item" href="{% url 'publisher:publisher_games' publisher.slug %}">{{ publisher.name }}</a></li>
+                {% endfor %}
+            </ul>
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item">
@@ -117,10 +133,8 @@
     <footer class="footer mt-auto py-3 dark-bg">
         <p class="m-0 text-center text-white">Made by Paul Smith 2025</p>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous">
-        </script>
+    <script src="https://kit.fontawesome.com/4774d4020a.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
     {% block extras %}
     {% endblock %}
 </body>

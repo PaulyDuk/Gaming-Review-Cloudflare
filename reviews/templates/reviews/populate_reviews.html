@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">Populate Reviews Interface</h1>
+            
+            <!-- Display Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Search Form -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Search Games</h5>
+                    <form method="post" action="{% url 'reviews:populate_interface' %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="search" class="form-label">Search Term:</label>
+                                <input type="text" class="form-control" id="search" name="search" 
+                                       value="{{ search_term|default:'' }}" placeholder="Enter game name or leave empty for all">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="limit" class="form-label">Limit:</label>
+                                <input type="number" class="form-control" id="limit" name="limit" 
+                                       value="{{ limit|default:50 }}" min="1" max="100">
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary">Search Games</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {% if games %}
+            <!-- Games Selection Form -->
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Select Games to Create Reviews</h5>
+                    <p class="text-muted">Found {{ games|length }} games. Select the ones you want to create reviews for:</p>
+                    
+                    <form id="create-reviews-form" method="post" action="{% url 'reviews:create_reviews' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Select All / Deselect All -->
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="selectAll()">Select All</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAll()">Deselect All</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Select</th>
+                                        <th>Game Title</th>
+                                        <th>Year</th>
+                                        <th>Platforms</th>
+                                        <th>Review Score (0-10)</th>
+                                        <th>Summary</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for game in games %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input game-checkbox" 
+                                                   name="game_selected" value="{{ forloop.counter0 }}"
+                                                   onchange="toggleGameData(this, {{ forloop.counter0 }})">
+                                        </td>
+                                        <td>
+                                            <strong>{{ game.title }}</strong>
+                                            <!-- Hidden input to store game data -->
+                                            <input type="hidden" class="game-data" name="selected_games" 
+                                                   value="{{ game.raw_data }}" disabled>
+                                        </td>
+                                        <td>{{ game.year }}</td>
+                                        <td>{{ game.platforms|truncatechars:50 }}</td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-sm review-score" 
+                                                   name="review_scores" min="0" max="10" step="0.1" 
+                                                   value="7.5" style="width: 80px;" disabled>
+                                        </td>
+                                        <td>
+                                            <div class="summary-text">
+                                                {{ game.summary|truncatechars:100 }}
+                                                {% if game.summary|length > 100 %}
+                                                    <a href="#" class="text-primary" onclick="toggleSummary(this)">Show more</a>
+                                                    <div class="full-summary" style="display: none;">
+                                                        {{ game.summary }}
+                                                        <a href="#" class="text-primary" onclick="toggleSummary(this)">Show less</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-success" id="create-reviews-btn" disabled>
+                                Create Selected Reviews
+                            </button>
+                            <small class="text-muted ms-2">This will generate AI reviews and upload images to Cloudinary</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function selectAll() {
+    const checkboxes = document.querySelectorAll('.game-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+        toggleGameData(checkbox, checkbox.value);
+    });
+    updateCreateButton();
+}
+
+function deselectAll() {
+    const checkboxes = document.querySelectorAll('.game-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+        toggleGameData(checkbox, checkbox.value);
+    });
+    updateCreateButton();
+}
+
+function toggleGameData(checkbox, index) {
+    const row = checkbox.closest('tr');
+    const gameDataInput = row.querySelector('.game-data');
+    const reviewScoreInput = row.querySelector('.review-score');
+    
+    if (checkbox.checked) {
+        gameDataInput.disabled = false;
+        reviewScoreInput.disabled = false;
+        row.classList.add('table-success');
+    } else {
+        gameDataInput.disabled = true;
+        reviewScoreInput.disabled = true;
+        row.classList.remove('table-success');
+    }
+    
+    updateCreateButton();
+}
+
+function updateCreateButton() {
+    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked');
+    const createBtn = document.getElementById('create-reviews-btn');
+    
+    if (checkedBoxes.length > 0) {
+        createBtn.disabled = false;
+        createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
+    } else {
+        createBtn.disabled = true;
+        createBtn.textContent = 'Create Selected Reviews';
+    }
+}
+
+function toggleSummary(link) {
+    const summaryDiv = link.closest('.summary-text');
+    const fullSummary = summaryDiv.querySelector('.full-summary');
+    
+    if (fullSummary.style.display === 'none') {
+        // Show full summary
+        summaryDiv.childNodes[0].style.display = 'none'; // Hide truncated text
+        link.style.display = 'none'; // Hide "Show more" link
+        fullSummary.style.display = 'block';
+    } else {
+        // Show truncated summary
+        summaryDiv.childNodes[0].style.display = 'inline'; // Show truncated text
+        summaryDiv.childNodes[2].style.display = 'inline'; // Show "Show more" link
+        fullSummary.style.display = 'none';
+    }
+}
+
+// Add form validation
+document.getElementById('create-reviews-form').addEventListener('submit', function(e) {
+    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked');
+    if (checkedBoxes.length === 0) {
+        e.preventDefault();
+        alert('Please select at least one game to create reviews for.');
+        return false;
+    }
+    
+    // Confirm before proceeding
+    if (!confirm(`Are you sure you want to create ${checkedBoxes.length} review(s)? This will generate AI content and may take some time.`)) {
+        e.preventDefault();
+        return false;
+    }
+});
+</script>
+
+{% endblock %}

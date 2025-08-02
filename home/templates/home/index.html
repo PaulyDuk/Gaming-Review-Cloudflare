@@ -5,30 +5,30 @@
 <!-- index.html content starts here -->
 <script src="{% static 'js/featured_reviews_carousel.js' %}"></script>
 <!-- Featured Reviews Carousel JS -->
-<div class="container-fluid">
+<div class="container">
     <!-- Featured Reviews Row -->
     <div class="row mb-4">
-        <h1 class="mb-3">Featured Reviews</h1>
-        <div class="col-12">
-            <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <h3 class="mb-3 mt-3" >Featured Reviews</h3>
+        <div class="col-12 d-flex justify-content-center">
+            <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel" style="max-width: 800px; width: 100%;">
                 <div class="carousel-inner">
                     {% for review in featured_reviews %}
-                    <div class="carousel-item active {% if forloop.first %}active{% endif %}">
-                        <div class="d-flex justify-content-center">
-                            <div class="card-carousel" style="width: 22rem;">
-                                <a href="{% url 'reviews:review_detail' review.slug %}">
-                                    {% if "placeholder" in review.featured_image.url %}
-                                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
-                                    {% else %}
-                                        <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
-                                    {% endif %}
-                                </a>
-                                <div class="card-body">
-                                    <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
-                                        <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1.5em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
-                                        <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="card mb-4" style="width: 100%; max-width: 700px;">
+                            <div class="card-body">
+                                <div class="image-container">
+                                    <a href="{% url 'reviews:review_detail' review.slug %}">
+                                        {% if "placeholder" in review.featured_image.url %}
+                                            <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                                        {% else %}
+                                            <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                                        {% endif %}
                                     </a>
                                 </div>
+                                <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
+                                    <span style="display: flex; align-items: center; margin-top: 0.5em;"><i class="fas fa-star" style="height: 1em; margin: 0.5em 0.5em;"></i><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
+                                    <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -47,8 +47,8 @@
     </div>
     <!-- All Reviews Row -->
     <div class="row">
-        <h1 class="mb-3">Recent Reviews</h1>
-        <!-- Blog Entries Column -->
+        <h3 class="mb-3">Recent Reviews</h3>
+        <!-- Review Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">
                 {% for review in review_list %}
@@ -65,12 +65,15 @@
                                     </a>
                                 </div>
                                 <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
-                                    <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1.5em; margin: 0.5em 0.5em;"><h2 class="card-title m-0 info-heading">{{ review.title }}</h2></span>
+                                    <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="/static/images/arrows.png" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
                                     <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
                                 </a>
                                 <hr />
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <p class="card-text h6 mb-0">Reviewed: {{ review.review_date|date:'F j, Y' }}</p>
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="card-text h6 mb-0">Reviewed:</p>
+                                        <p class="card-text small mb-0">{{ review.review_date|date:'F j, Y' }}</p>
+                                    </div>
                                     <div>
                                         <span class="me-3 card-text"><i class="fas fa-comments"></i> {{ review.user_comments.count }}</span>
                                         <span class="card-text"><i class="fas fa-star"></i> {{ review.user_reviews.count }}</span>

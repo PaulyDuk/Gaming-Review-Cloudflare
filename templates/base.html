@@ -82,6 +82,19 @@
             <a class="nav-link {% if '/accounts/profile/' in request.path %}active{% endif %}" aria-current="page" 
                 href="{% url 'accounts:profile' %}">Profile</a>
         </li>
+        {% if user.is_superuser %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if '/reviews/populate/' in request.path or '/reviews/admin/' in request.path %}active{% endif %}" href="#" id="navbarAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
+                <li><a class="dropdown-item" href="{% url 'reviews:populate_interface' %}">Populate Reviews</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'reviews:approve_comments' %}">Approve Comments</a></li>
+                <li><a class="dropdown-item" href="{% url 'reviews:approve_reviews' %}">Approve Reviews</a></li>
+            </ul>
+        </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
         </li>

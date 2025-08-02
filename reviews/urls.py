@@ -1,4 +1,5 @@
 from . import views
+from .admin_views import approve_comments, approve_reviews
 from django.urls import path
 
 app_name = 'reviews'
@@ -7,6 +8,10 @@ urlpatterns = [
     path('', views.ReviewList.as_view(), name='review_list'),
     path('search/', views.search_games, name='search_games'),
     path('accounts/profile/', views.profile, name='profile'),
+    path('populate/', views.populate_reviews_interface, name='populate_interface'),
+    path('populate/create/', views.create_reviews_from_selection, name='create_reviews'),
+    path('admin/approve-comments/', approve_comments, name='approve_comments'),
+    path('admin/approve-reviews/', approve_reviews, name='approve_reviews'),
     path('<slug:slug>/', views.review_details, name='review_detail'),
     path('<slug:slug>/edit_comment/<int:comment_id>',
          views.user_comment_edit, name='user_comment_edit'),

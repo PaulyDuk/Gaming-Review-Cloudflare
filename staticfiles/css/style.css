@@ -337,3 +337,22 @@ strong {
 .dropdown-divider {
     border-top: 1px solid #fff;
 }
+
+/* Fix dropdown toggle hover state persistence */
+.nav-link.dropdown-toggle:focus {
+    outline: none;
+}
+
+.nav-link.dropdown-toggle.show,
+.nav-link.dropdown-toggle[aria-expanded="true"] {
+    background-color: transparent !important;
+    color: inherit !important;
+}
+
+.navbar-nav .nav-link.dropdown-toggle:hover {
+    background-color: transparent !important;
+}
+
+.navbar-nav .nav-link.dropdown-toggle:not(.show):not([aria-expanded="true"]):hover {
+    background-color: rgba(255, 183, 3, 0.1) !important;
+}

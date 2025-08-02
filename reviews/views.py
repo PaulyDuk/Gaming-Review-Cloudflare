@@ -9,6 +9,7 @@ from developer.models import Developer
 from .models import Review, UserComment, UserReview
 from .forms import UserCommentForm, UserReviewForm
 from .igdb_service import IGDBService
+from .populate_views import populate_reviews_interface, create_reviews_from_selection
 from datetime import datetime
 
 

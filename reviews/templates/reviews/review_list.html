@@ -9,6 +9,11 @@
         <div class="col-12">
             {% if request.GET.genre %}
                 <h1 class="mb-3">{{ request.GET.genre|title }} Games</h1>
+                {% if is_paginated %}
+                    <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }}</p>
+                {% else %}
+                    <p class="info-heading mb-3">Showing {{ review_list|length }} of {{ paginator.count }}</p>
+                {% endif %}
             {% else %}
                 <div class="d-flex align-items-center mb-3">
                     <h1 class="mb-0 me-3">All Reviews</h1>
@@ -24,13 +29,18 @@
                         </ul>
                     </div>
                 </div>
+                {% if is_paginated %}
+                    <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} reviews</p>
+                {% else %}
+                    <p class="info-heading mb-3">Showing {{ review_list|length }} of {{ paginator.count }} reviews</p>
+                {% endif %}
             {% endif %}
             <!-- Review Entries Column -->
             <div class="col-12 mt-3 left">
                 <div class="row">
                     {% for review in review_list %}
                         <div class="col-md-3">
-                            <div class="card mb-4">
+                            <div class="card mb-4 homepage-review-card">
                                 <div class="card-body">
                                     <div class="image-container">
                                         <a href="{% url 'reviews:review_detail' review.slug %}">
@@ -43,17 +53,17 @@
                                     </div>
                                     <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
                                         <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
-                                        <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
+                                        <p class="card-text">{{ review.description|striptags }}</p>
                                     </a>
-                                    <hr />
-                                    <div class="d-flex justify-content-between align-items-start">
+
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
                                         <div>
-                                            <p class="card-text h6 mb-0">Reviewed:</p>
+                                            <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
                                             <p class="card-text small mb-0">{{ review.review_date|date:'F j, Y' }}</p>
                                         </div>
-                                        <div>
-                                            <span class="me-3 card-text"><i class="fas fa-comments"></i> {{ review.user_comments.count }}</span>
-                                            <span class="card-text"><i class="fas fa-star"></i> {{ review.user_reviews.count }}</span>
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-3 card-text"><i class="fas fa-comments orange-link"></i> {{ review.user_comments.count }}</span>
+                                            <span class="card-text"><i class="fas fa-star orange-link"></i> {{ review.user_reviews.count }}</span>
                                         </div>
                                     </div>
                                 </div>

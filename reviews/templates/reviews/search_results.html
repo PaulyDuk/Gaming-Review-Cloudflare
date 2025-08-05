@@ -17,7 +17,7 @@
                                 <div class="row">
                                     {% for game in games %}
                                         <div class="col-md-3">
-                                            <div class="card mb-4">
+                                            <div class="card mb-4 homepage-review-card">
                                                 <div class="card-body">
                                                     <div class="image-container">
                                                         <a href="{% url 'reviews:review_detail' game.slug %}">
@@ -27,16 +27,22 @@
                                                                 <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
                                                             {% endif %}
                                                         </a>
-                                                        <div class="image-flash">
-                                                            <p class="author">{{ game.console }}</p>
-                                                        </div>
                                                     </div>
                                                     <a href="{% url 'reviews:review_detail' game.slug %}" class="post-link">
-                                                        <h2 class="card-title">{{ game.title }}</h2>
-                                                        <p class="card-text">{{ game.description|striptags|truncatewords:50 }}</p>
+                                                        <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ game.title }}</h5></span>
+                                                        <p class="card-text">{{ game.description|striptags }}</p>
                                                     </a>
-                                                    <hr />
-                                                    <p class="card-text text-muted h6">Reviewed on: {{ game.created_on }}</p>
+
+                                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                        <div>
+                                                            <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
+                                                            <p class="card-text small mb-0">{{ game.created_on|date:'F j, Y' }}</p>
+                                                        </div>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="me-3 card-text"><i class="fas fa-comments orange-link"></i> {{ game.user_comments.count }}</span>
+                                                            <span class="card-text"><i class="fas fa-star orange-link"></i> {{ game.user_reviews.count }}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

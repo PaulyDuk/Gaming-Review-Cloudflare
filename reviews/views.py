@@ -71,6 +71,10 @@ class ReviewList(generic.ListView):
             queryset = queryset.order_by('title')
         elif sort == 'za':
             queryset = queryset.order_by('-title')
+        elif sort == 'newest':
+            queryset = queryset.order_by('-review_date')
+        elif sort == 'oldest':
+            queryset = queryset.order_by('review_date')
         return queryset
 
     def get_context_data(self, **kwargs):

@@ -7,7 +7,11 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 mt-3">
-            <h2>Welcome, {{ user.username }}!</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h2>Welcome, {{ user.username }}!</h2>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -16,11 +20,10 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>Account Management</h4>
+                    <h4 class="orange-link">Account Management</h4>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
-
                         <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action">
                             <i class="fas fa-lock me-2"></i>Change Password
                         </a>
@@ -36,17 +39,17 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4>My Activity</h4>
+                    <h4 class="orange-link">My Activity</h4>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h3 class="text-primary">{{ user_reviews.count }}</h3>
-                            <p class="mb-0">Reviews Written</p>
+                            <h3 class="orange-link">{{ user_reviews.count }}</h3>
+                            <p class="mb-0 info-heading">Reviews Written</p>
                         </div>
                         <div class="col-6">
-                            <h3 class="text-success">{{ user_comments.count }}</h3>
-                            <p class="mb-0">Comments Posted</p>
+                            <h3 class="orange-link">{{ user_comments.count }}</h3>
+                            <p class="mb-0 info-heading">Comments Posted</p>
                         </div>
                     </div>
                 </div>
@@ -60,24 +63,24 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>My Recent Reviews</h4>
+                    <h4 class="orange-link">My Recent Reviews</h4>
                 </div>
                 <div class="card-body">
                     {% for review in user_reviews|slice:":5" %}
                     <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'reviews:review_detail' slug=review.game.slug %}" class="text-decoration-none">{{ review.game.title }}</a></h6>
+                        <h6><a href="{% url 'reviews:review_detail' slug=review.game.slug %}" class="orange-link">{{ review.game.title }}</a></h6>
                         <div class="d-flex align-items-center mb-1">
                             <span class="badge bg-primary me-2">{{ review.rating }}/10</span>
-                            <small class="text-muted">{{ review.created_on|date:"M d, Y" }}</small>
+                            <small class="card-text">Reviewed on: {{ review.created_on|date:"M d, Y" }}</small>
                             {% if not review.approved %}
                             <span class="badge bg-warning ms-2">Awaiting Approval</span>
                             {% endif %}
                         </div>
-                        <p class="mb-0 text-muted">{{ review.review_text|truncatewords:20 }}</p>
+                        <p class="mb-0 card-text">{{ review.review_text|truncatewords:20 }}</p>
                     </div>
                     {% endfor %}
                     {% if user_reviews.count > 5 %}
-                    <p class="text-center mt-3"><small class="text-muted">Showing 5 of {{ user_reviews.count }} reviews</small></p>
+                    <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_reviews.count }} reviews</small></p>
                     {% endif %}
                 </div>
             </div>
@@ -91,23 +94,23 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>My Recent Comments</h4>
+                    <h4 class="orange-link">My Recent Comments</h4>
                 </div>
                 <div class="card-body">
                     {% for comment in user_comments|slice:":5" %}
                     <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'reviews:review_detail' slug=comment.review.slug %}" class="text-decoration-none">{{ comment.review.title }}</a></h6>
+                        <h6><a href="{% url 'reviews:review_detail' slug=comment.review.slug %}" class="orange-link">{{ comment.review.title }}</a></h6>
                         <div class="d-flex align-items-center mb-1">
-                            <small class="text-muted">{{ comment.created_on|date:"M d, Y" }}</small>
+                            <small class="card-text">Commented on: {{ comment.created_on|date:"M d, Y" }}</small>
                             {% if not comment.approved %}
                             <span class="badge bg-warning ms-2">Awaiting Approval</span>
                             {% endif %}
                         </div>
-                        <p class="mb-0 text-muted">{{ comment.body|truncatewords:20 }}</p>
+                        <p class="mb-0 card-text">{{ comment.body|truncatewords:20 }}</p>
                     </div>
                     {% endfor %}
                     {% if user_comments.count > 5 %}
-                    <p class="text-center mt-3"><small class="text-muted">Showing 5 of {{ user_comments.count }} comments</small></p>
+                    <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_comments.count }} comments</small></p>
                     {% endif %}
                 </div>
             </div>

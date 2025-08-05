@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-dark">
                                 <thead>
                                     <tr>
                                         <th width="50">Select</th>
@@ -61,27 +61,27 @@
                                                    name="comment_ids" value="{{ comment.id }}">
                                         </td>
                                         <td>
-                                            <strong class="text-dark">{{ comment.author.username }}</strong>
+                                            <strong class="text-white">{{ comment.author.username }}</strong>
                                             <br><small class="text-muted">{{ comment.author.email }}</small>
                                         </td>
                                         <td>
-                                            <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank">
+                                            <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank" class="orange-link">
                                                 {{ comment.review.title }}
                                             </a>
                                         </td>
                                         <td>
                                             <div class="comment-preview">
-                                                {{ comment.body|truncatechars:150 }}
+                                                <span class="text-light">{{ comment.body|truncatechars:150 }}</span>
                                                 {% if comment.body|length > 150 %}
-                                                    <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show full</a>
+                                                    <br><a href="#" class="orange-link" onclick="toggleFullComment(this)">Show full</a>
                                                     <div class="full-comment" style="display: none;">
-                                                        <hr>{{ comment.body }}
-                                                        <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show less</a>
+                                                        <hr><span class="text-light">{{ comment.body }}</span>
+                                                        <br><a href="#" class="orange-link" onclick="toggleFullComment(this)">Show less</a>
                                                     </div>
                                                 {% endif %}
                                             </div>
                                         </td>
-                                        <td>{{ comment.created_on|date:"M d, Y H:i" }}</td>
+                                        <td><span class="text-light">{{ comment.created_on|date:"M d, Y H:i" }}</span></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -91,9 +91,11 @@
                 </div>
             </div>
             {% else %}
-            <div class="alert alert-info">
-                <h4>No pending comments</h4>
-                <p>All comments have been reviewed!</p>
+            <div class="card mb-4 border-0 shadow-none">
+                <div class="card-body">
+                    <h5 class="info-heading">Pending Comments</h5>
+                    <p class="info-heading mb-0">All comments have been reviewed!</p>
+                </div>
             </div>
             {% endif %}
 
@@ -120,7 +122,7 @@
                         </div>
                         
                         <div class="table-responsive">
-                            <table class="table table-sm">
+                            <table class="table table-sm table-dark table-striped">
                                 <thead>
                                     <tr>
                                         <th width="50">Select</th>
@@ -138,27 +140,27 @@
                                                    name="approved_comment_ids" value="{{ comment.id }}">
                                         </td>
                                         <td>
-                                            <strong class="text-dark">{{ comment.author.username }}</strong>
+                                            <strong class="text-white">{{ comment.author.username }}</strong>
                                             <br><small class="text-muted">{{ comment.author.email }}</small>
                                         </td>
                                         <td>
-                                            <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank">
+                                            <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank" class="orange-link">
                                                 {{ comment.review.title|truncatechars:30 }}
                                             </a>
                                         </td>
                                         <td>
                                             <div class="comment-preview">
-                                                {{ comment.body|truncatechars:80 }}
+                                                <span class="text-light">{{ comment.body|truncatechars:80 }}</span>
                                                 {% if comment.body|length > 80 %}
-                                                    <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show full</a>
+                                                    <br><a href="#" class="orange-link" onclick="toggleFullComment(this)">Show full</a>
                                                     <div class="full-comment" style="display: none;">
-                                                        <hr>{{ comment.body }}
-                                                        <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show less</a>
+                                                        <hr><span class="text-light">{{ comment.body }}</span>
+                                                        <br><a href="#" class="orange-link" onclick="toggleFullComment(this)">Show less</a>
                                                     </div>
                                                 {% endif %}
                                             </div>
                                         </td>
-                                        <td>{{ comment.created_on|date:"M d, H:i" }}</td>
+                                        <td><span class="text-light">{{ comment.created_on|date:"M d, H:i" }}</span></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

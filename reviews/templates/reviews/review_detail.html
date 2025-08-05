@@ -57,14 +57,14 @@
                     {% if game_platforms %}
                         <p><strong>Available on:</strong> 
                             {% for platform in game_platforms %}
-                                <span class="badge bg-secondary me-1">{{ platform.name }}</span>{% if not forloop.last %} {% endif %}
+                                <span class="badge bg-secondary me-1 fs-6">{{ platform.name }}</span>{% if not forloop.last %} {% endif %}
                             {% endfor %}
                         </p>
                     {% endif %}
                     {% if game_genres %}
                         <p><strong>Genres:</strong> 
                             {% for genre in game_genres %}
-                                <span class="badge bg-success me-1">{{ genre.name }}</span>{% if not forloop.last %} {% endif %}
+                                <span class="badge bg-success me-1 fs-6">{{ genre.name }}</span>{% if not forloop.last %} {% endif %}
                             {% endfor %}
                         </p>
                     {% endif %}
@@ -233,7 +233,7 @@
                     <strong>
                         <i class="fas fa-star"></i> {{ user_review_count }} User Review{% if user_review_count != 1 %}s{% endif %}
                         {% if average_review_score %}
-                            - Average Score: <span class="badge bg-warning text-dark">{{ average_review_score }}/10</span>
+                            - Average Score: <span class="badge bg-warning text-dark fs-6">{{ average_review_score }}/10</span>
                         {% endif %}
                     </strong>
                     <hr>
@@ -255,7 +255,7 @@
                                         {{ user_review.user.username }} - {{ user_review.created_on }} wrote:</strong>
                                     </p>
                                     <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-primary me-2">{{ user_review.rating }}/10</span>
+                                        <span class="badge bg-primary me-2 fs-6">{{ user_review.rating }}/10</span>
                                     </div>
                                     <div class="card-text" id="user_review{{ user_review.id }}">
                                         {{ user_review.review_text | linebreaks }}

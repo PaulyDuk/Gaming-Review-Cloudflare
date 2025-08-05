@@ -21,28 +21,35 @@
                     </ul>
                 </div>
             </div>
+            {% if is_paginated %}
+                <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} publishers</p>
+            {% else %}
+                <p class="info-heading mb-3">Showing {{ publisher_list|length }} of {{ paginator.count }} publishers</p>
+            {% endif %}
             <!-- Publishers Column -->
             <div class="col-12 mt-3 left">
                 <div class="row">
                     {% for publisher in publisher_list %}
                         <div class="col-md-3">
-                            <div class="card mb-4">
+                            <div class="card mb-4 publisher-card">
                                 <div class="card-body">
                                     <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="post-link">
                                         <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ publisher.name }}</h5></span>
                                         {% if publisher.description %}
-                                            <p class="card-text">{{ publisher.description|striptags|truncatewords:30 }}</p>
+                                            <p class="card-text">{{ publisher.description|striptags }}</p>
                                         {% else %}
                                             <p class="card-text">No publisher information available</p>
                                         {% endif %}
                                     </a>
-                                    <hr />
                                     {% if publisher.website %}
-                                    <p class="card-text">
-                                        <a href="{{ publisher.website }}" target="_blank" class="external-link">
-                                            <i class="fas fa-external-link-alt"></i> Visit Website
-                                        </a>
-                                    </p>
+                                    <div class="mt-auto">
+                                        <hr />
+                                        <p class="card-text">
+                                            <a href="{{ publisher.website }}" target="_blank" class="external-link">
+                                                <i class="fas fa-external-link-alt"></i> Visit Website
+                                            </a>
+                                        </p>
+                                    </div>
                                     {% endif %}
                                 </div>
                             </div>

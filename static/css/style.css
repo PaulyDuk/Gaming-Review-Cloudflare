@@ -75,6 +75,56 @@ h1, h2, h3 {
     margin-top: auto;
 }
 
+/* Custom card class for developer list */
+.developer-card {
+    height: 330px;
+}
+
+.developer-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.developer-card .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.5rem;
+}
+
+.developer-card .mt-auto {
+    margin-top: auto;
+}
+
+/* Custom card class for publisher list */
+.publisher-card {
+    height: 330px;
+}
+
+.publisher-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.publisher-card .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.5rem;
+}
+
+.publisher-card .mt-auto {
+    margin-top: auto;
+}
+
 .orange-link {
     color: #ffb703;
     text-decoration: none;

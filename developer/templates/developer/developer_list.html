@@ -21,28 +21,35 @@
                     </ul>
                 </div>
             </div>
+            {% if is_paginated %}
+                <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} developers</p>
+            {% else %}
+                <p class="info-heading mb-3">Showing {{ developer_list|length }} of {{ paginator.count }} developers</p>
+            {% endif %}
             <!-- Developers Column -->
             <div class="col-12 mt-3 left">
                 <div class="row">
                     {% for developer in developer_list %}
                         <div class="col-md-3">
-                            <div class="card mb-4">
+                            <div class="card mb-4 developer-card">
                                 <div class="card-body">
                                     <a href="{% url 'developer:developer_games' developer.slug %}" class="post-link">
                                         <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ developer.name }}</h5></span>
                                         {% if developer.description %}
-                                            <p class="card-text">{{ developer.description|striptags|truncatewords:30 }}</p>
+                                            <p class="card-text">{{ developer.description|striptags }}</p>
                                         {% else %}
                                             <p class="card-text">No developer information available</p>
                                         {% endif %}
                                     </a>
-                                    <hr />
                                     {% if developer.website %}
-                                    <p class="card-text">
-                                        <a href="{{ developer.website }}" target="_blank" class="external-link">
-                                            <i class="fas fa-external-link-alt"></i> Visit Website
-                                        </a>
-                                    </p>
+                                    <div class="mt-auto">
+                                        <hr />
+                                        <p class="card-text">
+                                            <a href="{{ developer.website }}" target="_blank" class="external-link">
+                                                <i class="fas fa-external-link-alt"></i> Visit Website
+                                            </a>
+                                        </p>
+                                    </div>
                                     {% endif %}
                                 </div>
                             </div>

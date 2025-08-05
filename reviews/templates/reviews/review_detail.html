@@ -123,16 +123,16 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Publisher Info</h3></div>
                     {% if game_publishers %}
-                        {% with publisher=game_publishers.0 %}
+                        {% for publisher in game_publishers %}
                             <div class="mb-3">
-                    {% if publisher.name %}
-                        <h5 class="text-primary ">
-                            {% if publisher.slug %}
-                                <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="external-link text-decoration-none">{{ publisher.name }}</a>
-                            {% else %}
-                                <span class="no-link">{{ publisher.name }}</span>
-                            {% endif %}
-                        </h5>
+                                {% if publisher.name %}
+                                    <h5 class="text-primary">
+                                        {% if publisher.slug %}
+                                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="external-link text-decoration-none">{{ publisher.name }}</a>
+                                        {% else %}
+                                            <span class="info-heading">{{ publisher.name }}</span>
+                                        {% endif %}
+                                    </h5>
                                 {% endif %}
                                 {% if publisher.description %}
                                     <p class="card-text">{{ publisher.description|safe }}</p>
@@ -150,7 +150,7 @@
                                     </p>
                                 {% endif %}
                             </div>
-                        {% endwith %}
+                        {% endfor %}
                     {% endif %}
                 </div>
             </div>

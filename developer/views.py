@@ -12,7 +12,21 @@ class DeveloperList(generic.ListView):
     template_name = "developer/developer_list.html"
     context_object_name = 'developer_list'
     paginate_by = 12
-    ordering = ['name']
+
+    def get_queryset(self):
+        queryset = Developer.objects.all()
+        sort = self.request.GET.get('sort')
+        if sort == 'az':
+            queryset = queryset.order_by('name')
+        elif sort == 'za':
+            queryset = queryset.order_by('-name')
+        elif sort == 'newest':
+            queryset = queryset.order_by('-created_on')
+        elif sort == 'oldest':
+            queryset = queryset.order_by('created_on')
+        else:
+            queryset = queryset.order_by('name')  # Default ordering
+        return queryset
 
 
 def developer_games(request, slug):

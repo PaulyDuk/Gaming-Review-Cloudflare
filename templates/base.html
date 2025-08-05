@@ -62,6 +62,8 @@
                 Developers
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDevelopersDropdown">
+                <li><a class="dropdown-item" href="{% url 'developer:developer_list' %}">All Developers</a></li>
+                <li><hr class="dropdown-divider"></li>
                 {% for developer in all_developers %}
                     <li><a class="dropdown-item" href="{% url 'developer:developer_games' developer.slug %}">{{ developer.name }}</a></li>
                 {% endfor %}
@@ -72,6 +74,8 @@
                 Publishers
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarPublishersDropdown">
+                <li><a class="dropdown-item" href="{% url 'publisher:publisher_list' %}">All Publishers</a></li>
+                <li><hr class="dropdown-divider"></li>
                 {% for publisher in all_publishers %}
                     <li><a class="dropdown-item" href="{% url 'publisher:publisher_games' publisher.slug %}">{{ publisher.name }}</a></li>
                 {% endfor %}

@@ -31,6 +31,22 @@
                 </div>
             </div>
 
+            {% if search_term and not games %}
+            <!-- No Results Message -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="info-heading">No games found</h5>
+                    <p class="info-heading">No games were found for your search term "<strong>{{ search_term }}</strong>". Please check the spelling and try again.</p>
+                    <p class="mb-0 info-heading">
+                        <small>
+                            Tips: Try searching with fewer words or alternative spellings. 
+                            For example, try "God of War" instead of "God of War Ragnarök".
+                        </small>
+                    </p>
+                </div>
+            </div>
+            {% endif %}
+
             {% if games %}
             <!-- Games Selection Form -->
             <div class="card">
@@ -54,7 +70,7 @@
                                         <th>Game Title</th>
                                         <th>Year</th>
                                         <th>Platforms</th>
-                                        <th>Review Score (0-10)</th>
+                                        <th>Score 0-10</th>
                                         <th>Summary</th>
                                     </tr>
                                 </thead>
@@ -73,22 +89,16 @@
                                                    value="{{ game.raw_data }}" disabled>
                                         </td>
                                         <td>{{ game.year }}</td>
-                                        <td>{{ game.platforms|truncatechars:50 }}</td>
+                                        <td>{{ game.platforms }}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm review-score" 
                                                    name="review_scores" min="0" max="10" step="0.1" 
-                                                   value="7.5" style="width: 80px;" disabled>
+                                                   value="" style="width: 80px;" disabled
+                                                   oninput="updateCreateButton()">
                                         </td>
                                         <td>
                                             <div class="summary-text">
-                                                {{ game.summary|truncatechars:100 }}
-                                                {% if game.summary|length > 100 %}
-                                                    <a href="#" class="text-primary" onclick="toggleSummary(this)">Show more</a>
-                                                    <div class="full-summary" style="display: none;">
-                                                        {{ game.summary }}
-                                                        <a href="#" class="text-primary" onclick="toggleSummary(this)">Show less</a>
-                                                    </div>
-                                                {% endif %}
+                                                {{ game.summary }}
                                             </div>
                                         </td>
                                     </tr>
@@ -153,8 +163,23 @@ function updateCreateButton() {
     const createBtn = document.getElementById('create-reviews-btn');
     
     if (checkedBoxes.length > 0) {
-        createBtn.disabled = false;
-        createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
+        // Check if all selected games have scores
+        let allHaveScores = true;
+        checkedBoxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            const scoreInput = row.querySelector('.review-score');
+            if (!scoreInput.value || scoreInput.value === '') {
+                allHaveScores = false;
+            }
+        });
+        
+        if (allHaveScores) {
+            createBtn.disabled = false;
+            createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
+        } else {
+            createBtn.disabled = true;
+            createBtn.textContent = 'Enter scores for all selected games';
+        }
     } else {
         createBtn.disabled = true;
         createBtn.textContent = 'Create Selected Reviews';
@@ -184,6 +209,23 @@ document.getElementById('create-reviews-form').addEventListener('submit', functi
     if (checkedBoxes.length === 0) {
         e.preventDefault();
         alert('Please select at least one game to create reviews for.');
+        return false;
+    }
+    
+    // Check if all selected games have scores
+    let missingScores = [];
+    checkedBoxes.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        const scoreInput = row.querySelector('.review-score');
+        const gameTitle = row.querySelector('span').textContent;
+        if (!scoreInput.value || scoreInput.value === '') {
+            missingScores.push(gameTitle);
+        }
+    });
+    
+    if (missingScores.length > 0) {
+        e.preventDefault();
+        alert(`Please enter scores for the following games:\n${missingScores.join('\n')}`);
         return false;
     }
     

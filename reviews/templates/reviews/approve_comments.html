@@ -7,21 +7,11 @@
         <div class="col-12">
             <h1 class="mb-4">Approve Comments</h1>
             
-            <!-- Display Messages -->
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
             <!-- Summary Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Comments Summary</h5>
-                    <p class="mb-0">
+                    <h5 class="info-heading">Comments Summary</h5>
+                    <p class="mb-0 info-heading">
                         <span class="badge bg-warning">{{ total_unapproved }}</span> comments pending approval
                     </p>
                 </div>
@@ -31,17 +21,17 @@
             <!-- Unapproved Comments -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title">Pending Comments</h5>
+                    <h5 class="info-heading">Pending Comments</h5>
                     
                     <form method="post">
                         {% csrf_token %}
                         
                         <!-- Action Buttons -->
                         <div class="mb-3">
-                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm" onclick="return confirmAction('approve')">
+                            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">
                                 Approve Selected
                             </button>
-                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm" onclick="return confirmAction('reject')">
+                            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">
                                 Delete Selected
                             </button>
                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAll()">
@@ -71,7 +61,7 @@
                                                    name="comment_ids" value="{{ comment.id }}">
                                         </td>
                                         <td>
-                                            <strong>{{ comment.author.username }}</strong>
+                                            <strong class="text-dark">{{ comment.author.username }}</strong>
                                             <br><small class="text-muted">{{ comment.author.email }}</small>
                                         </td>
                                         <td>
@@ -111,7 +101,7 @@
             {% if recent_approved %}
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Recently Approved Comments</h5>
+                    <h5 class="info-heading">Recently Approved Comments</h5>
                     <div class="table-responsive">
                         <table class="table table-sm">
                             <thead>
@@ -154,17 +144,6 @@ function selectAll() {
 function deselectAll() {
     const checkboxes = document.querySelectorAll('.comment-checkbox');
     checkboxes.forEach(checkbox => checkbox.checked = false);
-}
-
-function confirmAction(action) {
-    const checkedBoxes = document.querySelectorAll('.comment-checkbox:checked');
-    if (checkedBoxes.length === 0) {
-        alert('Please select at least one comment.');
-        return false;
-    }
-    
-    const actionText = action === 'approve' ? 'approve' : 'delete';
-    return confirm(`Are you sure you want to ${actionText} ${checkedBoxes.length} comment(s)?`);
 }
 
 function toggleFullComment(link) {

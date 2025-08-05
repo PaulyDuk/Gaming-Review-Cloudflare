@@ -106,34 +106,71 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="info-heading">Recently Approved Reviews</h5>
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Author</th>
-                                    <th>Game</th>
-                                    <th>Rating</th>
-                                    <th>Review</th>
-                                    <th>Approved</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for review in recent_approved %}
-                                <tr>
-                                    <td>{{ review.user.username }}</td>
-                                    <td>
-                                        <a href="{% url 'reviews:review_detail' review.game.slug %}" target="_blank">
-                                            {{ review.game.title|truncatechars:30 }}
-                                        </a>
-                                    </td>
-                                    <td><span class="badge bg-primary">{{ review.rating }}/10</span></td>
-                                    <td>{{ review.review_text|truncatechars:80 }}</td>
-                                    <td>{{ review.created_on|date:"M d, H:i" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Action Buttons for Recently Approved -->
+                        <div class="mb-3">
+                            <button type="submit" name="action" value="delete_approved" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete the selected approved reviews? This action cannot be undone.')">
+                                Delete Selected
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAllApproved()">
+                                Select All
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="deselectAllApproved()">
+                                Deselect All
+                            </button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th width="50">Select</th>
+                                        <th>Author</th>
+                                        <th>Game</th>
+                                        <th>Rating</th>
+                                        <th>Review</th>
+                                        <th>Approved</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for review in recent_approved %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input approved-review-checkbox" 
+                                                   name="approved_review_ids" value="{{ review.id }}">
+                                        </td>
+                                        <td>
+                                            <strong class="text-dark">{{ review.user.username }}</strong>
+                                            <br><small class="text-muted">{{ review.user.email }}</small>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'reviews:review_detail' review.game.slug %}" target="_blank">
+                                                {{ review.game.title|truncatechars:30 }}
+                                            </a>
+                                        </td>
+                                        <td><span class="badge bg-primary">{{ review.rating }}/10</span></td>
+                                        <td>
+                                            <div class="review-preview">
+                                                {{ review.review_text|truncatechars:80 }}
+                                                {% if review.review_text|length > 80 %}
+                                                    <br><a href="#" class="text-primary" onclick="toggleFullReview(this)">Show full</a>
+                                                    <div class="full-review" style="display: none;">
+                                                        <hr>{{ review.review_text }}
+                                                        <br><a href="#" class="text-primary" onclick="toggleFullReview(this)">Show less</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>{{ review.created_on|date:"M d, H:i" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             </div>
             {% endif %}
@@ -149,6 +186,16 @@ function selectAll() {
 
 function deselectAll() {
     const checkboxes = document.querySelectorAll('.review-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+}
+
+function selectAllApproved() {
+    const checkboxes = document.querySelectorAll('.approved-review-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = true);
+}
+
+function deselectAllApproved() {
+    const checkboxes = document.querySelectorAll('.approved-review-checkbox');
     checkboxes.forEach(checkbox => checkbox.checked = false);
 }
 

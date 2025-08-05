@@ -22,6 +22,39 @@ def is_superuser(user):
 @user_passes_test(is_superuser)
 def populate_reviews_interface(request):
     """Main interface for populating reviews"""
+    
+    # Handle bulk review deletion
+    if (request.method == 'POST' and
+            request.POST.get('action') == 'delete_selected'):
+        existing_review_ids = request.POST.getlist('existing_review_ids')
+        if existing_review_ids:
+            try:
+                deleted_reviews = Review.objects.filter(
+                    id__in=existing_review_ids)
+                count = deleted_reviews.count()
+                deleted_reviews.delete()
+                messages.success(
+                    request, f'Successfully deleted {count} review(s)')
+            except Exception as e:
+                messages.error(request, f'Error deleting reviews: {str(e)}')
+        else:
+            messages.warning(request, 'No reviews selected for deletion')
+        return redirect('reviews:populate_interface')
+    
+    # Handle single review deletion (legacy support)
+    if request.method == 'POST' and 'delete_review' in request.POST:
+        review_id = request.POST.get('review_id')
+        try:
+            review = Review.objects.get(id=review_id)
+            title = review.title
+            review.delete()
+            messages.success(request, f'Successfully deleted review: {title}')
+        except Review.DoesNotExist:
+            messages.error(request, 'Review not found')
+        except Exception as e:
+            messages.error(request, f'Error deleting review: {str(e)}')
+        return redirect('reviews:populate_interface')
+    
     if request.method == 'POST':
         search_term = request.POST.get('search', '')
         limit = int(request.POST.get('limit', 50))
@@ -55,13 +88,22 @@ def populate_reviews_interface(request):
                 'raw_data': json.dumps(game)  # Store as JSON string for hidden input
             })
 
+        # Get existing reviews
+        existing_reviews = Review.objects.all().order_by('-created_on')
+
         return render(request, 'reviews/populate_reviews.html', {
             'games': formatted_games,
             'search_term': search_term,
-            'limit': limit
+            'limit': limit,
+            'existing_reviews': existing_reviews
         })
 
-    return render(request, 'reviews/populate_reviews.html')
+    # Get existing reviews for GET request
+    existing_reviews = Review.objects.all().order_by('-created_on')
+    
+    return render(request, 'reviews/populate_reviews.html', {
+        'existing_reviews': existing_reviews
+    })
 
 
 @user_passes_test(is_superuser)

@@ -8,15 +8,22 @@ from .models import UserComment, UserReview
 def approve_comments(request):
     """View for approving user comments"""
     if request.method == 'POST':
-        comment_ids = request.POST.getlist('comment_ids')
         action = request.POST.get('action')
 
-        if action == 'approve':
-            UserComment.objects.filter(id__in=comment_ids).update(approved=True)
-            messages.success(request, f'Approved {len(comment_ids)} comment(s)')
-        elif action == 'reject':
-            UserComment.objects.filter(id__in=comment_ids).delete()
-            messages.success(request, f'Deleted {len(comment_ids)} comment(s)')
+        if action in ['approve', 'reject']:
+            comment_ids = request.POST.getlist('comment_ids')
+            if action == 'approve':
+                UserComment.objects.filter(id__in=comment_ids).update(approved=True)
+                messages.success(request, f'Approved {len(comment_ids)} comment(s)')
+            elif action == 'reject':
+                UserComment.objects.filter(id__in=comment_ids).delete()
+                messages.success(request, f'Deleted {len(comment_ids)} comment(s)')
+        
+        elif action == 'delete_approved':
+            approved_comment_ids = request.POST.getlist('approved_comment_ids')
+            if approved_comment_ids:
+                UserComment.objects.filter(id__in=approved_comment_ids).delete()
+                messages.success(request, f'Deleted {len(approved_comment_ids)} approved comment(s)')
 
     # Get all unapproved comments
     unapproved_comments = UserComment.objects.filter(
@@ -41,15 +48,27 @@ def approve_comments(request):
 def approve_reviews(request):
     """View for approving user reviews"""
     if request.method == 'POST':
-        review_ids = request.POST.getlist('review_ids')
         action = request.POST.get('action')
 
-        if action == 'approve':
-            UserReview.objects.filter(id__in=review_ids).update(approved=True)
-            messages.success(request, f'Approved {len(review_ids)} review(s)')
-        elif action == 'reject':
-            UserReview.objects.filter(id__in=review_ids).delete()
-            messages.success(request, f'Deleted {len(review_ids)} review(s)')
+        if action in ['approve', 'reject']:
+            review_ids = request.POST.getlist('review_ids')
+            if action == 'approve':
+                UserReview.objects.filter(id__in=review_ids).update(
+                    approved=True)
+                messages.success(
+                    request, f'Approved {len(review_ids)} review(s)')
+            elif action == 'reject':
+                UserReview.objects.filter(id__in=review_ids).delete()
+                messages.success(
+                    request, f'Deleted {len(review_ids)} review(s)')
+        
+        elif action == 'delete_approved':
+            approved_review_ids = request.POST.getlist('approved_review_ids')
+            if approved_review_ids:
+                UserReview.objects.filter(id__in=approved_review_ids).delete()
+                messages.success(
+                    request,
+                    f'Deleted {len(approved_review_ids)} approved review(s)')
 
     # Get all unapproved reviews
     unapproved_reviews = UserReview.objects.filter(

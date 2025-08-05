@@ -102,32 +102,69 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="info-heading">Recently Approved Comments</h5>
-                    <div class="table-responsive">
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Author</th>
-                                    <th>Game</th>
-                                    <th>Comment</th>
-                                    <th>Approved</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for comment in recent_approved %}
-                                <tr>
-                                    <td>{{ comment.author.username }}</td>
-                                    <td>
-                                        <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank">
-                                            {{ comment.review.title|truncatechars:30 }}
-                                        </a>
-                                    </td>
-                                    <td>{{ comment.body|truncatechars:80 }}</td>
-                                    <td>{{ comment.created_on|date:"M d, H:i" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Action Buttons for Recently Approved -->
+                        <div class="mb-3">
+                            <button type="submit" name="action" value="delete_approved" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete the selected approved comments? This action cannot be undone.')">
+                                Delete Selected
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAllApproved()">
+                                Select All
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="deselectAllApproved()">
+                                Deselect All
+                            </button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th width="50">Select</th>
+                                        <th>Author</th>
+                                        <th>Game</th>
+                                        <th>Comment</th>
+                                        <th>Approved</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for comment in recent_approved %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input approved-comment-checkbox" 
+                                                   name="approved_comment_ids" value="{{ comment.id }}">
+                                        </td>
+                                        <td>
+                                            <strong class="text-dark">{{ comment.author.username }}</strong>
+                                            <br><small class="text-muted">{{ comment.author.email }}</small>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'reviews:review_detail' comment.review.slug %}" target="_blank">
+                                                {{ comment.review.title|truncatechars:30 }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <div class="comment-preview">
+                                                {{ comment.body|truncatechars:80 }}
+                                                {% if comment.body|length > 80 %}
+                                                    <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show full</a>
+                                                    <div class="full-comment" style="display: none;">
+                                                        <hr>{{ comment.body }}
+                                                        <br><a href="#" class="text-primary" onclick="toggleFullComment(this)">Show less</a>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                        <td>{{ comment.created_on|date:"M d, H:i" }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             </div>
             {% endif %}
@@ -143,6 +180,16 @@ function selectAll() {
 
 function deselectAll() {
     const checkboxes = document.querySelectorAll('.comment-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+}
+
+function selectAllApproved() {
+    const checkboxes = document.querySelectorAll('.approved-comment-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = true);
+}
+
+function deselectAllApproved() {
+    const checkboxes = document.querySelectorAll('.approved-comment-checkbox');
     checkboxes.forEach(checkbox => checkbox.checked = false);
 }
 

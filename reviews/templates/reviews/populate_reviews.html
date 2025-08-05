@@ -5,7 +5,7 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4">Add Review</h1>
+            <h1 class="mb-4">Add Reviews</h1>
             
             <!-- Search Form -->
             <div class="card mb-4">
@@ -112,6 +112,87 @@
                                 Create Selected Reviews
                             </button>
                             <small class="card-text ms-2">This will generate AI reviews and upload images to Cloudinary</small>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Existing Reviews Section -->
+            {% if existing_reviews %}
+            <h1>Existing Reviews ({{ existing_reviews.count }})</h1>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <p class="card-text">Manage your existing reviews below:</p>
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Action Buttons -->
+                        <div class="mb-3">
+                            <button type="submit" name="action" value="delete_selected" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete the selected reviews? This action cannot be undone.')">
+                                Delete Selected
+                            </button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAllExisting()">
+                                Select All
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="deselectAllExisting()">
+                                Deselect All
+                            </button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th width="50">Select</th>
+                                        <th>Game Title</th>
+                                        <th>Developer</th>
+                                        <th>Publisher</th>
+                                        <th>Score</th>
+                                        <th>Created</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for review in existing_reviews %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input existing-review-checkbox" 
+                                                   name="existing_review_ids" value="{{ review.id }}">
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'reviews:review_detail' review.slug %}" target="_blank" class="text-decoration-none">
+                                                <strong class="text-dark">{{ review.title }}</strong>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {% if review.developer %}
+                                                <a href="{% url 'developer:developer_games' review.developer.slug %}" target="_blank" class="text-decoration-none">
+                                                    {{ review.developer.name }}
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted">No Developer</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if review.publisher %}
+                                                <a href="{% url 'publisher:publisher_games' review.publisher.slug %}" target="_blank" class="text-decoration-none">
+                                                    {{ review.publisher.name }}
+                                                </a>
+                                            {% else %}
+                                                <span class="text-muted">No Publisher</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-primary">{{ review.review_score }}/10</span>
+                                        </td>
+                                        <td>
+                                            <small>{{ review.created_on|date:"M d, Y" }}</small>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </form>
                 </div>
@@ -235,6 +316,17 @@ document.getElementById('create-reviews-form').addEventListener('submit', functi
         return false;
     }
 });
+
+// Functions for existing reviews bulk actions
+function selectAllExisting() {
+    const checkboxes = document.querySelectorAll('.existing-review-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = true);
+}
+
+function deselectAllExisting() {
+    const checkboxes = document.querySelectorAll('.existing-review-checkbox');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+}
 </script>
 
 {% endblock %}

@@ -3,6 +3,7 @@ from reviews.models import Review
 from datetime import timedelta
 from django.utils import timezone
 
+
 def home_view(request):
     seven_days_ago = timezone.now() - timedelta(days=7)
     # Use the same logic as ReviewList view for consistency

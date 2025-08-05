@@ -25,14 +25,14 @@ def populate_reviews_interface(request):
     if request.method == 'POST':
         search_term = request.POST.get('search', '')
         limit = int(request.POST.get('limit', 50))
-        
+
         # Get games from IGDB
         igdb_service = IGDBService()
         if search_term:
             games = igdb_service.search_games_with_platforms(search_term, limit=limit)
         else:
             games = igdb_service.search_games_with_platforms('', limit=limit)
-        
+
         # Format games for template
         formatted_games = []
         for idx, game in enumerate(games, 1):
@@ -45,7 +45,7 @@ def populate_reviews_interface(request):
                 except Exception:
                     year = 'Unknown'
             platforms = ', '.join([p.get('name', 'Unknown') for p in game.get('platforms', [])])
-            
+
             formatted_games.append({
                 'index': idx,
                 'title': title,
@@ -54,13 +54,13 @@ def populate_reviews_interface(request):
                 'summary': game.get('summary', ''),
                 'raw_data': json.dumps(game)  # Store as JSON string for hidden input
             })
-        
+
         return render(request, 'reviews/populate_reviews.html', {
             'games': formatted_games,
             'search_term': search_term,
             'limit': limit
         })
-    
+
     return render(request, 'reviews/populate_reviews.html')
 
 
@@ -71,20 +71,20 @@ def create_reviews_from_selection(request):
     try:
         selected_games_data = request.POST.getlist('selected_games')
         review_scores = request.POST.getlist('review_scores')
-        
+
         if not selected_games_data:
             messages.error(request, 'No games selected')
             return redirect('reviews:populate_interface')
-        
+
         created_reviews = 0
         populate_command = PopulateCommand()
-        
+
         with transaction.atomic():
             for i, game_json in enumerate(selected_games_data):
                 try:
                     game = json.loads(game_json)
                     review_score = float(review_scores[i]) if i < len(review_scores) else 5.0
-                    
+
                     title = game.get('name')
                     slug = slugify(title)
                     description = game.get('summary', '')
@@ -135,7 +135,7 @@ def create_reviews_from_selection(request):
                     # Create review if both developer and publisher exist
                     if developer_obj and publisher_obj:
                         user = User.objects.order_by('?').first()
-                        
+
                         # Generate AI review
                         ai_review_text = populate_command.generate_ai_review(title)
                         review_text = ai_review_text if ai_review_text else f"Auto-generated review for {title}."
@@ -165,7 +165,7 @@ def create_reviews_from_selection(request):
                                 'is_published': True
                             }
                         )
-                        
+
                         # Add genres to review
                         genre_objs = []
                         for genre in game.get('genres', []):
@@ -175,17 +175,17 @@ def create_reviews_from_selection(request):
                                 genre_objs.append(genre_obj)
                         if genre_objs:
                             review.genres.set(genre_objs)
-                        
+
                         if created:
                             created_reviews += 1
-                        
+
                 except Exception as e:
                     messages.error(request, f'Error processing {title}: {str(e)}')
                     continue
-        
+
         messages.success(request, f'Successfully created {created_reviews} reviews')
         return redirect('reviews:populate_interface')
-        
+
     except Exception as e:
         messages.error(request, f'Error creating reviews: {str(e)}')
         return redirect('reviews:populate_interface')

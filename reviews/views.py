@@ -74,6 +74,8 @@ class ReviewList(generic.ListView):
             queryset = queryset.order_by('-review_date')
         elif sort == 'oldest':
             queryset = queryset.order_by('review_date')
+        else:
+            queryset = queryset.order_by('title')  # Default to A-Z sorting
         return queryset
 
     def get_context_data(self, **kwargs):

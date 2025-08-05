@@ -7,7 +7,7 @@
         <div class="row align-items-center g-0">
             <!-- Left column: Title and byline -->
             <div class="col-md-4 masthead-text">
-                <h1 class="post-title">{{ review.title }}</h1>
+                <h1 class="post-title orange-link"><a href="{% url 'reviews:review_detail' review.slug %}" class="orange-link">{{ review.title }}</a></h1>
                 <p class="post-subtitle">Reviewed by {{ review.reviewed_by }} on {{ review.created_on }}</p>
             </div>
             <!-- Center column: Arrows -->

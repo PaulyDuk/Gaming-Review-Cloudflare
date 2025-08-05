@@ -24,7 +24,7 @@ body {
     background-color: #457b9d;
     border-radius: 10px; 
     box-shadow: 0 0 15px 0 #888888;
-    padding: 1.5rem;
+    padding: 12px;
 }
 
 .card-text {
@@ -48,6 +48,31 @@ h1, h2, h3 {
     width: 100%;
     height: auto;
     object-fit: scale-down;
+}
+
+/* Custom card class for homepage recent reviews */
+.homepage-review-card {
+    height: 700px;
+}
+
+.homepage-review-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.homepage-review-card .card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 11;
+    line-clamp: 11;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.5rem;
+}
+
+.homepage-review-card .d-flex.justify-content-between {
+    margin-top: auto;
 }
 
 .orange-link {

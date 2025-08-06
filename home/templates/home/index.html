@@ -67,9 +67,23 @@
             </div>
         </div>
     </div>
-    <!-- All Reviews Row -->
+    <!-- Recent Reviews Row -->
     <div class="row">
-        <h3 class="mb-3">Reviews in last 7 days</h3>
+        <div class="d-flex align-items-center mb-3">
+            <h3 class="mb-0 me-3">Recent Reviews</h3>
+            <div class="dropdown">
+                <button class="btn btn-outline-success dropdown-toggle" type="button" id="recentReviewsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 1 Day{% endif %}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="recentReviewsDropdown">
+                    <li><a class="dropdown-item{% if days_filter == 1 %} active{% endif %}" href="?days=1">Last 1 Day</a></li>
+                    <li><a class="dropdown-item{% if days_filter == 3 %} active{% endif %}" href="?days=3">Last 3 Days</a></li>
+                    <li><a class="dropdown-item{% if days_filter == 7 %} active{% endif %}" href="?days=7">Last 7 Days</a></li>
+                    <li><a class="dropdown-item{% if days_filter == 14 %} active{% endif %}" href="?days=14">Last 14 Days</a></li>
+                    <li><a class="dropdown-item{% if days_filter == 30 %} active{% endif %}" href="?days=30">Last 30 Days</a></li>
+                </ul>
+            </div>
+        </div>
         <!-- Review Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">

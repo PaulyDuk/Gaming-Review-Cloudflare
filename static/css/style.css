@@ -127,6 +127,10 @@ h1, h2, h3 {
     margin-top: auto;
 }
 
+.orange-text {
+    color: #ffc107 !important; /* Use !important to override card-text */
+}
+
 .orange-link {
     color: #ffc107;
     text-decoration: none;
@@ -323,7 +327,7 @@ strong {
 
 .post-link {
     text-decoration: none;
-    color: #ffc107; /* Brighter orange */
+    color: #ffc107;
 }
 
 .post-link:hover {

@@ -86,23 +86,6 @@ function updateCreateButton() {
     }
 }
 
-function toggleSummary(link) {
-    const summaryDiv = link.closest('.summary-text');
-    const fullSummary = summaryDiv.querySelector('.full-summary');
-    
-    if (fullSummary.style.display === 'none') {
-        // Show full summary
-        summaryDiv.childNodes[0].style.display = 'none'; // Hide truncated text
-        link.style.display = 'none'; // Hide "Show more" link
-        fullSummary.style.display = 'block';
-    } else {
-        // Show truncated summary
-        summaryDiv.childNodes[0].style.display = 'inline'; // Show truncated text
-        summaryDiv.childNodes[2].style.display = 'inline'; // Show "Show more" link
-        fullSummary.style.display = 'none';
-    }
-}
-
 // Functions for existing reviews bulk actions
 function selectAllExisting() {
     const checkboxes = document.querySelectorAll('.existing-review-checkbox');

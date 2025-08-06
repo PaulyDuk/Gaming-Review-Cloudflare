@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-12 mt-3 left">
             <div class="row">
@@ -31,7 +31,7 @@
                                                     <a href="{% url 'reviews:review_detail' game.slug %}" class="post-link">
                                                         <span class="game-title-container">
                                                             <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
-                                                            <h5 class="card-title m-0 info-heading">{{ game.title }}</h5>
+                                                            <h5 class="card-title m-0 info-heading d-inline">{{ game.title }}</h5>
                                                         </span>
                                                         <p class="card-text">{{ game.description|striptags }}</p>
                                                     </a>
@@ -49,6 +49,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        {% if forloop.counter|divisibleby:4 %}
+                                            </div>
+                                            <div class="row">
+                                        {% endif %}
                                     {% endfor %}
                                 </div>
                             {% endif %}

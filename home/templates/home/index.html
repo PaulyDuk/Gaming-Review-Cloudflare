@@ -84,6 +84,11 @@
                 </ul>
             </div>
         </div>
+        {% if is_paginated %}
+            <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} reviews</p>
+        {% else %}
+            <p class="info-heading mb-3">Showing {{ review_list|length }} of {{ paginator.count }} reviews</p>
+        {% endif %}
         <!-- Review Entries Column -->
         <div class="col-12 mt-3 left">
             <div class="row">
@@ -133,19 +138,33 @@
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-    {% if page_obj.has_previous %}
-    <li>
-        <a href="?page={{ page_obj.previous_page_number }}"
-          class="page-link">&laquo; PREV</a>
-    </li>
-    {% endif %}
-    {% if page_obj.has_next %}
-    <li>
-        <a href="?page={{ page_obj.next_page_number }}"
-          class="page-link">NEXT &raquo;</a>
-    </li>
-    {% endif %}
-</ul>
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.previous_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                  class="page-link">&laquo; PREV</a>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a href="?page={{ num }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                          class="page-link">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                  class="page-link">NEXT &raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
     </nav>
     {% endif %}
 </div>

@@ -146,12 +146,12 @@ def populate_reviews_interface(request):
         for idx, game in enumerate(games, 1):
             title = game.get('name', 'Unknown')
             slug = slugify(title)
-            
+
             # Check if review already exists
             existing_review = Review.objects.filter(
                 Q(title__iexact=title) | Q(slug=slug)
             ).first()
-            
+
             year = None
             if 'release_dates' in game and game['release_dates']:
                 try:
@@ -191,7 +191,7 @@ def populate_reviews_interface(request):
 
     # Get existing reviews for GET request
     existing_reviews = Review.objects.all().order_by('-created_on')
-    
+
     # Add pagination for existing reviews
     paginator = Paginator(existing_reviews, 50)  # Show 50 reviews per page
     page_number = request.GET.get('page')
@@ -232,12 +232,12 @@ def create_reviews_from_selection(request):
 
                     title = game.get('name')
                     slug = slugify(title)
-                    
+
                     # Check if review already exists
                     existing_review = Review.objects.filter(
                         Q(title__iexact=title) | Q(slug=slug)
                     ).first()
-                    
+
                     if existing_review:
                         skipped_reviews += 1
                         messages.warning(
@@ -245,7 +245,7 @@ def create_reviews_from_selection(request):
                             f'Skipped "{title}" - review already exists'
                         )
                         continue
-                    
+
                     description = game.get('summary', '')
                     release_date = None
                     if 'release_dates' in game and game['release_dates']:
@@ -383,7 +383,7 @@ def create_reviews_from_selection(request):
         if skipped_reviews > 0:
             success_message += (f' (skipped {skipped_reviews} '
                                 f'existing review(s))')
-        
+
         messages.success(request, success_message)
         return redirect('reviews:populate_interface')
 

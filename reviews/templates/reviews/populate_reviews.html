@@ -80,7 +80,7 @@
                                         <td>
                                             <input type="checkbox" class="form-check-input game-checkbox" 
                                                    name="game_selected" value="{{ forloop.counter0 }}"
-                                                   onchange="toggleGameData(this, {{ forloop.counter0 }})">
+                                                   onchange="toggleGameData(this, '{{ forloop.counter0 }}')">
                                         </td>
                                         <td>
                                             <span style="font-weight: bold;">{{ game.title }}</span>

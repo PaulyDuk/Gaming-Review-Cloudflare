@@ -6,12 +6,28 @@ body {
     background-color: #1e1e2f;
 }
 
-.alert-info {
-    background-color: #457b9d !important;
-    color: #fff !important;
+/* Game title styling */
+.game-title-container {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
-.dark-bg{
+.game-title-arrow {
+    height: 1em;
+    margin: 0.5em 0.5em;
+}
+
+/* Review title styling */
+.review-title-container {
+    display: flex;
+    align-items: center;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+
+.dark-bg {
     background-color: #2a2a2a;
 }
 
@@ -75,42 +91,20 @@ h1, h2, h3 {
     margin-top: auto;
 }
 
-/* Custom card class for developer list */
-.developer-card {
-    height: 330px;
-}
-
-.developer-card .card-body {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
-
-.developer-card .card-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 7;
-    line-clamp: 7;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0.5rem;
-}
-
-.developer-card .mt-auto {
-    margin-top: auto;
-}
-
-/* Custom card class for publisher list */
+/* Custom card class for developer and publisher lists */
+.developer-card,
 .publisher-card {
     height: 330px;
 }
 
+.developer-card .card-body,
 .publisher-card .card-body {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
+.developer-card .card-text,
 .publisher-card .card-text {
     display: -webkit-box;
     -webkit-line-clamp: 7;
@@ -121,6 +115,7 @@ h1, h2, h3 {
     margin-bottom: 0.5rem;
 }
 
+.developer-card .mt-auto,
 .publisher-card .mt-auto {
     margin-top: auto;
 }
@@ -188,20 +183,6 @@ h1, h2, h3 {
 }
 .btn:hover,
 .btn:focus {
-    background-color: #ffb703 !important;
-    color: #fff !important;
-    border-color: #ffb703 !important;
-}
-
-/* Search button custom style - keeping for backwards compatibility */
-.btn-outline-success {
-    border-color: #ffb703 !important;
-    color: #ffb703 !important;
-    background-color: #2a2a2a !important;
-    transition: background 0.2s, color 0.2s;
-}
-.btn-outline-success:hover,
-.btn-outline-success:focus {
     background-color: #ffb703 !important;
     color: #fff !important;
     border-color: #ffb703 !important;
@@ -436,10 +417,6 @@ strong {
     border-radius: 10px !important;
     box-shadow: 0 0 15px 0 #888888 !important;
     color: #FAF9F6 !important;
-}
-
-.alert.alert-success {
-    background-color: #457b9d !important;
 }
 
 .alert.alert-error,

@@ -11,6 +11,7 @@ body {
     display: flex;
     align-items: center;
     margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
 .game-title-arrow {
@@ -23,6 +24,7 @@ body {
     display: flex;
     align-items: center;
     margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
 .dark-bg {

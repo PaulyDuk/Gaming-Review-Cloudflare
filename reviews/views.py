@@ -265,7 +265,7 @@ def user_comment_edit(request, slug, comment_id):
                 request, messages.ERROR, 'Error updating comment!'
             )
 
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+    return HttpResponseRedirect(reverse('reviews:review_detail', args=[slug]))
 
 
 def user_comment_delete(request, slug, comment_id):
@@ -279,7 +279,9 @@ def user_comment_delete(request, slug, comment_id):
     # Ensure the comment belongs to this review
     if user_comment.review != review:
         messages.add_message(request, messages.ERROR, 'Comment not found!')
-        return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+        return HttpResponseRedirect(
+            reverse('reviews:review_detail', args=[slug])
+        )
 
     if user_comment.author == request.user:
         user_comment.delete()
@@ -289,7 +291,9 @@ def user_comment_delete(request, slug, comment_id):
             request, messages.ERROR, 'You can only delete your own comments!'
         )
 
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+    return HttpResponseRedirect(
+        reverse('reviews:review_detail', args=[slug])
+    )
 
 
 def user_review_edit(request, slug, review_id):
@@ -308,7 +312,9 @@ def user_review_edit(request, slug, review_id):
         # Ensure the review belongs to this game
         if user_review.game != review:
             messages.add_message(request, messages.ERROR, 'Review not found!')
-            return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+            return HttpResponseRedirect(
+                reverse('reviews:review_detail', args=[slug])
+            )
 
         if user_review_form.is_valid() and user_review.user == request.user:
             user_review = user_review_form.save(commit=False)
@@ -321,7 +327,9 @@ def user_review_edit(request, slug, review_id):
                 request, messages.ERROR, 'Error updating review!'
             )
 
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+    return HttpResponseRedirect(
+        reverse('reviews:review_detail', args=[slug])
+    )
 
 
 def user_review_delete(request, slug, review_id):
@@ -335,7 +343,9 @@ def user_review_delete(request, slug, review_id):
     # Ensure the review belongs to this game
     if user_review.game != review:
         messages.add_message(request, messages.ERROR, 'Review not found!')
-        return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+        return HttpResponseRedirect(
+            reverse('reviews:review_detail', args=[slug])
+        )
 
     if user_review.user == request.user:
         user_review.delete()
@@ -345,7 +355,9 @@ def user_review_delete(request, slug, review_id):
             request, messages.ERROR, 'You can only delete your own reviews!'
         )
 
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+    return HttpResponseRedirect(
+        reverse('reviews:review_detail', args=[slug])
+    )
 
 
 def search_games(request):

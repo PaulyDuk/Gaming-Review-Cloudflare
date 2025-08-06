@@ -54,7 +54,7 @@
                                     <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
                                         <span class="game-title-container">
                                             <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
-                                            <h5 class="card-title m-0 info-heading">{{ review.title }}</h5>
+                                            <h5 class="card-title m-0 orange-link">{{ review.title }}</h5>
                                         </span>
                                         <p class="card-text">{{ review.description|striptags }}</p>
                                     </a>

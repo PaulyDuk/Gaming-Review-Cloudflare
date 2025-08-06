@@ -9,7 +9,7 @@
         <div class="col-md-12 mt-3">
             <div class="card">
                 <div class="card-body">
-                    <h2>Welcome, {{ user.username }}!</h2>
+                    <h2 class="orange-text">Welcome, {{ user.username }}!</h2>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="orange-link">Account Management</h4>
+                    <h4 class="orange-text">Account Management</h4>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -39,16 +39,16 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="orange-link">My Activity</h4>
+                    <h4 class="orange-text">My Activity</h4>
                 </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h3 class="orange-link">{{ user_reviews.count }}</h3>
+                            <h3 class="orange-text">{{ user_reviews.count }}</h3>
                             <p class="mb-0 info-heading">Reviews Written</p>
                         </div>
                         <div class="col-6">
-                            <h3 class="orange-link">{{ user_comments.count }}</h3>
+                            <h3 class="orange-text">{{ user_comments.count }}</h3>
                             <p class="mb-0 info-heading">Comments Posted</p>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="orange-link">My Recent Reviews</h4>
+                    <h4 class="orange-text">My Recent Reviews</h4>
                 </div>
                 <div class="card-body">
                     {% for review in user_reviews|slice:":5" %}
@@ -94,7 +94,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="orange-link">My Recent Comments</h4>
+                    <h4 class="orange-text">My Recent Comments</h4>
                 </div>
                 <div class="card-body">
                     {% for comment in user_comments|slice:":5" %}

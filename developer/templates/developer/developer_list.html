@@ -36,7 +36,7 @@
                                     <a href="{% url 'developer:developer_games' developer.slug %}" class="post-link">
                                         <span class="game-title-container">
                                             <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
-                                            <h5 class="card-title m-0 info-heading">{{ developer.name }}</h5>
+                                            <h5 class="card-title m-0 orange-link">{{ developer.name }}</h5>
                                         </span>
                                         {% if developer.description %}
                                             <p class="card-text">{{ developer.description|striptags }}</p>

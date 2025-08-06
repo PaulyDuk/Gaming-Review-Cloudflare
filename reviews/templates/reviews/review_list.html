@@ -58,7 +58,6 @@
                                         </span>
                                         <p class="card-text">{{ review.description|striptags }}</p>
                                     </a>
-
                                     <div class="d-flex justify-content-between align-items-center mt-auto">
                                         <div>
                                             <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
@@ -87,7 +86,7 @@
             {% if page_obj.has_previous %}
             <li class="page-item">
                 <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-                  class="page-link">&laquo; PREV</a>
+                class="page-link">&laquo; PREV</a>
             </li>
             {% endif %}
             
@@ -99,7 +98,7 @@
                 {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
                     <li class="page-item">
                         <a href="?page={{ num }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-                          class="page-link">{{ num }}</a>
+                        class="page-link">{{ num }}</a>
                     </li>
                 {% endif %}
             {% endfor %}
@@ -107,7 +106,7 @@
             {% if page_obj.has_next %}
             <li class="page-item">
                 <a href="?page={{ page_obj.next_page_number }}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}"
-                  class="page-link">NEXT &raquo;</a>
+                class="page-link">NEXT &raquo;</a>
             </li>
             {% endif %}
         </ul>

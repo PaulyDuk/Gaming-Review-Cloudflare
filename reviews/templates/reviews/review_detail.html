@@ -176,21 +176,21 @@
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Comments</h3></div>
-                          {% if user_comments %}
+                        {% if user_comments %}
                             {% for user_comment in user_comments %}
                             <div class="p-2 comments
-                              {% if not user_comment.approved and user_comment.author == user %}
-                              faded{% elif not user_comment.approved %} d-none{% endif %}">
-                              <p class="card-text"><strong>{{ user_comment.author }} - {{ user_comment.created_on }} wrote:</strong>
-                              </p>
-                              <div class="card-text" id="user_comment{{ user_comment.id }}">
+                            {% if not user_comment.approved and user_comment.author == user %}
+                            faded{% elif not user_comment.approved %} d-none{% endif %}">
+                            <p class="card-text"><strong>{{ user_comment.author }} - {{ user_comment.created_on }} wrote:</strong>
+                            </p>
+                            <div class="card-text" id="user_comment{{ user_comment.id }}">
                                 {{ user_comment.body | linebreaks }}
-                              </div>
-                              {% if not user_comment.approved and user_comment.author == user %}
-                              <p class="approval">
+                            </div>
+                            {% if not user_comment.approved and user_comment.author == user %}
+                            <p class="approval">
                                 This comment is awaiting approval
-                              </p>
-                              {% endif %}
+                            </p>
+                            {% endif %}
                                 {% if user.is_authenticated and user_comment.author == user %}
                                     <button class="btn btn-outline-success btn-edit-user-comment" comment_id="{{ user_comment.id }}">Edit</button>
                                     <button class="btn btn-outline-success btn-delete-user-comment" comment_id="{{ user_comment.id }}">Delete</button>
@@ -210,14 +210,14 @@
                         <div class="card-body">
                             {% if user.is_authenticated %}
                             <div class="d-flex align-items-center mb-2">
-                              <img src="{% static 'images/arrows.png' %}" class="arrows">
-                              <h3 class="info-heading mb-0">Leave a comment:</h3>
+                                <img src="{% static 'images/arrows.png' %}" class="arrows">
+                                <h3 class="info-heading mb-0">Leave a comment:</h3>
                             </div>
                             <p class="card-text">Posting as: {{ user.username }}</p>
                             <form id="userCommentForm" method="post" class="card-text form-layout">
-                              {{ user_comment_form | crispy }}
-                              {% csrf_token %}
-                              <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+                                {{ user_comment_form | crispy }}
+                                {% csrf_token %}
+                                <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-outline-success btn-lg">Submit</button>
                             </form>
                             {% else %}
                             <p class="card-text"><a class="orange-link" href="{% url 'account_login' %}">Log in</a> to leave a comment</p>
@@ -249,8 +249,8 @@
                             {% if user_reviews %}
                                 {% for user_review in user_reviews %}
                                 <div class="p-2 reviews
-                                  {% if not user_review.approved and user_review.user == user %}
-                                  faded{% elif not user_review.approved %} d-none{% endif %}">
+                                {% if not user_review.approved and user_review.user == user %}
+                                faded{% elif not user_review.approved %} d-none{% endif %}">
                                     <p class="card-text"><strong>
                                         {{ user_review.user.username }} - {{ user_review.created_on }} wrote:</strong>
                                     </p>
@@ -291,14 +291,14 @@
                                 </div>
                                     <p class="card-text">Posting as: {{ user.username }}</p>
                                     <form id="userReviewForm" method="post" class="card-text form-layout">
-                                      {% if user_review_form.errors %}
-                                          <div class="alert alert-danger" role="alert">
-                                              Please correct the errors below.
-                                          </div>
-                                      {% endif %}
-                                      {{ user_review_form | crispy }}
-                                      {% csrf_token %}
-                                      <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+                                        {% if user_review_form.errors %}
+                                            <div class="alert alert-danger" role="alert">
+                                                Please correct the errors below.
+                                            </div>
+                                        {% endif %}
+                                        {{ user_review_form | crispy }}
+                                        {% csrf_token %}
+                                        <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-outline-success btn-lg">Submit</button>
                                     </form>
                                 {% else %}
                                     <div id="reviewCompleteMessage">
@@ -309,9 +309,9 @@
                                         <h3>Edit Your Review:</h3>
                                         <p class="card-text">Posting as: {{ user.username }}</p>
                                         <form id="userReviewForm" method="post" class="form-layout">
-                                          {{ user_review_form | crispy }}
-                                          {% csrf_token %}
-                                          <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-outline-success btn-lg">Update</button>
+                                            {{ user_review_form | crispy }}
+                                            {% csrf_token %}
+                                            <button id="submitUserReviewButton" name="review_submit" type="submit" class="btn btn-outline-success btn-lg">Update</button>
                                         </form>
                                     </div>
                                 {% endif %}

@@ -34,7 +34,10 @@
                             <div class="card mb-4 developer-card">
                                 <div class="card-body">
                                     <a href="{% url 'developer:developer_games' developer.slug %}" class="post-link">
-                                        <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ developer.name }}</h5></span>
+                                        <span class="game-title-container">
+                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
+                                            <h5 class="card-title m-0 info-heading">{{ developer.name }}</h5>
+                                        </span>
                                         {% if developer.description %}
                                             <p class="card-text">{{ developer.description|striptags }}</p>
                                         {% else %}

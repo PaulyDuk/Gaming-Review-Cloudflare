@@ -29,7 +29,10 @@
                                                         </a>
                                                     </div>
                                                     <a href="{% url 'reviews:review_detail' game.slug %}" class="post-link">
-                                                        <span style="display: flex; align-items: center; margin-top: 0.5em;"><img src="{% static 'images/arrows.png' %}" style="height: 1em; margin: 0.5em 0.5em;"><h5 class="card-title m-0 info-heading">{{ game.title }}</h5></span>
+                                                        <span class="game-title-container">
+                                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
+                                                            <h5 class="card-title m-0 info-heading">{{ game.title }}</h5>
+                                                        </span>
                                                         <p class="card-text">{{ game.description|striptags }}</p>
                                                     </a>
 

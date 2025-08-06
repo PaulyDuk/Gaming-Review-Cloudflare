@@ -52,7 +52,7 @@ body {
 }
 
 h1, h2, h3 {
-    color: #ffc107; /* Brighter orange for better contrast */
+    color: #ffc107;
 }
 
 /* Ensure headings in card bodies use white for better readability */
@@ -128,7 +128,7 @@ h1, h2, h3 {
 }
 
 .orange-link {
-    color: #ffc107; /* Brighter orange for better contrast */
+    color: #ffc107;
     text-decoration: none;
 }
 
@@ -138,7 +138,7 @@ h1, h2, h3 {
 }
 .external-link:hover,
 .external-link:focus {
-    color: #ffb703;
+    color: #ffc107;
 }
 
 .arrows {
@@ -153,14 +153,14 @@ h1, h2, h3 {
 
 /* Pagination next/prev buttons styled like search button */
 .pagination .page-link {
-    border-color: #ffc107 !important; /* Brighter orange */
-    color: #ffc107 !important; /* Brighter orange */
+    border-color: #ffc107 !important;
+    color: #ffc107 !important;
     background-color: transparent !important;
     transition: background 0.2s, color 0.2s;
 }
 .pagination .page-link:hover,
 .pagination .page-link:focus {
-    background-color: #ffc107 !important; /* Brighter orange */
+    background-color: #ffc107 !important;
     color: #fff !important;
     border-color: #ffc107 !important;
 }
@@ -178,15 +178,15 @@ h1, h2, h3 {
 .card-body:hover h2.card-title,
 .card-body:hover h5.card-title,
 .card-body:hover h3:not(.info-heading) {
-    color: #ffc107 !important; /* Brighter orange */
+    color: #ffc107 !important;
 }
 
 /* Universal button styling */
 .btn {
-    border-color: #ffc107 !important; /* Brighter orange */
-    color: #ffc107 !important; /* Brighter orange */
-    background-color: #1a1a1a !important; /* Darker background for better contrast */
-    border-width: 2px !important; /* Thicker border for visibility */
+    border-color: #ffc107 !important;
+    color: #ffc107 !important;
+    background-color: #1a1a1a !important;
+    border-width: 2px !important;
     transition: background 0.2s, color 0.2s;
 }
 .btn:hover,
@@ -205,7 +205,7 @@ h1, h2, h3 {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link:focus {
-    color: #ffc107 !important; /* Brighter orange */
+    color: #ffc107 !important;
     font-size: 1.1rem;
 }
 
@@ -279,9 +279,9 @@ strong {
 .signup input[type="text"]:focus,
 .signup input[type="email"]:focus,
 .signup input[type="password"]:focus {
-    border-color: #ffc107; /* Brighter orange */
+    border-color: #ffc107;
     outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25); /* Updated for brighter orange */
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
 }
 
 .image-flash {
@@ -326,7 +326,10 @@ strong {
     color: #ffc107; /* Brighter orange */
 }
 
-.post-link:hover,
+.post-link:hover {
+    color: #fff;
+}
+
 .page-link {
     color: #E84610;
 }
@@ -338,13 +341,13 @@ strong {
 
 .post-subtitle {
     margin-left: 5%;
-    color: lightgray;
+    color: #e9ecef;
 }
 
 .btn-signup,
 .btn-edit {
-    border-color: #ffc107 !important; /* Brighter orange */
-    color: #ffc107 !important; /* Brighter orange */
+    border-color: #ffc107 !important;
+    color: #ffc107 !important;
     background-color: transparent !important;
     transition: background 0.2s, color 0.2s;
 }
@@ -352,7 +355,7 @@ strong {
 .btn-signup:hover,
 .btn-signup:active,
 .btn-signup:focus {
-    background-color: #ffc107 !important; /* Brighter orange */
+    background-color: #ffc107 !important;
     color: #fff !important;
     border-color: #ffc107 !important;
 }
@@ -391,10 +394,10 @@ strong {
 }
 
 .approval {
-    color: #ffc107; /* Brighter orange */
+    color: #ffc107;
 }
 
-                       /* Dropdown menu background and text color to match navbar */
+/* Dropdown menu background and text color to match navbar */
 .dropdown-menu {
     background-color: #2a2a2a !important;
 }
@@ -403,15 +406,15 @@ strong {
 }
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item:focus {
-    background-color: #ffc107 !important; /* Brighter orange */
+    background-color: #ffc107 !important;
     color: #fff !important;
 }
 .dropdown-menu .dropdown-item:active {
-    background-color: #ffc107 !important; /* Brighter orange */
+    background-color: #ffc107 !important;
     color: #fff !important;
 }
 .dropdown-menu .dropdown-item.active {
-    background-color: #ffc107 !important; /* Brighter orange */
+    background-color: #ffc107 !important;
     color: #fff !important;
 }
 .dropdown-divider {
@@ -433,8 +436,8 @@ strong {
 }
 
 .alert.alert-warning {
-    background-color: #ffc107 !important; /* Brighter orange */
-    color: #000 !important; /* Black text for better contrast */
+    background-color: #ffc107 !important;
+    color: #000 !important;
 }
 
 .alert .btn-close {
@@ -450,12 +453,12 @@ strong {
 /* Improved badge contrast */
 .badge.bg-light {
     background-color: #e9ecef !important;
-    color: #212529 !important; /* Dark text on light background */
+    color: #212529 !important;
 }
 
 .badge.bg-warning {
     background-color: #ffc107 !important;
-    color: #000 !important; /* Black text for better contrast */
+    color: #000 !important;
 }
 
 /* Enhanced link accessibility */
@@ -466,5 +469,37 @@ strong {
 /* Improve external link visibility */
 .external-link:hover,
 .external-link:focus {
-    color: #ffc107 !important; /* Updated to brighter orange */
+    color: #ffc107 !important;
+}
+
+/* Table text improvements */
+.table-dark th,
+.table-dark td {
+    color: #fff !important;
+    border-color: #495057 !important;
+}
+
+.table-dark .text-muted {
+    color: #adb5bd !important;
+}
+
+/* Badge improvements for tables */
+.badge {
+    font-size: 0.85em !important;
+}
+
+/* Mobile text size improvements */
+@media (max-width: 768px) {
+    .card-text {
+        font-size: 0.95rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .orange-link {
+        font-size: 0.9rem;
+    }
 }

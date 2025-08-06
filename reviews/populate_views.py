@@ -182,7 +182,7 @@ def populate_reviews_interface(request):
         # Get existing reviews
         existing_reviews_queryset = Review.objects.all().order_by(
             '-created_on')
-        
+
         # Count featured reviews
         featured_count = existing_reviews_queryset.filter(
             is_featured=True).count()
@@ -205,7 +205,7 @@ def populate_reviews_interface(request):
 
     # Get existing reviews for GET request
     existing_reviews = Review.objects.all().order_by('-created_on')
-    
+
     # Count featured reviews
     featured_count = existing_reviews.filter(is_featured=True).count()
 

@@ -3,8 +3,11 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.db import transaction
+from django.db.models import Q
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.urls import reverse
 import json
 import datetime
 
@@ -19,6 +22,14 @@ def is_superuser(user):
     return user.is_superuser
 
 
+def get_paginated_redirect(current_page):
+    """Helper function to create redirect URL with pagination"""
+    redirect_url = reverse('reviews:populate_interface')
+    if current_page and str(current_page) != '1':
+        redirect_url += f'?page={current_page}'
+    return redirect_url
+
+
 @user_passes_test(is_superuser)
 def populate_reviews_interface(request):
     """Main interface for populating reviews"""
@@ -27,6 +38,8 @@ def populate_reviews_interface(request):
     if request.method == 'POST':
         action = request.POST.get('action')
         existing_review_ids = request.POST.getlist('existing_review_ids')
+        current_page = request.POST.get(
+            'current_page', request.GET.get('page', 1))
 
         if action == 'delete_selected':
             if existing_review_ids:
@@ -42,7 +55,7 @@ def populate_reviews_interface(request):
                         request, f'Error deleting reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected for deletion')
-            return redirect('reviews:populate_interface')
+            return redirect(get_paginated_redirect(current_page))
 
         elif action == 'publish_selected':
             if existing_review_ids:
@@ -56,7 +69,7 @@ def populate_reviews_interface(request):
                         request, f'Error publishing reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected')
-            return redirect('reviews:populate_interface')
+            return redirect(get_paginated_redirect(current_page))
 
         elif action == 'unpublish_selected':
             if existing_review_ids:
@@ -70,7 +83,7 @@ def populate_reviews_interface(request):
                         request, f'Error unpublishing reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected')
-            return redirect('reviews:populate_interface')
+            return redirect(get_paginated_redirect(current_page))
 
         elif action == 'feature_selected':
             if existing_review_ids:
@@ -84,7 +97,7 @@ def populate_reviews_interface(request):
                         request, f'Error featuring reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected')
-            return redirect('reviews:populate_interface')
+            return redirect(get_paginated_redirect(current_page))
 
         elif action == 'unfeature_selected':
             if existing_review_ids:
@@ -98,11 +111,13 @@ def populate_reviews_interface(request):
                         request, f'Error unfeaturing reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected')
-            return redirect('reviews:populate_interface')
+            return redirect(get_paginated_redirect(current_page))
 
     # Handle single review deletion (legacy support)
     if request.method == 'POST' and 'delete_review' in request.POST:
         review_id = request.POST.get('review_id')
+        current_page = request.POST.get(
+            'current_page', request.GET.get('page', 1))
         try:
             review = Review.objects.get(id=review_id)
             title = review.title
@@ -112,7 +127,7 @@ def populate_reviews_interface(request):
             messages.error(request, 'Review not found')
         except Exception as e:
             messages.error(request, f'Error deleting review: {str(e)}')
-        return redirect('reviews:populate_interface')
+        return redirect(get_paginated_redirect(current_page))
 
     if request.method == 'POST':
         search_term = request.POST.get('search', '')
@@ -130,6 +145,13 @@ def populate_reviews_interface(request):
         formatted_games = []
         for idx, game in enumerate(games, 1):
             title = game.get('name', 'Unknown')
+            slug = slugify(title)
+            
+            # Check if review already exists
+            existing_review = Review.objects.filter(
+                Q(title__iexact=title) | Q(slug=slug)
+            ).first()
+            
             year = None
             if 'release_dates' in game and game['release_dates']:
                 try:
@@ -141,12 +163,18 @@ def populate_reviews_interface(request):
                 p.get('name', 'Unknown') for p in game.get('platforms', [])
             ])
 
+            review_url = (reverse('reviews:review_detail',
+                                  args=[existing_review.slug])
+                          if existing_review else None)
+
             formatted_games.append({
                 'index': idx,
                 'title': title,
                 'year': year,
                 'platforms': platforms,
                 'summary': game.get('summary', ''),
+                'has_review': existing_review is not None,
+                'review_url': review_url,
                 # Store as JSON string for hidden input
                 'raw_data': json.dumps(game)
             })
@@ -163,9 +191,17 @@ def populate_reviews_interface(request):
 
     # Get existing reviews for GET request
     existing_reviews = Review.objects.all().order_by('-created_on')
+    
+    # Add pagination for existing reviews
+    paginator = Paginator(existing_reviews, 50)  # Show 50 reviews per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, 'reviews/populate_reviews.html', {
-        'existing_reviews': existing_reviews
+        'existing_reviews': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_obj': page_obj,
+        'paginator': paginator,
     })
 
 
@@ -182,6 +218,7 @@ def create_reviews_from_selection(request):
             return redirect('reviews:populate_interface')
 
         created_reviews = 0
+        skipped_reviews = 0
         populate_command = PopulateCommand()
 
         with transaction.atomic():
@@ -195,6 +232,20 @@ def create_reviews_from_selection(request):
 
                     title = game.get('name')
                     slug = slugify(title)
+                    
+                    # Check if review already exists
+                    existing_review = Review.objects.filter(
+                        Q(title__iexact=title) | Q(slug=slug)
+                    ).first()
+                    
+                    if existing_review:
+                        skipped_reviews += 1
+                        messages.warning(
+                            request,
+                            f'Skipped "{title}" - review already exists'
+                        )
+                        continue
+                    
                     description = game.get('summary', '')
                     release_date = None
                     if 'release_dates' in game and game['release_dates']:
@@ -327,8 +378,13 @@ def create_reviews_from_selection(request):
                         request, f'Error processing {title}: {str(e)}')
                     continue
 
-        messages.success(
-            request, f'Successfully created {created_reviews} reviews')
+        # Build success message
+        success_message = f'Successfully created {created_reviews} review(s)'
+        if skipped_reviews > 0:
+            success_message += (f' (skipped {skipped_reviews} '
+                                f'existing review(s))')
+        
+        messages.success(request, success_message)
         return redirect('reviews:populate_interface')
 
     except Exception as e:

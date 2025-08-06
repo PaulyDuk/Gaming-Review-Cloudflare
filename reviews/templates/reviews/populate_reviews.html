@@ -52,6 +52,19 @@
             <div class="card">
                 <div class="card-body">
                     <p class="card-text">Found {{ games|length }} games. Select the games you want to create reviews for:</p>
+                    {% if games %}
+                        {% regroup games by has_review as grouped_games %}
+                        {% for group in grouped_games %}
+                            {% if group.grouper %}
+                                <div class="alert alert-warning" role="alert">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>{{ group.list|length }} game{{ group.list|length|pluralize }}</strong> already 
+                                    {{ group.list|length|pluralize:"has,have" }} review{{ group.list|length|pluralize }} 
+                                    and cannot be selected for creation.
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     
                     <form id="create-reviews-form" method="post" action="{% url 'reviews:create_reviews' %}">
                         {% csrf_token %}
@@ -76,24 +89,41 @@
                                 </thead>
                                 <tbody>
                                     {% for game in games %}
-                                    <tr>
+                                    <tr {% if game.has_review %}class="table-warning"{% endif %}>
                                         <td>
-                                            <input type="checkbox" class="form-check-input game-checkbox" 
-                                                   name="game_selected" value="{{ forloop.counter0 }}"
-                                                   onchange="toggleGameData(this, '{{ forloop.counter0 }}')">
+                                            {% if game.has_review %}
+                                                <input type="checkbox" class="form-check-input game-checkbox" 
+                                                       name="game_selected" value="{{ forloop.counter0 }}"
+                                                       onchange="toggleGameData(this, '{{ forloop.counter0 }}')" disabled>
+                                                <small class="text-muted d-block">Review exists</small>
+                                            {% else %}
+                                                <input type="checkbox" class="form-check-input game-checkbox" 
+                                                       name="game_selected" value="{{ forloop.counter0 }}"
+                                                       onchange="toggleGameData(this, '{{ forloop.counter0 }}')">
+                                            {% endif %}
                                         </td>
                                         <td>
-                                            <span style="font-weight: bold;">{{ game.title }}</span>
+                                            {% if game.has_review %}
+                                                <span style="font-weight: bold;" class="text-muted">{{ game.title }}</span>
+                                                <small class="d-block text-dark">
+                                                    <i class="fas fa-exclamation-triangle text-warning"></i> Review already exists
+                                                    <a href="{{ game.review_url }}" target="_blank" class="text-dark text-decoration-underline ms-1">
+                                                        <i class="fas fa-external-link-alt"></i> View Review
+                                                    </a>
+                                                </small>
+                                            {% else %}
+                                                <span style="font-weight: bold;">{{ game.title }}</span>
+                                            {% endif %}
                                             <!-- Hidden input to store game data -->
                                             <input type="hidden" class="game-data" name="selected_games" 
-                                                   value="{{ game.raw_data }}" disabled>
+                                                   value="{{ game.raw_data }}" {% if game.has_review %}disabled{% else %}disabled{% endif %}>
                                         </td>
                                         <td>{{ game.year }}</td>
                                         <td>{{ game.platforms }}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm review-score" 
                                                    name="review_scores" min="0" max="10" step="0.1" 
-                                                   value="" style="width: 80px;" disabled
+                                                   value="" style="width: 80px;" {% if game.has_review %}disabled{% else %}disabled{% endif %}
                                                    oninput="updateCreateButton()">
                                         </td>
                                         <td>
@@ -111,7 +141,6 @@
                             <button type="submit" class="btn btn-outline-success" id="create-reviews-btn" disabled>
                                 Create Selected Reviews
                             </button>
-                            <small class="card-text ms-2">This will generate AI reviews and upload images to Cloudinary</small>
                         </div>
                     </form>
                 </div>
@@ -120,13 +149,24 @@
             
             <!-- Existing Reviews Section -->
             {% if existing_reviews %}
-            <h1>Existing Reviews ({{ existing_reviews.count }})</h1>
+            <h1>Existing Reviews 
+                {% if is_paginated %}
+                    ({{ paginator.count }} total - Page {{ page_obj.number }} of {{ paginator.num_pages }})
+                {% else %}
+                    ({{ page_obj|length }})
+                {% endif %}
+            </h1>
             <div class="card mt-4 mb-4">
                 <div class="card-body">
-                    <p class="card-text">Manage your existing reviews below:</p>
+                    {% if is_paginated %}
+                        <p class="card-text">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} reviews:</p>
+                    {% else %}
+                        <p class="card-text">Manage your existing reviews below:</p>
+                    {% endif %}
                     
                     <form method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="current_page" value="{{ page_obj.number|default:1 }}">
                         
                         <!-- Action Buttons -->
                         <div class="mb-3">
@@ -225,6 +265,37 @@
                     </form>
                 </div>
             </div>
+            
+            <!-- Pagination for existing reviews -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">&laquo; PREV</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link">NEXT &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
             {% endif %}
         </div>
     </div>
@@ -234,8 +305,11 @@
 function selectAll() {
     const checkboxes = document.querySelectorAll('.game-checkbox');
     checkboxes.forEach(checkbox => {
-        checkbox.checked = true;
-        toggleGameData(checkbox, checkbox.value);
+        // Skip disabled checkboxes (games that already have reviews)
+        if (!checkbox.disabled) {
+            checkbox.checked = true;
+            toggleGameData(checkbox, checkbox.value);
+        }
     });
     updateCreateButton();
 }
@@ -243,8 +317,11 @@ function selectAll() {
 function deselectAll() {
     const checkboxes = document.querySelectorAll('.game-checkbox');
     checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-        toggleGameData(checkbox, checkbox.value);
+        // Skip disabled checkboxes (games that already have reviews)
+        if (!checkbox.disabled) {
+            checkbox.checked = false;
+            toggleGameData(checkbox, checkbox.value);
+        }
     });
     updateCreateButton();
 }
@@ -253,6 +330,16 @@ function toggleGameData(checkbox, index) {
     const row = checkbox.closest('tr');
     const gameDataInput = row.querySelector('.game-data');
     const reviewScoreInput = row.querySelector('.review-score');
+    
+    // Check if this game already has a review
+    const hasReview = row.classList.contains('table-warning');
+    
+    if (hasReview) {
+        // Disable interaction for games that already have reviews
+        checkbox.checked = false;
+        checkbox.disabled = true;
+        return;
+    }
     
     if (checkbox.checked) {
         gameDataInput.disabled = false;
@@ -268,7 +355,7 @@ function toggleGameData(checkbox, index) {
 }
 
 function updateCreateButton() {
-    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked');
+    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked:not(:disabled)');
     const createBtn = document.getElementById('create-reviews-btn');
     
     if (checkedBoxes.length > 0) {
@@ -314,7 +401,7 @@ function toggleSummary(link) {
 
 // Add form validation
 document.getElementById('create-reviews-form').addEventListener('submit', function(e) {
-    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked');
+    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked:not(:disabled)');
     if (checkedBoxes.length === 0) {
         e.preventDefault();
         alert('Please select at least one game to create reviews for.');

@@ -23,23 +23,81 @@ def is_superuser(user):
 def populate_reviews_interface(request):
     """Main interface for populating reviews"""
 
-    # Handle bulk review deletion
-    if (request.method == 'POST' and
-            request.POST.get('action') == 'delete_selected'):
+    # Handle bulk actions on existing reviews
+    if request.method == 'POST':
+        action = request.POST.get('action')
         existing_review_ids = request.POST.getlist('existing_review_ids')
-        if existing_review_ids:
-            try:
-                deleted_reviews = Review.objects.filter(
-                    id__in=existing_review_ids)
-                count = deleted_reviews.count()
-                deleted_reviews.delete()
-                messages.success(
-                    request, f'Successfully deleted {count} review(s)')
-            except Exception as e:
-                messages.error(request, f'Error deleting reviews: {str(e)}')
-        else:
-            messages.warning(request, 'No reviews selected for deletion')
-        return redirect('reviews:populate_interface')
+        
+        if action == 'delete_selected':
+            if existing_review_ids:
+                try:
+                    deleted_reviews = Review.objects.filter(
+                        id__in=existing_review_ids)
+                    count = deleted_reviews.count()
+                    deleted_reviews.delete()
+                    messages.success(
+                        request, f'Successfully deleted {count} review(s)')
+                except Exception as e:
+                    messages.error(request, f'Error deleting reviews: {str(e)}')
+            else:
+                messages.warning(request, 'No reviews selected for deletion')
+            return redirect('reviews:populate_interface')
+        
+        elif action == 'publish_selected':
+            if existing_review_ids:
+                try:
+                    count = Review.objects.filter(
+                        id__in=existing_review_ids).update(is_published=True)
+                    messages.success(
+                        request, f'Successfully published {count} review(s)')
+                except Exception as e:
+                    messages.error(
+                        request, f'Error publishing reviews: {str(e)}')
+            else:
+                messages.warning(request, 'No reviews selected')
+            return redirect('reviews:populate_interface')
+        
+        elif action == 'unpublish_selected':
+            if existing_review_ids:
+                try:
+                    count = Review.objects.filter(
+                        id__in=existing_review_ids).update(is_published=False)
+                    messages.success(
+                        request, f'Successfully unpublished {count} review(s)')
+                except Exception as e:
+                    messages.error(
+                        request, f'Error unpublishing reviews: {str(e)}')
+            else:
+                messages.warning(request, 'No reviews selected')
+            return redirect('reviews:populate_interface')
+        
+        elif action == 'feature_selected':
+            if existing_review_ids:
+                try:
+                    count = Review.objects.filter(
+                        id__in=existing_review_ids).update(is_featured=True)
+                    messages.success(
+                        request, f'Successfully featured {count} review(s)')
+                except Exception as e:
+                    messages.error(
+                        request, f'Error featuring reviews: {str(e)}')
+            else:
+                messages.warning(request, 'No reviews selected')
+            return redirect('reviews:populate_interface')
+        
+        elif action == 'unfeature_selected':
+            if existing_review_ids:
+                try:
+                    count = Review.objects.filter(
+                        id__in=existing_review_ids).update(is_featured=False)
+                    messages.success(
+                        request, f'Successfully unfeatured {count} review(s)')
+                except Exception as e:
+                    messages.error(
+                        request, f'Error unfeaturing reviews: {str(e)}')
+            else:
+                messages.warning(request, 'No reviews selected')
+            return redirect('reviews:populate_interface')
 
     # Handle single review deletion (legacy support)
     if request.method == 'POST' and 'delete_review' in request.POST:

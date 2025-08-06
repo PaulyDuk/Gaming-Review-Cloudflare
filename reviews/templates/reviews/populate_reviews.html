@@ -133,6 +133,18 @@
                             <button type="submit" name="action" value="delete_selected" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete the selected reviews? This action cannot be undone.')">
                                 Delete Selected
                             </button>
+                            <button type="submit" name="action" value="publish_selected" class="btn btn-success btn-sm">
+                                Mark as Published
+                            </button>
+                            <button type="submit" name="action" value="unpublish_selected" class="btn btn-warning btn-sm">
+                                Mark as Unpublished
+                            </button>
+                            <button type="submit" name="action" value="feature_selected" class="btn btn-info btn-sm">
+                                Mark as Featured
+                            </button>
+                            <button type="submit" name="action" value="unfeature_selected" class="btn btn-outline-info btn-sm">
+                                Remove Featured
+                            </button>
                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="selectAllExisting()">
                                 Select All
                             </button>
@@ -150,6 +162,8 @@
                                         <th>Developer</th>
                                         <th>Publisher</th>
                                         <th>Score</th>
+                                        <th>Published</th>
+                                        <th>Featured</th>
                                         <th>Created</th>
                                     </tr>
                                 </thead>
@@ -185,6 +199,20 @@
                                         </td>
                                         <td>
                                             <span class="badge bg-primary">{{ review.review_score }}/10</span>
+                                        </td>
+                                        <td>
+                                            {% if review.is_published %}
+                                                <span class="badge bg-success">Published</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">Draft</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if review.is_featured %}
+                                                <span class="badge bg-warning text-dark">Featured</span>
+                                            {% else %}
+                                                <span class="badge bg-light text-dark">-</span>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <small class="text-light">{{ review.created_on|date:"M d, Y" }}</small>

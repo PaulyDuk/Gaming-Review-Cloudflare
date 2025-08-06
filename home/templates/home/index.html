@@ -11,7 +11,6 @@
             <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% for review in featured_reviews %}
-                        <!-- Debug: Review {{ forloop.counter0 }} - divisible by 3: {{ forloop.counter0|divisibleby:3 }} -->
                         {% if forloop.counter0|divisibleby:3 %}
                             <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
                                 <div class="row justify-content-center">
@@ -31,7 +30,7 @@
                                     </div>
                                     <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
                                         <span style="display: flex; align-items: center; margin-top: 0.5em;">
-                                            <i class="fas fa-star" style="height: 1em; margin: 0.5em 0.5em; color: #ffc107;"></i>
+                                            <i class="fas fa-star orange-link"></i>
                                             <h5 class="card-title m-0 info-heading">{{ review.title }}</h5>
                                         </span>
                                         <p class="card-text">{{ review.description|striptags }}</p>
@@ -51,7 +50,6 @@
                             </div>
                         </div>
                         
-                        <!-- Debug: Review {{ forloop.counter }} - divisible by 3: {{ forloop.counter|divisibleby:3 }} - is last: {{ forloop.last }} -->
                         {% if forloop.counter|divisibleby:3 or forloop.last %}
                                 </div>
                             </div>
@@ -138,81 +136,4 @@
 {% endblock %}
 
 {% block extras %}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('=== CAROUSEL DEBUG START ===');
-  
-  // Check if Bootstrap is loaded
-  console.log('Bootstrap available:', typeof bootstrap !== 'undefined');
-  console.log('Bootstrap.Carousel available:', typeof bootstrap !== 'undefined' && typeof bootstrap.Carousel !== 'undefined');
-  
-  // Check if carousel element exists
-  const carouselElement = document.getElementById('featuredReviewsCarousel');
-  console.log('Carousel element found:', !!carouselElement);
-  
-  if (carouselElement) {
-    console.log('Carousel element:', carouselElement);
-    
-    // Check carousel items
-    const carouselItems = carouselElement.querySelectorAll('.carousel-item');
-    console.log('Number of carousel items:', carouselItems.length);
-    
-    carouselItems.forEach((item, index) => {
-      console.log(`Item ${index} active:`, item.classList.contains('active'));
-    });
-    
-    // Check controls
-    const prevBtn = carouselElement.querySelector('.carousel-control-prev');
-    const nextBtn = carouselElement.querySelector('.carousel-control-next');
-    console.log('Prev button found:', !!prevBtn);
-    console.log('Next button found:', !!nextBtn);
-    
-    if (typeof bootstrap !== 'undefined' && bootstrap.Carousel) {
-      // Try to initialize carousel
-      try {
-        const carousel = new bootstrap.Carousel(carouselElement, {
-          interval: 5000,
-          wrap: true,
-          keyboard: true,
-          pause: 'hover'
-        });
-        console.log('Carousel initialized successfully:', carousel);
-        
-        // Test manual navigation
-        if (prevBtn) {
-          prevBtn.addEventListener('click', function(e) {
-            console.log('Prev button clicked');
-            e.preventDefault();
-            carousel.prev();
-          });
-        }
-        
-        if (nextBtn) {
-          nextBtn.addEventListener('click', function(e) {
-            console.log('Next button clicked');
-            e.preventDefault();
-            carousel.next();
-          });
-        }
-        
-        // Listen for carousel events
-        carouselElement.addEventListener('slide.bs.carousel', function (e) {
-          console.log('Carousel sliding from', e.from, 'to', e.to);
-        });
-        
-        carouselElement.addEventListener('slid.bs.carousel', function (e) {
-          console.log('Carousel slid to', e.to);
-        });
-        
-      } catch (error) {
-        console.error('Error initializing carousel:', error);
-      }
-    } else {
-      console.error('Bootstrap Carousel not available');
-    }
-  }
-  
-  console.log('=== CAROUSEL DEBUG END ===');
-});
-</script>
 {% endblock %}

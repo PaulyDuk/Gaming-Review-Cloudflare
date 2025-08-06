@@ -14,6 +14,7 @@ class ReviewInline(admin.TabularInline):
     )
     readonly_fields = ('created_on',)
     show_change_link = True  # Allows clicking through to edit the full review
+    list_editable = ('is_published', 'is_featured')  # Allow quick editing
 
 
 @admin.register(Publisher)
@@ -45,16 +46,40 @@ class ReviewAdmin(SummernoteModelAdmin):
     summernote_fields = ('description', 'review_text')
     list_display = (
         'title', 'publisher', 'developer',
-        'review_score', 'is_published'
+        'review_score', 'is_published', 'is_featured'
     )
     list_filter = (
-        'is_published', 'publisher', 'developer'
+        'is_published', 'is_featured', 'publisher', 'developer'
     )
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}
     date_hierarchy = 'created_on'
     ordering = ('-created_on',)
     list_per_page = 25
+    actions = [
+        'mark_as_published', 'mark_as_unpublished',
+        'mark_as_featured', 'mark_as_unfeatured'
+    ]
+
+    def mark_as_published(self, request, queryset):
+        updated = queryset.update(is_published=True)
+        self.message_user(request, f'{updated} reviews marked as published.')
+    mark_as_published.short_description = "Mark selected reviews as published"
+
+    def mark_as_unpublished(self, request, queryset):
+        updated = queryset.update(is_published=False)
+        self.message_user(request, f'{updated} reviews marked as unpublished.')
+    mark_as_unpublished.short_description = "Mark selected as unpublished"
+
+    def mark_as_featured(self, request, queryset):
+        updated = queryset.update(is_featured=True)
+        self.message_user(request, f'{updated} reviews marked as featured.')
+    mark_as_featured.short_description = "Mark selected reviews as featured"
+
+    def mark_as_unfeatured(self, request, queryset):
+        updated = queryset.update(is_featured=False)
+        self.message_user(request, f'{updated} reviews unmarked as featured.')
+    mark_as_unfeatured.short_description = "Mark selected as not featured"
 
 
 @admin.register(UserComment)

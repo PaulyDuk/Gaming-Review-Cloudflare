@@ -91,9 +91,9 @@
                     {% if developer.name %}
                         <h5 class="text-primary">
                             {% if developer.slug %}
-                                <a href="{% url 'developer:developer_games' developer.slug %}" class="external-link">{{ developer.name }}</a>
+                                <a href="{% url 'developer:developer_games' developer.slug %}" class="orange-link">{{ developer.name }}</a>
                             {% else %}
-                                <span class="info-heading">{{ developer.name }}</span>
+                                <span class="orange-link">{{ developer.name }}</span>
                             {% endif %}
                         </h5>
                                 {% endif %}
@@ -107,7 +107,7 @@
                                 {% endif %}
                                 {% if developer.website %}
                                     <p>
-                                        <a href="{{ developer.website }}" target="_blank" class="external-link">
+                                        <a href="{{ developer.website }}" target="_blank" class="orange-link">
                                             <i class="fas fa-external-link-alt"></i> Developer Website
                                         </a>
                                     </p>
@@ -128,7 +128,7 @@
                                 {% if publisher.name %}
                                     <h5 class="text-primary">
                                         {% if publisher.slug %}
-                                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="external-link text-decoration-none">{{ publisher.name }}</a>
+                                            <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="orange-link text-decoration-none">{{ publisher.name }}</a>
                                         {% else %}
                                             <span class="info-heading">{{ publisher.name }}</span>
                                         {% endif %}
@@ -144,7 +144,7 @@
                                 {% endif %}
                                 {% if publisher.website %}
                                     <p>
-                                        <a href="{{ publisher.website }}" target="_blank" class="external-link">
+                                        <a href="{{ publisher.website }}" target="_blank" class="orange-link">
                                             <i class="fas fa-external-link-alt"></i> Publisher Website
                                         </a>
                                     </p>
@@ -254,11 +254,12 @@
                                     <p class="card-text"><strong>
                                         {{ user_review.user.username }} - {{ user_review.created_on }} wrote:</strong>
                                     </p>
-                                    <div class="d-flex align-items-center mb-2">
-                                        <span class="badge bg-primary me-2 fs-6">{{ user_review.rating }}/10</span>
-                                    </div>
                                     <div class="card-text" id="user_review{{ user_review.id }}">
                                         {{ user_review.review_text | linebreaks }}
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                    <p class="card-text"><strong>
+                                        Rated:  </strong><span class="badge bg-primary me-2 fs-6">{{ user_review.rating }}/10</span>
                                     </div>
                                     {% if not user_review.approved and user_review.user == user %}
                                     <p class="approval">

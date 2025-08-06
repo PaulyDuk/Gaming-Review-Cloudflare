@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-12 mt-3 left">
             <div class="row">
@@ -18,42 +18,48 @@
                     {% if games %}
                     
                         <h2 class="mt-4">Games ({{ games.count }})</h2>
-                        <div class="row">
-                            {% for game in games %}
-                                <div class="col-md-3">
-                                    <div class="card mb-4 homepage-review-card">
-                                        <div class="card-body">
-                                            <div class="image-container">
-                                                <a href="{% url 'reviews:review_detail' slug=game.slug %}">
-                                                    {% if "placeholder" in game.featured_image.url %}
-                                                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
-                                                    {% else %}
-                                                        <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
-                                                    {% endif %}
-                                                </a>
-                                            </div>
-                                            <a href="{% url 'reviews:review_detail' slug=game.slug %}" class="post-link">
-                                                <span class="game-title-container">
-                                                    <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
-                                                    <h5 class="card-title m-0 info-heading">{{ game.title }}</h5>
-                                                </span>
-                                                <p class="card-text">{{ game.description|striptags }}</p>
-                                            </a>
-
-                                            <div class="d-flex justify-content-between align-items-center mt-auto">
-                                                <div>
-                                                    <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
-                                                    <p class="card-text small mb-0">{{ game.created_on|date:'F j, Y' }}</p>
+                        <div class="col-12 mt-3 left">
+                            <div class="row">
+                                {% for game in games %}
+                                    <div class="col-md-3">
+                                        <div class="card mb-4 homepage-review-card">
+                                            <div class="card-body">
+                                                <div class="image-container">
+                                                    <a href="{% url 'reviews:review_detail' slug=game.slug %}">
+                                                        {% if "placeholder" in game.featured_image.url %}
+                                                            <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                                                        {% else %}
+                                                            <img class="card-img-top" src="{{ game.featured_image.url }}" alt="{{ game.title }}">
+                                                        {% endif %}
+                                                    </a>
                                                 </div>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="me-3 card-text"><i class="fas fa-comments orange-link"></i> {{ game.user_comments.count }}</span>
-                                                    <span class="card-text"><i class="fas fa-star orange-link"></i> {{ game.user_reviews.count }}</span>
+                                                <a href="{% url 'reviews:review_detail' slug=game.slug %}" class="post-link">
+                                                    <span class="game-title-container">
+                                                        <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
+                                                        <h5 class="card-title m-0 info-heading d-inline">{{ game.title }}</h5>
+                                                    </span>
+                                                    <p class="card-text">{{ game.description|striptags }}</p>
+                                                </a>
+
+                                                <div class="d-flex justify-content-between align-items-center mt-auto">
+                                                    <div>
+                                                        <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
+                                                        <p class="card-text small mb-0">{{ game.created_on|date:'F j, Y' }}</p>
+                                                    </div>
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="me-3 card-text"><i class="fas fa-comments orange-link"></i> {{ game.user_comments.count }}</span>
+                                                        <span class="card-text"><i class="fas fa-star orange-link"></i> {{ game.user_reviews.count }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                    {% if forloop.counter|divisibleby:4 %}
+                                        </div>
+                                        <div class="row">
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </div>
                     {% else %}
                         <div class="alert alert-info mt-4" role="alert">

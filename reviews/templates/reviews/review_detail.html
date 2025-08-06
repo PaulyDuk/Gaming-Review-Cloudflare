@@ -35,15 +35,15 @@
             <!-- Review Section -->
             <div class="card mb-4 mt-3">
                 <div class="card-body mb-4">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h2 class="mb-0 info-heading">Description</h2></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading">Description</h2></div>
                     <p class="card-text">{{ review.description | safe }}</p>
                     <hr>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h2 class="mb-0 info-heading">Review</h2></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading">Review</h2></div>
                     <div class="card-text">{{ review.review_text | safe }}</div>
                     <hr>
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h2 class="mb-0 info-heading ">Score: {{ review.review_score | safe }}</h2></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading ">Score: {{ review.review_score | safe }}</h2></div>
                 </div>
             </div>
         </div>
@@ -53,7 +53,7 @@
             <!-- Game Info Card -->
             <div class="card mb-4 mt-3">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Game Info</h3></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Game Info</h3></div>
                     {% if game_platforms %}
                         <p><strong>Available on:</strong> 
                             {% for platform in game_platforms %}
@@ -73,7 +73,7 @@
                         <div class="mb-2">
                             {% for release in game_release_dates %}
                                 <div class="d-flex align-items-center mb-1">
-                                    <span><strong>{{ release.platform }} - </strong><span class="card-text">{{ release.date }}</span>
+                                    <span><strong>{{ release.platform }} - </strong><span class="card-text">{{ release.date }}</span></span>
                                 </div>
                             {% endfor %}
                         </div>
@@ -84,7 +84,7 @@
             <!-- Developer Card -->
             <div class="card mb-4 mt-3 mt-lg-0">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Developer Info</h3></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Developer Info</h3></div>
                     {% if game_developers %}
                         {% for developer in game_developers %}
                             <div class="mb-3">
@@ -121,7 +121,7 @@
             <!-- Publisher Card -->
             <div class="card mb-4">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Publisher Info</h3></div>
+                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Publisher Info</h3></div>
                     {% if game_publishers %}
                         {% for publisher in game_publishers %}
                             <div class="mb-3">
@@ -175,7 +175,7 @@
                 <div class="col-md-8">
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">Comments</h3></div>
+                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Comments</h3></div>
                         {% if user_comments %}
                             {% for user_comment in user_comments %}
                             <div class="p-2 comments
@@ -210,7 +210,7 @@
                         <div class="card-body">
                             {% if user.is_authenticated %}
                             <div class="d-flex align-items-center mb-2">
-                                <img src="{% static 'images/arrows.png' %}" class="arrows">
+                                <img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon">
                                 <h3 class="info-heading mb-0">Leave a comment:</h3>
                             </div>
                             <p class="card-text">Posting as: {{ user.username }}</p>
@@ -245,7 +245,7 @@
                 <div class="col-md-8">
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows"><h3 class="mb-0 info-heading">User Reviews</h3></div>
+                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">User Reviews</h3></div>
                             {% if user_reviews %}
                                 {% for user_review in user_reviews %}
                                 <div class="p-2 reviews
@@ -286,7 +286,7 @@
                             {% if user.is_authenticated %}
                                 {% if not user_has_reviewed %}
                             <div class="d-flex align-items-center mb-2">
-                                <img src="{% static 'images/arrows.png' %}" class="arrows">
+                                <img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon">
                                 <h3 class="info-heading mb-0">Leave a review:</h3>
                                 </div>
                                     <p class="card-text">Posting as: {{ user.username }}</p>
@@ -324,7 +324,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <!-- Delete user comment confirmation modal -->
 <div class="modal fade" id="deleteUserCommentModal" tabindex="-1" aria-labelledby="deleteUserCommentModalLabel" aria-hidden="true">

@@ -29,7 +29,10 @@
                         
                         <p>
                             <label for="{{ form.password.id_for_label }}">{{ form.password.label }}:</label>
-                            {{ form.password }}
+                            <input type="password" name="password" id="{{ form.password.id_for_label }}" placeholder="Password" autocomplete="current-password" required>
+                            {% if form.password.errors %}
+                                <div class="text-danger small">{{ form.password.errors }}</div>
+                            {% endif %}
                         </p>
                         
                         {% if form.remember %}

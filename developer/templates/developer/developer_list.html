@@ -34,10 +34,10 @@
                             <div class="card mb-4 developer-card">
                                 <div class="card-body">
                                     <a href="{% url 'developer:developer_games' developer.slug %}" class="post-link">
-                                        <span class="game-title-container">
-                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow">
+                                        <div class="game-title-container">
+                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow" alt="Arrow icon">
                                             <h5 class="card-title m-0 orange-link">{{ developer.name }}</h5>
-                                        </span>
+                                        </div>
                                         {% if developer.description %}
                                             <p class="card-text">{{ developer.description|striptags }}</p>
                                         {% else %}
@@ -45,7 +45,7 @@
                                         {% endif %}
                                     </a>
                                     <div class="mt-auto">
-                                        <hr />
+                                        <hr>
                                         <p class="card-text">
                                             {% if developer.website %}
                                                 <a href="{{ developer.website }}" target="_blank" class="orange-link">

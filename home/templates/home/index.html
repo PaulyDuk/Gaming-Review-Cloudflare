@@ -29,10 +29,10 @@
                                         </a>
                                     </div>
                                     <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
-                                        <span class="review-title-container">
+                                        <div class="review-title-container">
                                             <i class="fas fa-star orange-link"></i>
                                             <h5 class="card-title m-0 orange-link d-inline ms-2">{{ review.title }}</h5>
-                                        </span>
+                                        </div>
                                         <p class="card-text">{{ review.description|striptags }}</p>
                                     </a>
                                     
@@ -106,10 +106,10 @@
                                     </a>
                                 </div>
                                 <a href="{% url 'reviews:review_detail' review.slug %}" class="orange-link">
-                                    <span class="game-title-container">
-                                        <img src="/static/images/arrows.png" class="game-title-arrow">
+                                    <div class="game-title-container">
+                                        <img src="/static/images/arrows.png" class="game-title-arrow" alt="Arrow icon">
                                         <h5 class="card-title m-0 orange-link d-inline">{{ review.title }}</h5>
-                                    </span>
+                                    </div>
                                     <p class="card-text">{{ review.description|striptags }}</p>
                                 </a>
 

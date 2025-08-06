@@ -9,7 +9,7 @@
 
 <head>
     <title>The Gaming Verdict</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Google Fonts CSS -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -27,58 +27,6 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    
-    <!-- Custom styles for scrollable dropdowns -->
-    <style>
-        #navbarDevelopersDropdown + .dropdown-menu,
-        #navbarPublishersDropdown + .dropdown-menu {
-            max-height: 60vh; /* Use viewport height for better mobile responsiveness */
-            overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        }
-        
-        /* Custom scrollbar styling for dropdown - Desktop only */
-        @media (min-width: 768px) {
-            #navbarDevelopersDropdown + .dropdown-menu::-webkit-scrollbar,
-            #navbarPublishersDropdown + .dropdown-menu::-webkit-scrollbar {
-                width: 8px;
-            }
-            
-            #navbarDevelopersDropdown + .dropdown-menu::-webkit-scrollbar-track,
-            #navbarPublishersDropdown + .dropdown-menu::-webkit-scrollbar-track {
-                background: #f1f1f1;
-                border-radius: 10px;
-            }
-            
-            #navbarDevelopersDropdown + .dropdown-menu::-webkit-scrollbar-thumb,
-            #navbarPublishersDropdown + .dropdown-menu::-webkit-scrollbar-thumb {
-                background: #888;
-                border-radius: 10px;
-            }
-            
-            #navbarDevelopersDropdown + .dropdown-menu::-webkit-scrollbar-thumb:hover,
-            #navbarPublishersDropdown + .dropdown-menu::-webkit-scrollbar-thumb:hover {
-                background: #555;
-            }
-        }
-        
-        /* Mobile optimizations */
-        @media (max-width: 767px) {
-            #navbarDevelopersDropdown + .dropdown-menu,
-            #navbarPublishersDropdown + .dropdown-menu {
-                max-height: 50vh; /* Smaller height on mobile */
-                /* Hide scrollbars on mobile for cleaner look */
-                scrollbar-width: none; /* Firefox */
-                -ms-overflow-style: none; /* IE and Edge */
-            }
-            
-            #navbarDevelopersDropdown + .dropdown-menu::-webkit-scrollbar,
-            #navbarPublishersDropdown + .dropdown-menu::-webkit-scrollbar {
-                display: none; /* Chrome, Safari, Opera */
-            }
-        }
-    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -105,7 +53,7 @@
                 <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}">All Reviews</a></li>
                 <li><hr class="dropdown-divider"></li>
                 {% for genre in genres %}
-                    <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}?genre={{ genre.name }}">{{ genre.name }}</a></li>
+                    <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}?genre={{ genre.name|urlencode }}">{{ genre.name }}</a></li>
                 {% endfor %}
             </ul>
         </li>
@@ -171,13 +119,13 @@
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
 
-                <span class="navbar-text-custom">
+                <div class="navbar-text-custom">
                         {% if user.is_authenticated %}
     <p class="text-end m-1">Welcome back, {{ user }}</p>
     {% else %}
     <p class="text-end m-1">You are not logged in</p>
     {% endif %}
-                </span>
+                </div>
             </div>
         </div>
     </nav>

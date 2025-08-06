@@ -44,16 +44,18 @@
                                             <p class="card-text">No publisher information available</p>
                                         {% endif %}
                                     </a>
-                                    {% if publisher.website %}
                                     <div class="mt-auto">
                                         <hr />
                                         <p class="card-text">
-                                            <a href="{{ publisher.website }}" target="_blank" class="external-link">
-                                                <i class="fas fa-external-link-alt"></i> Visit Website
-                                            </a>
+                                            {% if publisher.website %}
+                                                <a href="{{ publisher.website }}" target="_blank" class="external-link">
+                                                    <i class="fas fa-external-link-alt"></i> Visit Website
+                                                </a>
+                                            {% else %}
+                                                <span class="info-heading">No Website Available</span>
+                                            {% endif %}
                                         </p>
                                     </div>
-                                    {% endif %}
                                 </div>
                             </div>
                         </div>

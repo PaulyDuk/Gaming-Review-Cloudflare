@@ -161,9 +161,9 @@
             {% if existing_reviews %}
             <h1>Existing Reviews 
                 {% if is_paginated %}
-                    ({{ paginator.count }} total - Page {{ page_obj.number }} of {{ paginator.num_pages }})
+                    ({{ paginator.count }} total - {{ featured_count }} Featured - Page {{ page_obj.number }} of {{ paginator.num_pages }})
                 {% else %}
-                    ({{ page_obj|length }})
+                    ({{ page_obj|length }} total - {{ featured_count }} Featured)
                 {% endif %}
             </h1>
             <div class="card mt-4 mb-4">

@@ -182,6 +182,10 @@ def populate_reviews_interface(request):
         # Get existing reviews
         existing_reviews_queryset = Review.objects.all().order_by(
             '-created_on')
+        
+        # Count featured reviews
+        featured_count = existing_reviews_queryset.filter(
+            is_featured=True).count()
 
         # Add pagination for existing reviews
         paginator = Paginator(existing_reviews_queryset, 50)
@@ -196,10 +200,14 @@ def populate_reviews_interface(request):
             'is_paginated': page_obj.has_other_pages(),
             'page_obj': page_obj,
             'paginator': paginator,
+            'featured_count': featured_count,
         })
 
     # Get existing reviews for GET request
     existing_reviews = Review.objects.all().order_by('-created_on')
+    
+    # Count featured reviews
+    featured_count = existing_reviews.filter(is_featured=True).count()
 
     # Add pagination for existing reviews
     paginator = Paginator(existing_reviews, 50)  # Show 50 reviews per page
@@ -211,6 +219,7 @@ def populate_reviews_interface(request):
         'is_paginated': page_obj.has_other_pages(),
         'page_obj': page_obj,
         'paginator': paginator,
+        'featured_count': featured_count,
     })
 
 

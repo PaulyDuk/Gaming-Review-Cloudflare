@@ -27,7 +27,7 @@ def populate_reviews_interface(request):
     if request.method == 'POST':
         action = request.POST.get('action')
         existing_review_ids = request.POST.getlist('existing_review_ids')
-        
+
         if action == 'delete_selected':
             if existing_review_ids:
                 try:
@@ -38,11 +38,12 @@ def populate_reviews_interface(request):
                     messages.success(
                         request, f'Successfully deleted {count} review(s)')
                 except Exception as e:
-                    messages.error(request, f'Error deleting reviews: {str(e)}')
+                    messages.error(
+                        request, f'Error deleting reviews: {str(e)}')
             else:
                 messages.warning(request, 'No reviews selected for deletion')
             return redirect('reviews:populate_interface')
-        
+
         elif action == 'publish_selected':
             if existing_review_ids:
                 try:
@@ -56,7 +57,7 @@ def populate_reviews_interface(request):
             else:
                 messages.warning(request, 'No reviews selected')
             return redirect('reviews:populate_interface')
-        
+
         elif action == 'unpublish_selected':
             if existing_review_ids:
                 try:
@@ -70,7 +71,7 @@ def populate_reviews_interface(request):
             else:
                 messages.warning(request, 'No reviews selected')
             return redirect('reviews:populate_interface')
-        
+
         elif action == 'feature_selected':
             if existing_review_ids:
                 try:
@@ -84,7 +85,7 @@ def populate_reviews_interface(request):
             else:
                 messages.warning(request, 'No reviews selected')
             return redirect('reviews:populate_interface')
-        
+
         elif action == 'unfeature_selected':
             if existing_review_ids:
                 try:
@@ -120,7 +121,8 @@ def populate_reviews_interface(request):
         # Get games from IGDB
         igdb_service = IGDBService()
         if search_term:
-            games = igdb_service.search_games_with_platforms(search_term, limit=limit)
+            games = igdb_service.search_games_with_platforms(
+                search_term, limit=limit)
         else:
             games = igdb_service.search_games_with_platforms('', limit=limit)
 
@@ -135,7 +137,9 @@ def populate_reviews_interface(request):
                     year = datetime.datetime.fromtimestamp(timestamp).year
                 except Exception:
                     year = 'Unknown'
-            platforms = ', '.join([p.get('name', 'Unknown') for p in game.get('platforms', [])])
+            platforms = ', '.join([
+                p.get('name', 'Unknown') for p in game.get('platforms', [])
+            ])
 
             formatted_games.append({
                 'index': idx,
@@ -143,7 +147,8 @@ def populate_reviews_interface(request):
                 'year': year,
                 'platforms': platforms,
                 'summary': game.get('summary', ''),
-                'raw_data': json.dumps(game)  # Store as JSON string for hidden input
+                # Store as JSON string for hidden input
+                'raw_data': json.dumps(game)
             })
 
         # Get existing reviews
@@ -183,7 +188,10 @@ def create_reviews_from_selection(request):
             for i, game_json in enumerate(selected_games_data):
                 try:
                     game = json.loads(game_json)
-                    review_score = float(review_scores[i]) if i < len(review_scores) else 5.0
+                    if i < len(review_scores):
+                        review_score = float(review_scores[i])
+                    else:
+                        review_score = 5.0
 
                     title = game.get('name')
                     slug = slugify(title)
@@ -192,7 +200,8 @@ def create_reviews_from_selection(request):
                     if 'release_dates' in game and game['release_dates']:
                         try:
                             timestamp = game['release_dates'][0]['date']
-                            release_date = datetime.datetime.fromtimestamp(timestamp).date()
+                            release_date = datetime.datetime.fromtimestamp(
+                                timestamp).date()
                         except Exception:
                             release_date = None
 
@@ -203,14 +212,24 @@ def create_reviews_from_selection(request):
                         logo_url = dev_data.get('logo_url', '')
                         if logo_url and logo_url.startswith('//'):
                             logo_url = 'https:' + logo_url
-                        cloudinary_logo_id = populate_command.upload_developer_logo_to_cloudinary(logo_url, dev_data['name'])
+                        cloudinary_logo_id = (
+                            populate_command
+                            .upload_developer_logo_to_cloudinary(
+                                logo_url, dev_data['name']
+                            )
+                        )
                         developer_obj, _ = Developer.objects.get_or_create(
                             name=dev_data['name'],
                             defaults={
                                 'description': dev_data.get('description', ''),
                                 'website': dev_data.get('website', ''),
-                                'founded_year': dev_data.get('founded_year') or None,
-                                'logo': cloudinary_logo_id if cloudinary_logo_id else logo_url
+                                'founded_year': (
+                                    dev_data.get('founded_year') or None
+                                ),
+                                'logo': (
+                                    cloudinary_logo_id if cloudinary_logo_id
+                                    else logo_url
+                                )
                             }
                         )
 
@@ -221,14 +240,24 @@ def create_reviews_from_selection(request):
                         logo_url = pub_data.get('logo_url', '')
                         if logo_url and logo_url.startswith('//'):
                             logo_url = 'https:' + logo_url
-                        cloudinary_logo_id = populate_command.upload_publisher_logo_to_cloudinary(logo_url, pub_data['name'])
+                        cloudinary_logo_id = (
+                            populate_command
+                            .upload_publisher_logo_to_cloudinary(
+                                logo_url, pub_data['name']
+                            )
+                        )
                         publisher_obj, _ = Publisher.objects.get_or_create(
                             name=pub_data['name'],
                             defaults={
                                 'description': pub_data.get('description', ''),
                                 'website': pub_data.get('website', ''),
-                                'founded_year': pub_data.get('founded_year') or None,
-                                'logo': cloudinary_logo_id if cloudinary_logo_id else logo_url
+                                'founded_year': (
+                                    pub_data.get('founded_year') or None
+                                ),
+                                'logo': (
+                                    cloudinary_logo_id if cloudinary_logo_id
+                                    else logo_url
+                                )
                             }
                         )
 
@@ -237,16 +266,26 @@ def create_reviews_from_selection(request):
                         user = User.objects.order_by('?').first()
 
                         # Generate AI review
-                        ai_review_text = populate_command.generate_ai_review(title)
-                        review_text = ai_review_text if ai_review_text else f"Auto-generated review for {title}."
+                        ai_review_text = populate_command.generate_ai_review(
+                            title)
+                        if ai_review_text:
+                            review_text = ai_review_text
+                        else:
+                            review_text = f"Auto-generated review for {title}."
                         review_date = datetime.datetime.now()
 
                         # Download and upload cover image
                         cover_url = game.get('cover_url', '')
                         if cover_url.startswith('//'):
                             cover_url = 'https:' + cover_url
-                        cloudinary_id = populate_command.upload_cover_to_cloudinary(cover_url, title)
-                        featured_image = cloudinary_id if cloudinary_id else 'placeholder'
+                        cloudinary_id = (
+                            populate_command.upload_cover_to_cloudinary(
+                                cover_url, title
+                            )
+                        )
+                        featured_image = (
+                            cloudinary_id if cloudinary_id else 'placeholder'
+                        )
 
                         review, created = Review.objects.get_or_create(
                             title=title,
@@ -255,7 +294,9 @@ def create_reviews_from_selection(request):
                                 'publisher': publisher_obj,
                                 'developer': developer_obj,
                                 'description': description,
-                                'release_date': release_date or datetime.date.today(),
+                                'release_date': (
+                                    release_date or datetime.date.today()
+                                ),
                                 'review_score': review_score,
                                 'review_text': review_text,
                                 'reviewed_by': user,
@@ -271,7 +312,9 @@ def create_reviews_from_selection(request):
                         for genre in game.get('genres', []):
                             genre_name = genre.get('name')
                             if genre_name:
-                                genre_obj, _ = Genre.objects.get_or_create(name=genre_name)
+                                genre_obj, _ = Genre.objects.get_or_create(
+                                    name=genre_name
+                                )
                                 genre_objs.append(genre_obj)
                         if genre_objs:
                             review.genres.set(genre_objs)
@@ -280,10 +323,12 @@ def create_reviews_from_selection(request):
                             created_reviews += 1
 
                 except Exception as e:
-                    messages.error(request, f'Error processing {title}: {str(e)}')
+                    messages.error(
+                        request, f'Error processing {title}: {str(e)}')
                     continue
 
-        messages.success(request, f'Successfully created {created_reviews} reviews')
+        messages.success(
+            request, f'Successfully created {created_reviews} reviews')
         return redirect('reviews:populate_interface')
 
     except Exception as e:

@@ -80,7 +80,9 @@ class ReviewList(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['featured_reviews'] = Review.objects.filter(is_featured=True, is_published=True)
+        context['featured_reviews'] = Review.objects.filter(
+            is_featured=True, is_published=True
+        )
         return context
 
 
@@ -103,7 +105,8 @@ def review_details(request, slug):
     user_comments = review.user_comments.all().order_by("-created_on")
     comment_count = review.user_comments.filter(approved=True).count()
 
-    # Get platforms, release dates, genres, and developers from IGDB for this game
+    # Get platforms, release dates, genres, and developers from IGDB
+    # for this game
     game_platforms = []
     game_release_dates = []
     game_genres = []
@@ -121,7 +124,9 @@ def review_details(request, slug):
             igdb_developers = platform_data['developers']
             game_developers = []
             for dev in igdb_developers:
-                db_dev = Developer.objects.filter(name__iexact=dev.get('name')).first()
+                db_dev = Developer.objects.filter(
+                    name__iexact=dev.get('name')
+                ).first()
                 if db_dev:
                     game_developers.append(db_dev)
                 else:
@@ -132,7 +137,9 @@ def review_details(request, slug):
             igdb_publishers = platform_data['publishers']
             game_publishers = []
             for pub in igdb_publishers:
-                db_pub = Publisher.objects.filter(name__iexact=pub.get('name')).first()
+                db_pub = Publisher.objects.filter(
+                    name__iexact=pub.get('name')
+                ).first()
                 if db_pub:
                     game_publishers.append(db_pub)
                 else:
@@ -380,8 +387,12 @@ def search_games(request):
 @login_required
 def profile(request):
     """Display user profile with account management links"""
-    user_reviews = UserReview.objects.filter(user=request.user).order_by('-created_on')
-    user_comments = UserComment.objects.filter(author=request.user).order_by('-created_on')
+    user_reviews = UserReview.objects.filter(
+        user=request.user
+    ).order_by('-created_on')
+    user_comments = UserComment.objects.filter(
+        author=request.user
+    ).order_by('-created_on')
 
     context = {
         'user_reviews': user_reviews,

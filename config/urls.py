@@ -31,5 +31,6 @@ urlpatterns = [
     path('publishers/', include('publisher.urls')),
     path('reviews/', include('reviews.urls'), name='reviews-urls'),
     path('summernote/', include('django_summernote.urls')),
-    path('accounts/', include(('accounts.urls', 'accounts'), namespace='accounts')),
+    path('accounts/', include(('accounts.urls', 'accounts'),
+                              namespace='accounts')),
 ]

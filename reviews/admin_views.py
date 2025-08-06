@@ -13,17 +13,23 @@ def approve_comments(request):
         if action in ['approve', 'reject']:
             comment_ids = request.POST.getlist('comment_ids')
             if action == 'approve':
-                UserComment.objects.filter(id__in=comment_ids).update(approved=True)
-                messages.success(request, f'Approved {len(comment_ids)} comment(s)')
+                UserComment.objects.filter(id__in=comment_ids).update(
+                    approved=True)
+                messages.success(
+                    request, f'Approved {len(comment_ids)} comment(s)')
             elif action == 'reject':
                 UserComment.objects.filter(id__in=comment_ids).delete()
-                messages.success(request, f'Deleted {len(comment_ids)} comment(s)')
+                messages.success(
+                    request, f'Deleted {len(comment_ids)} comment(s)')
 
         elif action == 'delete_approved':
             approved_comment_ids = request.POST.getlist('approved_comment_ids')
             if approved_comment_ids:
-                UserComment.objects.filter(id__in=approved_comment_ids).delete()
-                messages.success(request, f'Deleted {len(approved_comment_ids)} approved comment(s)')
+                UserComment.objects.filter(
+                    id__in=approved_comment_ids).delete()
+                messages.success(
+                    request,
+                    f'Deleted {len(approved_comment_ids)} approved comment(s)')
 
     # Get all unapproved comments
     unapproved_comments = UserComment.objects.filter(

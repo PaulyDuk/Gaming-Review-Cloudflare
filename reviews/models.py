@@ -15,7 +15,9 @@ class Review(models.Model):
     developer = models.ForeignKey(
         Developer, on_delete=models.CASCADE, related_name='games')
     description = models.TextField()
-    genres = models.ManyToManyField('Genre', related_name='reviews', blank=True)
+    genres = models.ManyToManyField(
+        'Genre', related_name='reviews', blank=True
+    )
     release_date = models.DateField()
 
     # Review fields

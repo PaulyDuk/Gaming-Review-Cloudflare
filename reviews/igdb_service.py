@@ -9,13 +9,22 @@ class IGDBService:
     """Service class for interacting with IGDB API"""
 
     def __init__(self):
-        self.client_id = getattr(settings, 'IGDB_CLIENT_ID', None) or os.getenv('IGDB_CLIENT_ID')
-        self.client_secret = getattr(settings, 'IGDB_CLIENT_SECRET', None) or os.getenv('IGDB_CLIENT_SECRET')
+        self.client_id = (
+            getattr(settings, 'IGDB_CLIENT_ID', None) or
+            os.getenv('IGDB_CLIENT_ID')
+        )
+        self.client_secret = (
+            getattr(settings, 'IGDB_CLIENT_SECRET', None) or
+            os.getenv('IGDB_CLIENT_SECRET')
+        )
         self.access_token = None
         self.wrapper = None
 
         if not self.client_id or not self.client_secret:
-            raise ValueError("IGDB_CLIENT_ID and IGDB_CLIENT_SECRET must be set in settings or environment variables")
+            raise ValueError(
+                "IGDB_CLIENT_ID and IGDB_CLIENT_SECRET must be set "
+                "in settings or environment variables"
+            )
 
     def get_access_token(self):
         """Get Twitch access token for IGDB API"""
@@ -34,7 +43,10 @@ class IGDBService:
             self.access_token = response.json()['access_token']
             return self.access_token
         else:
-            raise Exception(f"Failed to get access token: {response.status_code} - {response.text}")
+            raise Exception(
+                f"Failed to get access token: {response.status_code} - "
+                f"{response.text}"
+            )
 
     def initialize_wrapper(self):
         """Initialize IGDB wrapper with credentials"""
@@ -59,7 +71,9 @@ class IGDBService:
         return None
 
     def search_games_with_platforms(self, game_name, limit=10):
-        """Search for games by name and return with detailed platform information"""
+        """
+        Search for games by name and return with detailed platform information
+        """
         wrapper = self.initialize_wrapper()
 
         query_string = (
@@ -83,7 +97,10 @@ class IGDBService:
             # Format the results to make platforms easier to work with
             formatted_games = []
             for game in games:
-                cover_url = (game.get('cover', {}).get('url', '') if game.get('cover') else '')
+                cover_url = (
+                    game.get('cover', {}).get('url', '')
+                    if game.get('cover') else ''
+                )
                 if cover_url:
                     cover_url = cover_url.replace('t_thumb', 't_cover_big')
                 formatted_game = {
@@ -142,8 +159,10 @@ class IGDBService:
                                 try:
                                     import datetime
                                     timestamp = company['start_date']
-                                    if isinstance(timestamp, (int, float)) and timestamp > 0:
-                                        date_obj = datetime.datetime.fromtimestamp(timestamp)
+                                    if (isinstance(timestamp, (int, float)) and
+                                            timestamp > 0):
+                                        date_obj = datetime.datetime.\
+                                            fromtimestamp(timestamp)
                                         founded_year = date_obj.year
                                     else:
                                         founded_year = ''
@@ -152,13 +171,15 @@ class IGDBService:
 
                             # Extract logo URL
                             logo_url = ''
-                            if company.get('logo') and company['logo'].get('url'):
+                            if (company.get('logo') and
+                                    company['logo'].get('url')):
                                 logo_url = company['logo']['url']
                                 # Convert to HTTPS and larger size
                                 if logo_url.startswith('//'):
                                     logo_url = 'https:' + logo_url
-                                # Replace t_thumb with t_logo_med for better quality
-                                logo_url = logo_url.replace('t_thumb', 't_logo_med')
+                                # Replace t_thumb with t_logo_med for quality
+                                logo_url = logo_url.replace(
+                                    't_thumb', 't_logo_med')
 
                             developer_info = {
                                 'id': company.get('id'),
@@ -196,8 +217,10 @@ class IGDBService:
                                 try:
                                     import datetime
                                     timestamp = company['start_date']
-                                    if isinstance(timestamp, (int, float)) and timestamp > 0:
-                                        date_obj = datetime.datetime.fromtimestamp(timestamp)
+                                    if (isinstance(timestamp, (int, float)) and
+                                            timestamp > 0):
+                                        date_obj = datetime.datetime.\
+                                            fromtimestamp(timestamp)
                                         founded_year = date_obj.year
                                     else:
                                         founded_year = ''
@@ -206,13 +229,15 @@ class IGDBService:
 
                             # Extract logo URL
                             logo_url = ''
-                            if company.get('logo') and company['logo'].get('url'):
+                            if (company.get('logo') and
+                                    company['logo'].get('url')):
                                 logo_url = company['logo']['url']
                                 # Convert to HTTPS and larger size
                                 if logo_url.startswith('//'):
                                     logo_url = 'https:' + logo_url
-                                # Replace t_thumb with t_logo_med for better quality
-                                logo_url = logo_url.replace('t_thumb', 't_logo_med')
+                                # Replace t_thumb with t_logo_med for quality
+                                logo_url = logo_url.replace(
+                                    't_thumb', 't_logo_med')
 
                             publisher_info = {
                                 'id': company.get('id'),

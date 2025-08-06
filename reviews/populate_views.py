@@ -22,7 +22,7 @@ def is_superuser(user):
 @user_passes_test(is_superuser)
 def populate_reviews_interface(request):
     """Main interface for populating reviews"""
-    
+
     # Handle bulk review deletion
     if (request.method == 'POST' and
             request.POST.get('action') == 'delete_selected'):
@@ -40,7 +40,7 @@ def populate_reviews_interface(request):
         else:
             messages.warning(request, 'No reviews selected for deletion')
         return redirect('reviews:populate_interface')
-    
+
     # Handle single review deletion (legacy support)
     if request.method == 'POST' and 'delete_review' in request.POST:
         review_id = request.POST.get('review_id')
@@ -54,7 +54,7 @@ def populate_reviews_interface(request):
         except Exception as e:
             messages.error(request, f'Error deleting review: {str(e)}')
         return redirect('reviews:populate_interface')
-    
+
     if request.method == 'POST':
         search_term = request.POST.get('search', '')
         limit = int(request.POST.get('limit', 50))
@@ -100,7 +100,7 @@ def populate_reviews_interface(request):
 
     # Get existing reviews for GET request
     existing_reviews = Review.objects.all().order_by('-created_on')
-    
+
     return render(request, 'reviews/populate_reviews.html', {
         'existing_reviews': existing_reviews
     })

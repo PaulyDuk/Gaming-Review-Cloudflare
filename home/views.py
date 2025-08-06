@@ -10,7 +10,7 @@ def home_view(request):
     review_list = Review.objects.filter(is_published=True, review_date__gte=seven_days_ago)
     featured_reviews = Review.objects.filter(
         is_featured=True, is_published=True
-    )[:3]
+    )
     is_paginated = False
     page_obj = None
     context = {

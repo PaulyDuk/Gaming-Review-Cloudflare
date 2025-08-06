@@ -1,30 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
-  let multipleCardCarousel = document.querySelector("#featuredReviewsCarousel");
-
-  if (window.matchMedia("(min-width: 768px)").matches) {
-    let carousel = new bootstrap.Carousel(multipleCardCarousel, {
-      interval: true, // Disable automatic sliding
-      wrap: false, // Prevent wrapping at the end
-    });
-
-    let carouselWidth = document.querySelector(".carousel-inner").scrollWidth;
-    let cardWidth = document.querySelector(".carousel-item").offsetWidth;
-    let scrollPosition = 0;
-
-    document.querySelector("#featuredReviewsCarousel .carousel-control-next").addEventListener("click", function () {
-      if (scrollPosition < carouselWidth - cardWidth * 4) {
-        scrollPosition += cardWidth * 5 ;
-        document.querySelector("#featuredReviewsCarousel .carousel-inner").scroll({ left: scrollPosition, behavior: 'smooth' });
-      }
-    });
-
-    document.querySelector("#featuredReviewsCarousel .carousel-control-prev").addEventListener("click", function () {
-      if (scrollPosition > 0) {
-        scrollPosition -= cardWidth * 5;
-        document.querySelector("#featuredReviewsCarousel .carousel-inner").scroll({ left: scrollPosition, behavior: 'smooth' });
-      }
-    });
+  console.log('DOM loaded, initializing carousel...');
+  
+  const carouselElement = document.getElementById('featuredReviewsCarousel');
+  
+  if (carouselElement) {
+    console.log('Carousel element found');
+    
+    // Make sure Bootstrap is available
+    if (typeof bootstrap !== 'undefined' && bootstrap.Carousel) {
+      console.log('Bootstrap found, creating carousel');
+      
+      // Initialize carousel
+      const carousel = new bootstrap.Carousel(carouselElement, {
+        interval: 5000,
+        wrap: true,
+        keyboard: true,
+        pause: 'hover'
+      });
+      
+      console.log('Carousel initialized successfully');
+      
+      // Add event listeners for debugging
+      carouselElement.addEventListener('slide.bs.carousel', function (e) {
+        console.log('Carousel sliding from', e.from, 'to', e.to);
+      });
+      
+      carouselElement.addEventListener('slid.bs.carousel', function (e) {
+        console.log('Carousel slid to', e.to);
+      });
+      
+    } else {
+      console.error('Bootstrap not found or Carousel component not available');
+    }
   } else {
-    multipleCardCarousel.classList.add("slide");
+    console.error('Carousel element with ID "featuredReviewsCarousel" not found');
   }
 });

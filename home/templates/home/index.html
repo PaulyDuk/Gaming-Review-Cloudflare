@@ -3,35 +3,59 @@
 
 {% block content %}
 <!-- index.html content starts here -->
-<script src="{% static 'js/featured_reviews_carousel.js' %}"></script>
-<!-- Featured Reviews Carousel JS -->
 <div class="container">
     <!-- Featured Reviews Row -->
     <div class="row mb-4">
-        <h3 class="mb-3 mt-3" >Featured Reviews</h3>
-        <div class="col-12 d-flex justify-content-center">
-            <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel" style="max-width: 800px; width: 100%;">
+        <h3 class="mb-3 mt-3">Featured Reviews</h3>
+        <div class="col-12">
+            <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% for review in featured_reviews %}
-                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                        <div class="card mb-4" style="width: 100%; max-width: 700px;">
-                            <div class="card-body">
-                                <div class="image-container">
-                                    <a href="{% url 'reviews:review_detail' review.slug %}">
-                                        {% if "placeholder" in review.featured_image.url %}
-                                            <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
-                                        {% else %}
-                                            <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
-                                        {% endif %}
+                        <!-- Debug: Review {{ forloop.counter0 }} - divisible by 3: {{ forloop.counter0|divisibleby:3 }} -->
+                        {% if forloop.counter0|divisibleby:3 %}
+                            <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                                <div class="row justify-content-center">
+                        {% endif %}
+                        
+                        <div class="col-md-3">
+                            <div class="card mb-4 homepage-review-card">
+                                <div class="card-body">
+                                    <div class="image-container">
+                                        <a href="{% url 'reviews:review_detail' review.slug %}">
+                                            {% if "placeholder" in review.featured_image.url %}
+                                                <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                                            {% else %}
+                                                <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                    <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
+                                        <span style="display: flex; align-items: center; margin-top: 0.5em;">
+                                            <i class="fas fa-star" style="height: 1em; margin: 0.5em 0.5em; color: #ffc107;"></i>
+                                            <h5 class="card-title m-0 info-heading">{{ review.title }}</h5>
+                                        </span>
+                                        <p class="card-text">{{ review.description|striptags }}</p>
                                     </a>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                        <div>
+                                            <p class="card-text h6 mb-0 orange-link">Reviewed:</p>
+                                            <p class="card-text small mb-0">{{ review.review_date|date:'F j, Y' }}</p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-3 card-text"><i class="fas fa-comments orange-link"></i> {{ review.user_comments.count }}</span>
+                                            <span class="card-text"><i class="fas fa-star orange-link"></i> {{ review.user_reviews.count }}</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a href="{% url 'reviews:review_detail' review.slug %}" class="post-link">
-                                    <span style="display: flex; align-items: center; margin-top: 0.5em;"><i class="fas fa-star" style="height: 1em; margin: 0.5em 0.5em;"></i><h5 class="card-title m-0 info-heading">{{ review.title }}</h5></span>
-                                    <p class="card-text">{{ review.description|striptags|truncatewords:30 }}</p>
-                                </a>
                             </div>
                         </div>
-                    </div>
+                        
+                        <!-- Debug: Review {{ forloop.counter }} - divisible by 3: {{ forloop.counter|divisibleby:3 }} - is last: {{ forloop.last }} -->
+                        {% if forloop.counter|divisibleby:3 or forloop.last %}
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="prev">
@@ -111,4 +135,84 @@
     {% endif %}
 </div>
 <!-- index.html content ends here -->
+{% endblock %}
+
+{% block extras %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  console.log('=== CAROUSEL DEBUG START ===');
+  
+  // Check if Bootstrap is loaded
+  console.log('Bootstrap available:', typeof bootstrap !== 'undefined');
+  console.log('Bootstrap.Carousel available:', typeof bootstrap !== 'undefined' && typeof bootstrap.Carousel !== 'undefined');
+  
+  // Check if carousel element exists
+  const carouselElement = document.getElementById('featuredReviewsCarousel');
+  console.log('Carousel element found:', !!carouselElement);
+  
+  if (carouselElement) {
+    console.log('Carousel element:', carouselElement);
+    
+    // Check carousel items
+    const carouselItems = carouselElement.querySelectorAll('.carousel-item');
+    console.log('Number of carousel items:', carouselItems.length);
+    
+    carouselItems.forEach((item, index) => {
+      console.log(`Item ${index} active:`, item.classList.contains('active'));
+    });
+    
+    // Check controls
+    const prevBtn = carouselElement.querySelector('.carousel-control-prev');
+    const nextBtn = carouselElement.querySelector('.carousel-control-next');
+    console.log('Prev button found:', !!prevBtn);
+    console.log('Next button found:', !!nextBtn);
+    
+    if (typeof bootstrap !== 'undefined' && bootstrap.Carousel) {
+      // Try to initialize carousel
+      try {
+        const carousel = new bootstrap.Carousel(carouselElement, {
+          interval: 5000,
+          wrap: true,
+          keyboard: true,
+          pause: 'hover'
+        });
+        console.log('Carousel initialized successfully:', carousel);
+        
+        // Test manual navigation
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function(e) {
+            console.log('Prev button clicked');
+            e.preventDefault();
+            carousel.prev();
+          });
+        }
+        
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function(e) {
+            console.log('Next button clicked');
+            e.preventDefault();
+            carousel.next();
+          });
+        }
+        
+        // Listen for carousel events
+        carouselElement.addEventListener('slide.bs.carousel', function (e) {
+          console.log('Carousel sliding from', e.from, 'to', e.to);
+        });
+        
+        carouselElement.addEventListener('slid.bs.carousel', function (e) {
+          console.log('Carousel slid to', e.to);
+        });
+        
+      } catch (error) {
+        console.error('Error initializing carousel:', error);
+      }
+    } else {
+      console.error('Bootstrap Carousel not available');
+    }
+  }
+  
+  console.log('=== CAROUSEL DEBUG END ===');
+});
+</script>
 {% endblock %}

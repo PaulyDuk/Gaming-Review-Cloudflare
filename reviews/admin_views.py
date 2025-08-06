@@ -18,7 +18,7 @@ def approve_comments(request):
             elif action == 'reject':
                 UserComment.objects.filter(id__in=comment_ids).delete()
                 messages.success(request, f'Deleted {len(comment_ids)} comment(s)')
-        
+
         elif action == 'delete_approved':
             approved_comment_ids = request.POST.getlist('approved_comment_ids')
             if approved_comment_ids:
@@ -61,7 +61,7 @@ def approve_reviews(request):
                 UserReview.objects.filter(id__in=review_ids).delete()
                 messages.success(
                     request, f'Deleted {len(review_ids)} review(s)')
-        
+
         elif action == 'delete_approved':
             approved_review_ids = request.POST.getlist('approved_review_ids')
             if approved_review_ids:

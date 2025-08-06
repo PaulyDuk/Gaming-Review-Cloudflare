@@ -52,7 +52,14 @@ body {
 }
 
 h1, h2, h3 {
-    color: #ffb703;
+    color: #ffc107; /* Brighter orange for better contrast */
+}
+
+/* Ensure headings in card bodies use white for better readability */
+.card-body h1, 
+.card-body h2, 
+.card-body h3 {
+    color: #fff !important;
 }
 
 .image-container {
@@ -121,7 +128,7 @@ h1, h2, h3 {
 }
 
 .orange-link {
-    color: #ffb703;
+    color: #ffc107; /* Brighter orange for better contrast */
     text-decoration: none;
 }
 
@@ -146,16 +153,16 @@ h1, h2, h3 {
 
 /* Pagination next/prev buttons styled like search button */
 .pagination .page-link {
-    border-color: #ffb703 !important;
-    color: #ffb703 !important;
+    border-color: #ffc107 !important; /* Brighter orange */
+    color: #ffc107 !important; /* Brighter orange */
     background-color: transparent !important;
     transition: background 0.2s, color 0.2s;
 }
 .pagination .page-link:hover,
 .pagination .page-link:focus {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
     color: #fff !important;
-    border-color: #ffb703 !important;
+    border-color: #ffc107 !important;
 }
 
 /* Make navbar toggler (burger menu) icon white */
@@ -171,21 +178,22 @@ h1, h2, h3 {
 .card-body:hover h2.card-title,
 .card-body:hover h5.card-title,
 .card-body:hover h3:not(.info-heading) {
-    color: #ffb703 !important;
+    color: #ffc107 !important; /* Brighter orange */
 }
 
 /* Universal button styling */
 .btn {
-    border-color: #ffb703 !important;
-    color: #ffb703 !important;
-    background-color: #2a2a2a !important;
+    border-color: #ffc107 !important; /* Brighter orange */
+    color: #ffc107 !important; /* Brighter orange */
+    background-color: #1a1a1a !important; /* Darker background for better contrast */
+    border-width: 2px !important; /* Thicker border for visibility */
     transition: background 0.2s, color 0.2s;
 }
 .btn:hover,
 .btn:focus {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important;
     color: #fff !important;
-    border-color: #ffb703 !important;
+    border-color: #ffc107 !important;
 }
 
 /* Navbar */
@@ -197,7 +205,7 @@ h1, h2, h3 {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link:focus {
-    color: #ffb703 !important;
+    color: #ffc107 !important; /* Brighter orange */
     font-size: 1.1rem;
 }
 
@@ -271,9 +279,9 @@ strong {
 .signup input[type="text"]:focus,
 .signup input[type="email"]:focus,
 .signup input[type="password"]:focus {
-    border-color: #ffb703;
+    border-color: #ffc107; /* Brighter orange */
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(255, 183, 3, 0.25);
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25); /* Updated for brighter orange */
 }
 
 .image-flash {
@@ -315,7 +323,7 @@ strong {
 
 .post-link {
     text-decoration: none;
-    color: #ffb703;
+    color: #ffc107; /* Brighter orange */
 }
 
 .post-link:hover,
@@ -335,8 +343,8 @@ strong {
 
 .btn-signup,
 .btn-edit {
-    border-color: #ffb703 !important;
-    color: #ffb703 !important;
+    border-color: #ffc107 !important; /* Brighter orange */
+    color: #ffc107 !important; /* Brighter orange */
     background-color: transparent !important;
     transition: background 0.2s, color 0.2s;
 }
@@ -344,9 +352,9 @@ strong {
 .btn-signup:hover,
 .btn-signup:active,
 .btn-signup:focus {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
     color: #fff !important;
-    border-color: #ffb703 !important;
+    border-color: #ffc107 !important;
 }
 
 .link {
@@ -383,7 +391,7 @@ strong {
 }
 
 .approval {
-    color: #ffb703;
+    color: #ffc107; /* Brighter orange */
 }
 
                        /* Dropdown menu background and text color to match navbar */
@@ -395,15 +403,15 @@ strong {
 }
 .dropdown-menu .dropdown-item:hover,
 .dropdown-menu .dropdown-item:focus {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
     color: #fff !important;
 }
 .dropdown-menu .dropdown-item:active {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
     color: #fff !important;
 }
 .dropdown-menu .dropdown-item.active {
-    background-color: #ffb703 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
     color: #fff !important;
 }
 .dropdown-divider {
@@ -425,10 +433,38 @@ strong {
 }
 
 .alert.alert-warning {
-    background-color: #ffb703 !important;
-    color: #333 !important;
+    background-color: #ffc107 !important; /* Brighter orange */
+    color: #000 !important; /* Black text for better contrast */
 }
 
 .alert .btn-close {
     filter: invert(1) !important;
+}
+
+/* Enhanced form control focus indicators */
+.form-control:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25) !important;
+}
+
+/* Improved badge contrast */
+.badge.bg-light {
+    background-color: #e9ecef !important;
+    color: #212529 !important; /* Dark text on light background */
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important; /* Black text for better contrast */
+}
+
+/* Enhanced link accessibility */
+.orange-link:hover {
+    color: #fff !important;
+}
+
+/* Improve external link visibility */
+.external-link:hover,
+.external-link:focus {
+    color: #ffc107 !important; /* Updated to brighter orange */
 }

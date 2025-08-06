@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-dark">
                                 <thead>
                                     <tr>
                                         <th>Select</th>
@@ -84,6 +84,8 @@
                                         <th>Year</th>
                                         <th>Platforms</th>
                                         <th>Score 0-10</th>
+                                        <th>Published</th>
+                                        <th>Featured</th>
                                         <th>Summary</th>
                                     </tr>
                                 </thead>
@@ -116,15 +118,25 @@
                                             {% endif %}
                                             <!-- Hidden input to store game data -->
                                             <input type="hidden" class="game-data" name="selected_games" 
-                                                   value="{{ game.raw_data }}" {% if game.has_review %}disabled{% else %}disabled{% endif %}>
+                                                   value="{{ game.raw_data }}" {% if not game.has_review %}disabled{% endif %}>
                                         </td>
                                         <td>{{ game.year }}</td>
                                         <td>{{ game.platforms }}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm review-score" 
                                                    name="review_scores" min="0" max="10" step="0.1" 
-                                                   value="" style="width: 80px;" {% if game.has_review %}disabled{% else %}disabled{% endif %}
+                                                   value="" style="width: 80px;" {% if not game.has_review %}disabled{% endif %}
                                                    oninput="updateCreateButton()">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input published-checkbox" 
+                                                   name="is_published_{{ forloop.counter0 }}" value="1" 
+                                                   {% if game.has_review %}disabled{% else %}checked{% endif %}>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" class="form-check-input featured-checkbox" 
+                                                   name="is_featured_{{ forloop.counter0 }}" value="1" 
+                                                   {% if game.has_review %}disabled{% endif %}>
                                         </td>
                                         <td>
                                             <div class="summary-text">
@@ -330,6 +342,8 @@ function toggleGameData(checkbox, index) {
     const row = checkbox.closest('tr');
     const gameDataInput = row.querySelector('.game-data');
     const reviewScoreInput = row.querySelector('.review-score');
+    const publishedCheckbox = row.querySelector('.published-checkbox');
+    const featuredCheckbox = row.querySelector('.featured-checkbox');
     
     // Check if this game already has a review
     const hasReview = row.classList.contains('table-warning');
@@ -344,10 +358,14 @@ function toggleGameData(checkbox, index) {
     if (checkbox.checked) {
         gameDataInput.disabled = false;
         reviewScoreInput.disabled = false;
+        publishedCheckbox.disabled = false;
+        featuredCheckbox.disabled = false;
         row.classList.add('table-success');
     } else {
         gameDataInput.disabled = true;
         reviewScoreInput.disabled = true;
+        publishedCheckbox.disabled = true;
+        featuredCheckbox.disabled = true;
         row.classList.remove('table-success');
     }
     

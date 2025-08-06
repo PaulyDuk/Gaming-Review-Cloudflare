@@ -239,6 +239,14 @@ def create_reviews_from_selection(request):
                     else:
                         review_score = 5.0
 
+                    # Get published and featured status for this game
+                    is_published_key = f'is_published_{i}'
+                    is_featured_key = f'is_featured_{i}'
+
+                    # HTML checkboxes only send data when checked
+                    is_published = is_published_key in request.POST
+                    is_featured = is_featured_key in request.POST
+
                     title = game.get('name')
                     slug = slugify(title)
 
@@ -362,8 +370,8 @@ def create_reviews_from_selection(request):
                                 'reviewed_by': user,
                                 'review_date': review_date,
                                 'featured_image': featured_image,
-                                'is_featured': False,
-                                'is_published': True
+                                'is_featured': is_featured,
+                                'is_published': is_published
                             }
                         )
 

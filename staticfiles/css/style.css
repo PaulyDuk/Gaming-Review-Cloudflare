@@ -313,7 +313,7 @@ strong {
 .homepage-review-card .card-text {
     display: -webkit-box;
     -webkit-line-clamp: 11;
-    line-clamp: 11;
+    /* line-clamp: 11; */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -341,7 +341,7 @@ strong {
 .publisher-card .card-text {
     display: -webkit-box;
     -webkit-line-clamp: 7;
-    line-clamp: 7;
+    /* line-clamp: 7; */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -534,7 +534,7 @@ h4.orange-text,
 .btn:focus {
     background-color: #ffc107;
     color: #fff;
-    border-color: #ffc107;
+    border-color: #e0a800;
 }
 
 .btn-signup:hover,
@@ -542,7 +542,7 @@ h4.orange-text,
 .btn-signup:focus {
     background-color: #ffc107;
     color: #fff;
-    border-color: #ffc107;
+    border-color: #e0a800;
 }
 
 /* Override Bootstrap's btn-outline-success green styling */
@@ -558,7 +558,7 @@ h4.orange-text,
 .btn-outline-success.active,
 .btn-outline-success.show {
     background-color: #ffc107;
-    border-color: #ffc107;
+    border-color: #e0a800;
     color: #fff;
 }
 
@@ -567,7 +567,7 @@ h4.orange-text,
 .btn-outline-success.focus {
     box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
     background-color: #ffc107;
-    border-color: #ffc107;
+    border-color: #e0a800;
     color: #fff;
 }
 
@@ -576,7 +576,7 @@ h4.orange-text,
 .btn-outline-success:not(:disabled):not(.disabled).active,
 .show > .btn-outline-success.dropdown-toggle {
     background-color: #ffc107;
-    border-color: #ffc107;
+    border-color: #e0a800;
     color: #fff;
     box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
 }
@@ -593,7 +593,7 @@ h4.orange-text,
 .pagination .page-link:focus {
     background-color: #ffc107;
     color: #fff;
-    border-color: #ffc107;
+    border-color: #e0a800;
 }
 
 /* Form focus states */

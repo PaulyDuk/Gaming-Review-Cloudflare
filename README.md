@@ -2,8 +2,8 @@
 <br>
 <img src="docs/home.png">
 <br>
-<h2 align="center">Welcome to the readme of The Gaming Verdict, fiunal indiviual project for Code Institutes Boot Camp</h2>
-<h2 align="center"><a href="#">Website Link | <a href="#">Project Board</a></h2>
+<h2 align="center">Welcome to The Gaming Verdict, my final capstone project for Code Institute's Full Stack Developement Boot Camp</h2>
+<h2 align="center"><a href="https://the-gaming-verdict-8fd4666bd959.herokuapp.com/">Website Link | <a href="https://github.com/users/PaulyDuk/projects/7/views/1">Project Board</a></h2>
 <h1>Table of Contents</h1>
 <ol>
 <li><a href="#introduction">Introduction</a></li>
@@ -19,6 +19,7 @@
 </ul>
 <li><a href="#user-stories">User Stories</a></li>
 <li><a href="#design">UI/UX Design</a></li>
+<li><a href="#design">Agile Framework</a></li>
 <li><a href="#features">Features</a></li>
 <li><a href="#ai">AI Implementation</a></li>
 <li><a href="#testing">Testing and Validation</a></li>
@@ -28,6 +29,7 @@
 <li><a href="#lighthouse">Lighthouse</a></li>
 <li><a href="#contrast">Contrast Checker</a></li>
 </ul>
+<li><a href="#design">Deployment</a></li>
 <li><a href="#conclusion">Project Conclusion</a></li>
 <li><a href="#credits">Credits</a></li>
 </ol>
@@ -53,11 +55,11 @@ The application to be structured to provide:<br><br>
 <br><br>
 
 <h1 id="wireframes">Wireframes</h1>
-Wireframes were made for each display size and are shown below, these were later updated with the color scheme but the basic design did not change from our initial design
+Wireframes were made for each display size and are shown below, these were the basic layout that I envisaged before undertaking this project and what were originally taken to get my MVP.
 <br>
-<h2 id="phone">Phone:</h2>
+<h2 id="phone">Index Page:</h2>
 <br>
-<img src="#">
+<img src="/static/docs/index.png">
 <br>
 <h2 id="tablet">Tablet:</h2>
 <br>

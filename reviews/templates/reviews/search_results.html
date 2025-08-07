@@ -56,46 +56,6 @@
                                 </div>
                             {% endif %}
 
-                            <!-- Publishers Section -->
-                            {% if publishers %}
-                                <h2 class="mt-4">Publishers ({{ publishers.count }})</h2>
-                                <div class="row">
-                                    {% for publisher in publishers %}
-                                        <div class="col-md-3">
-                                            <div class="card mb-4 publisher-card">
-                                                <div class="card-body">
-                                                    <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="post-link">
-                                                        <div class="game-title-container">
-                                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow" alt="Arrow icon">
-                                                            <h5 class="card-title m-0 info-heading d-inline">{{ publisher.name }}</h5>
-                                                        </div>
-                                                        {% if publisher.description %}
-                                                            <p class="card-text">{{ publisher.description|striptags }}</p>
-                                                        {% else %}
-                                                            <p class="card-text">No publisher information available</p>
-                                                        {% endif %}
-                                                    </a>
-                                                    {% if publisher.website %}
-                                                    <div class="mt-auto">
-                                                        <hr>
-                                                        <p class="card-text">
-                                                            <a href="{{ publisher.website }}" target="_blank" class="external-link">
-                                                                <i class="fas fa-external-link-alt"></i> Visit Website
-                                                            </a>
-                                                        </p>
-                                                    </div>
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {% if forloop.counter|divisibleby:4 %}
-                                            </div>
-                                            <div class="row">
-                                        {% endif %}
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-
                             <!-- Developers Section -->
                             {% if developers %}
                                 <h2 class="mt-4">Developers ({{ developers.count }})</h2>
@@ -120,6 +80,46 @@
                                                         <hr>
                                                         <p class="card-text">
                                                             <a href="{{ developer.website }}" target="_blank" class="external-link">
+                                                                <i class="fas fa-external-link-alt"></i> Visit Website
+                                                            </a>
+                                                        </p>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if forloop.counter|divisibleby:4 %}
+                                            </div>
+                                            <div class="row">
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Publishers Section -->
+                            {% if publishers %}
+                                <h2 class="mt-4">Publishers ({{ publishers.count }})</h2>
+                                <div class="row">
+                                    {% for publisher in publishers %}
+                                        <div class="col-md-3">
+                                            <div class="card mb-4 publisher-card">
+                                                <div class="card-body">
+                                                    <a href="{% url 'publisher:publisher_games' publisher.slug %}" class="post-link">
+                                                        <div class="game-title-container">
+                                                            <img src="{% static 'images/arrows.png' %}" class="game-title-arrow" alt="Arrow icon">
+                                                            <h5 class="card-title m-0 info-heading d-inline">{{ publisher.name }}</h5>
+                                                        </div>
+                                                        {% if publisher.description %}
+                                                            <p class="card-text">{{ publisher.description|striptags }}</p>
+                                                        {% else %}
+                                                            <p class="card-text">No publisher information available</p>
+                                                        {% endif %}
+                                                    </a>
+                                                    {% if publisher.website %}
+                                                    <div class="mt-auto">
+                                                        <hr>
+                                                        <p class="card-text">
+                                                            <a href="{{ publisher.website }}" target="_blank" class="external-link">
                                                                 <i class="fas fa-external-link-alt"></i> Visit Website
                                                             </a>
                                                         </p>

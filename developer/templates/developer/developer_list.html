@@ -3,14 +3,28 @@
 
 {% block content %}
 
+<main class="developer-list-main">
 <!-- developer_list.html content starts here -->
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Developers</li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-12">
             <div class="d-flex align-items-center mb-3">
                 <h1 class="mb-0 me-3">All Developers</h1>
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle mt-2" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle mt-2" 
+                            type="button" 
+                            id="sortDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false"
+                            aria-label="Sort developers">
                         Sort By
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="sortDropdown">
@@ -26,12 +40,14 @@
             {% else %}
                 <p class="info-heading mb-3">Showing {{ developer_list|length }} of {{ paginator.count }} developers</p>
             {% endif %}
-            <!-- Developers Column -->
-            <div class="col-12 mt-3 left">
+            <!-- Developers Section -->
+            <section aria-labelledby="developers-heading">
+                <h2 id="developers-heading" class="visually-hidden">Developer Listings</h2>
+                <div class="col-12 mt-3 left">
                 <div class="row">
                     {% for developer in developer_list %}
                         <div class="col-md-3">
-                            <div class="card mb-4 developer-card">
+                            <article class="card mb-4 developer-card">
                                 <div class="card-body">
                                     <a href="{% url 'developer:developer_games' developer.slug %}" class="post-link">
                                         <div class="game-title-container">
@@ -57,7 +73,7 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         </div>
                         {% if forloop.counter|divisibleby:4 %}
                             </div>
@@ -66,7 +82,7 @@
                     {% endfor %}
 
                 </div>
-            </div>
+            </section>
         </div>
     </div>
     {% if is_paginated %}
@@ -102,6 +118,7 @@
     </nav>
     {% endif %}
 </div>
+</main>
 
 <!-- developer_list.html content ends here -->
 {% endblock %}

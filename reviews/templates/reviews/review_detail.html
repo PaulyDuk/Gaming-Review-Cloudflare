@@ -2,6 +2,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+<main class="review-detail-main">
 <div class="masthead">
     <div class="container">
         <div class="row align-items-center g-0">
@@ -12,116 +13,159 @@
             </div>
             <!-- Center column: Arrows -->
             <div class="col-md-4 d-flex justify-content-center align-items-center">
-                <img src="{% static 'images/large_arrows_300.png' %}" alt="Arrows" class="arrows-large">
+                <img src="{% static 'images/large_arrows_300.png' %}" alt="" class="arrows-large" role="presentation">
             </div>
             <!-- Right column: Game image -->
             <div class="col-md-4 masthead-image">
-                <div class="image-container">
+                <figure class="image-container">
                     {% if "placeholder" in review.featured_image.url %}
-                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
+                        <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Placeholder image indicating no game image is available">
                     {% else %}
-                        <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                        <img class="card-img-top" src="{{ review.featured_image.url }}" alt="Screenshot of {{ review.title }} showing the main game interface">
                     {% endif %}
-                </div>
+                    <figcaption class="visually-hidden">Featured image for {{ review.title }} game review</figcaption>
+                </figure>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'reviews:review_list' %}" class="orange-link">Reviews</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ review.title }}</li>
+    </ol>
+</nav>
 
 <div class="container">
     <div class="row">
         <!-- Main content - takes up full width on small screens, 2/3 on large screens -->
         <div class="col-12 col-lg-8 order-1 order-lg-1">
             <!-- Review Section -->
-            <div class="card mb-4 mt-3">
+            <article class="card mb-4 mt-3">
                 <div class="card-body mb-4">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading">Description</h2></div>
-                    <p class="card-text">{{ review.description | safe }}</p>
-                    <hr>
+                    <section aria-labelledby="description-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="" role="presentation"><h2 id="description-heading" class="mb-0 info-heading">Description</h2></div>
+                        <p class="card-text">{{ review.description | safe }}</p>
+                        <hr>
+                    </section>
                 </div>
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading">Review</h2></div>
-                    <div class="card-text">{{ review.review_text | safe }}</div>
-                    <hr>
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 class="mb-0 info-heading ">Score: {{ review.review_score | safe }}</h2></div>
+                    <section aria-labelledby="review-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 id="review-heading" class="mb-0 info-heading">Review</h2></div>
+                        <div class="card-text">{{ review.review_text | safe }}</div>
+                        <hr>
+                    </section>
+                    <section aria-labelledby="score-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 id="score-heading" class="mb-0 info-heading ">Score: {{ review.review_score | safe }}</h2></div>
+                    </section>
                 </div>
-            </div>
+            </article>
         </div>
         <!-- Right Sidebar - shows on right on large screens, below review on small screens -->
-        <div class="col-12 col-lg-4 order-2 order-lg-2">
+        <div class="col-12 col-lg-4 order-2 order-lg-2" role="complementary" aria-label="Game information and related details">
             
             <!-- Game Info Card -->
-            <div class="card mb-4 mt-3">
+            <aside class="card mb-4 mt-3">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Game Info</h3></div>
+                    <section aria-labelledby="game-info-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 id="game-info-heading" class="mb-0 info-heading">Game Info</h3></div>
                     {% if game_platforms %}
-                        <p><strong>Available on:</strong> 
-                            {% for platform in game_platforms %}
-                                <span class="badge bg-secondary me-1 fs-6">{{ platform.name }}</span>{% if not forloop.last %} {% endif %}
-                            {% endfor %}
-                        </p>
-                    {% endif %}
-                    {% if game_genres %}
-                        <p><strong>Genres:</strong> 
-                            {% for genre in game_genres %}
-                                <span class="badge bg-success me-1 fs-6">{{ genre.name }}</span>{% if not forloop.last %} {% endif %}
-                            {% endfor %}
-                        </p>
-                    {% endif %}
-                    {% if game_release_dates %}
-                        <p><strong>Release Dates:</strong></p>
-                        <div class="mb-2">
-                            {% for release in game_release_dates %}
-                                <div class="d-flex align-items-center mb-1">
-                                    <span><strong>{{ release.platform }} - </strong><span class="card-text">{{ release.date }}</span></span>
-                                </div>
-                            {% endfor %}
+                        <div class="mb-3">
+                            <strong>Available on:</strong>
+                            <ul class="list-inline mt-1 mb-0" role="list" aria-label="Gaming platforms">
+                                {% for platform in game_platforms %}
+                                    <li class="list-inline-item">
+                                        <span class="badge bg-secondary me-1 fs-6">{{ platform.name }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     {% endif %}
+                    {% if game_genres %}
+                        <div class="mb-3">
+                            <strong>Genres:</strong>
+                            <ul class="list-inline mt-1 mb-0" role="list" aria-label="Game genres">
+                                {% for genre in game_genres %}
+                                    <li class="list-inline-item">
+                                        <span class="badge bg-success me-1 fs-6">{{ genre.name }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if game_release_dates %}
+                        <div class="mb-3">
+                            <strong>Release Dates:</strong>
+                            <ul class="list-unstyled mt-1 mb-0" role="list" aria-label="Game release dates by platform">
+                                {% for release in game_release_dates %}
+                                    <li class="d-flex align-items-center mb-1">
+                                        <strong>{{ release.platform }} - </strong>
+                                        <span class="card-text ms-1">{{ release.date }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    </section>
                 </div>
-            </div>
+            </aside>
             
             <!-- Developer Card -->
-            <div class="card mb-4 mt-3 mt-lg-0">
+            <aside class="card mb-4 mt-3 mt-lg-0">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Developer Info</h3></div>
+                    <section aria-labelledby="developer-info-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 id="developer-info-heading" class="mb-0 info-heading">Developer Info</h3></div>
                     {% if game_developers %}
                         {% for developer in game_developers %}
                             <div class="mb-3">
-                    {% if developer.name %}
-                        <h5 class="text-primary">
-                            {% if developer.slug %}
-                                <a href="{% url 'developer:developer_games' developer.slug %}" class="orange-link">{{ developer.name }}</a>
-                            {% else %}
-                                <span class="orange-link">{{ developer.name }}</span>
-                            {% endif %}
-                        </h5>
+                                {% if developer.name %}
+                                    <h5 class="text-primary">
+                                        {% if developer.slug %}
+                                            <a href="{% url 'developer:developer_games' developer.slug %}" class="orange-link">{{ developer.name }}</a>
+                                        {% else %}
+                                            <span class="orange-link">{{ developer.name }}</span>
+                                        {% endif %}
+                                    </h5>
                                 {% endif %}
-                                {% if developer.description %}
-                                    <p class="card-text">{{ developer.description|safe }}</p>
-                                {% else %}
-                                    <p class="card-text">No developer information available.</p>
-                                {% endif %}
-                                {% if developer.founded_year %}
-                                    <p><strong>Established:</strong> <span class="card-text">{{ developer.founded_year }}</span></p>
-                                {% endif %}
-                                {% if developer.website %}
-                                    <p>
-                                        <a href="{{ developer.website }}" target="_blank" class="orange-link">
-                                            <i class="fas fa-external-link-alt"></i> Developer Website
-                                        </a>
-                                    </p>
-                                {% endif %}
+                                
+                                <dl class="mb-2">
+                                    {% if developer.description %}
+                                        <dt class="visually-hidden">Description</dt>
+                                        <dd class="card-text mb-2">{{ developer.description|safe }}</dd>
+                                    {% else %}
+                                        <dt class="visually-hidden">Description</dt>
+                                        <dd class="card-text mb-2">No developer information available.</dd>
+                                    {% endif %}
+                                    
+                                    {% if developer.founded_year %}
+                                        <dt class="fw-bold">Established:</dt>
+                                        <dd class="card-text mb-2">{{ developer.founded_year }}</dd>
+                                    {% endif %}
+                                    
+                                    {% if developer.website %}
+                                        <dt class="visually-hidden">Website</dt>
+                                        <dd class="mb-2">
+                                            <a href="{{ developer.website }}" target="_blank" class="orange-link">
+                                                <i class="fas fa-external-link-alt"></i> Developer Website
+                                            </a>
+                                        </dd>
+                                    {% endif %}
+                                </dl>
                             </div>
                         {% endfor %}
                     {% endif %}
+                    </section>
                 </div>
-            </div>
+            </aside>
             
             <!-- Publisher Card -->
-            <div class="card mb-4">
+            <aside class="card mb-4">
                 <div class="card-body">
-                    <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Publisher Info</h3></div>
+                    <section aria-labelledby="publisher-info-heading">
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 id="publisher-info-heading" class="mb-0 info-heading">Publisher Info</h3></div>
                     {% if game_publishers %}
                         {% for publisher in game_publishers %}
                             <div class="mb-3">
@@ -134,26 +178,36 @@
                                         {% endif %}
                                     </h5>
                                 {% endif %}
-                                {% if publisher.description %}
-                                    <p class="card-text">{{ publisher.description|safe }}</p>
-                                {% else %}
-                                    <p class="card-text">No publisher information available.</p>
-                                {% endif %}
-                                {% if publisher.founded_year %}
-                                    <p><strong>Established:</strong> <span class="card-text">{{ publisher.founded_year }}</span></p>
-                                {% endif %}
-                                {% if publisher.website %}
-                                    <p>
-                                        <a href="{{ publisher.website }}" target="_blank" class="orange-link">
-                                            <i class="fas fa-external-link-alt"></i> Publisher Website
-                                        </a>
-                                    </p>
-                                {% endif %}
+                                
+                                <dl class="mb-2">
+                                    {% if publisher.description %}
+                                        <dt class="visually-hidden">Description</dt>
+                                        <dd class="card-text mb-2">{{ publisher.description|safe }}</dd>
+                                    {% else %}
+                                        <dt class="visually-hidden">Description</dt>
+                                        <dd class="card-text mb-2">No publisher information available.</dd>
+                                    {% endif %}
+                                    
+                                    {% if publisher.founded_year %}
+                                        <dt class="fw-bold">Established:</dt>
+                                        <dd class="card-text mb-2">{{ publisher.founded_year }}</dd>
+                                    {% endif %}
+                                    
+                                    {% if publisher.website %}
+                                        <dt class="visually-hidden">Website</dt>
+                                        <dd class="mb-2">
+                                            <a href="{{ publisher.website }}" target="_blank" class="orange-link">
+                                                <i class="fas fa-external-link-alt"></i> Publisher Website
+                                            </a>
+                                        </dd>
+                                    {% endif %}
+                                </dl>
                             </div>
                         {% endfor %}
                     {% endif %}
+                    </section>
                 </div>
-            </div>
+            </aside>
         </div>
     </div>
 
@@ -175,7 +229,7 @@
                 <div class="col-md-8">
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">Comments</h3></div>
+                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 id="comments-heading" class="mb-0 info-heading">Comments</h2></div>
                         {% if user_comments %}
                             {% for user_comment in user_comments %}
                             <div class="p-2 comments
@@ -192,8 +246,16 @@
                             </p>
                             {% endif %}
                                 {% if user.is_authenticated and user_comment.author == user %}
-                                    <button class="btn btn-outline-success btn-edit-user-comment" comment_id="{{ user_comment.id }}">Edit</button>
-                                    <button class="btn btn-outline-success btn-delete-user-comment" comment_id="{{ user_comment.id }}">Delete</button>
+                                    <button class="btn btn-outline-success btn-edit-user-comment" 
+                                            comment_id="{{ user_comment.id }}"
+                                            aria-label="Edit comment by {{ user_comment.author.username }}">
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-outline-success btn-delete-user-comment" 
+                                            comment_id="{{ user_comment.id }}"
+                                            aria-label="Delete comment by {{ user_comment.author.username }}">
+                                        Delete
+                                    </button>
                                 {% endif %}
                             </div>
                             {% endfor %}
@@ -211,10 +273,22 @@
                             {% if user.is_authenticated %}
                             <div class="d-flex align-items-center mb-2">
                                 <img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon">
-                                <h3 class="info-heading mb-0">Leave a comment:</h3>
+                                <h4 class="info-heading mb-0">Leave a comment:</h4>
                             </div>
                             <p class="card-text">Posting as: {{ user.username }}</p>
                             <form id="userCommentForm" method="post" class="card-text form-layout">
+                                {% if user_comment_form.errors %}
+                                    <div class="alert alert-danger" role="alert" aria-live="polite" aria-atomic="true">
+                                        <strong>Error:</strong> Please correct the errors below.
+                                        <ul class="mb-0 mt-2">
+                                            {% for field, errors in user_comment_form.errors.items %}
+                                                {% for error in errors %}
+                                                    <li>{{ field|title }}: {{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                                 {{ user_comment_form | crispy }}
                                 {% csrf_token %}
                                 <button id="submitUserCommentButton" name="comment_submit" type="submit" class="btn btn-outline-success btn-lg">Submit</button>
@@ -245,7 +319,7 @@
                 <div class="col-md-8">
                     <div class="card mb-4 mt-3">
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h3 class="mb-0 info-heading">User Reviews</h3></div>
+                            <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon"><h2 id="user-reviews-heading" class="mb-0 info-heading">User Reviews</h2></div>
                             {% if user_reviews %}
                                 {% for user_review in user_reviews %}
                                 <div class="p-2 reviews
@@ -267,8 +341,17 @@
                                     </p>
                                     {% endif %}
                                     {% if user.is_authenticated and user_review.user == user %}
-                                        <button class="btn btn-outline-success btn-edit-user-review" review_id="{{ user_review.id }}" review_rating="{{ user_review.rating }}">Edit</button>
-                                        <button class="btn btn-outline-success btn-delete-user-review" review_id="{{ user_review.id }}">Delete</button>
+                                        <button class="btn btn-outline-success btn-edit-user-review" 
+                                                review_id="{{ user_review.id }}" 
+                                                review_rating="{{ user_review.rating }}"
+                                                aria-label="Edit review by {{ user_review.user.username }}">
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-outline-success btn-delete-user-review" 
+                                                review_id="{{ user_review.id }}"
+                                                aria-label="Delete review by {{ user_review.user.username }}">
+                                            Delete
+                                        </button>
                                     {% endif %}
                                 </div>
                                 {% endfor %}
@@ -287,13 +370,20 @@
                                 {% if not user_has_reviewed %}
                             <div class="d-flex align-items-center mb-2">
                                 <img src="{% static 'images/arrows.png' %}" class="arrows" alt="Arrow icon">
-                                <h3 class="info-heading mb-0">Leave a review:</h3>
+                                <h4 class="info-heading mb-0">Leave a review:</h4>
                                 </div>
                                     <p class="card-text">Posting as: {{ user.username }}</p>
                                     <form id="userReviewForm" method="post" class="card-text form-layout">
                                         {% if user_review_form.errors %}
-                                            <div class="alert alert-danger" role="alert">
-                                                Please correct the errors below.
+                                            <div class="alert alert-danger" role="alert" aria-live="polite" aria-atomic="true">
+                                                <strong>Error:</strong> Please correct the errors below.
+                                                <ul class="mb-0 mt-2">
+                                                    {% for field, errors in user_review_form.errors.items %}
+                                                        {% for error in errors %}
+                                                            <li>{{ field|title }}: {{ error }}</li>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </ul>
                                             </div>
                                         {% endif %}
                                         {{ user_review_form | crispy }}
@@ -302,11 +392,11 @@
                                     </form>
                                 {% else %}
                                     <div id="reviewCompleteMessage">
-                                        <h3>Your Review</h3>
+                                        <h4>Your Review</h4>
                                         <p class="text-white">You have already reviewed this game. You can edit or delete your review on the left.</p>
                                     </div>
                                     <div id="userReviewFormContainer" style="display: none;">
-                                        <h3>Edit Your Review:</h3>
+                                        <h4>Edit Your Review:</h4>
                                         <p class="card-text">Posting as: {{ user.username }}</p>
                                         <form id="userReviewForm" method="post" class="form-layout">
                                             {{ user_review_form | crispy }}
@@ -365,6 +455,7 @@
         </div>
     </div>
 </div>
+</main>
 {% endblock content %}
 
 {% block extras %}

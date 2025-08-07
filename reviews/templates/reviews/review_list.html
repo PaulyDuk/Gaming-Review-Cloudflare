@@ -4,6 +4,22 @@
 {% block content %}
 
 <!-- index.html content starts here -->
+
+<main class="review-list-main">
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">
+            {% if request.GET.genre %}
+                {{ request.GET.genre|title }} Reviews
+            {% else %}
+                All Reviews
+            {% endif %}
+        </li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -18,7 +34,12 @@
                 <div class="d-flex align-items-center mb-3">
                     <h1 class="mb-0 me-3">All Reviews</h1>
                     <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle mt-2" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-secondary dropdown-toggle mt-2" 
+                                type="button" 
+                                id="sortDropdown" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                                aria-label="Sort reviews">
                             Sort By
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="sortDropdown">
@@ -40,7 +61,7 @@
                 <div class="row">
                     {% for review in review_list %}
                         <div class="col-md-3">
-                            <div class="card mb-4 homepage-review-card">
+                            <article class="card mb-4 homepage-review-card">
                                 <div class="card-body">
                                     <div class="image-container">
                                         <a href="{% url 'reviews:review_detail' review.slug %}">
@@ -69,7 +90,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </article> 
                         </div>
                         {% if forloop.counter|divisibleby:4 %}
                             </div>
@@ -113,6 +134,7 @@
     </nav>
     {% endif %}
 </div>
+</main>
 
 <!-- index.html content ends here -->
 {% endblock %}

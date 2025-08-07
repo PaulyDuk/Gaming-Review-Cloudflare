@@ -3,11 +3,13 @@
 
 {% block content %}
 <!-- index.html content starts here -->
+<main class="home-main-content">
 <div class="container">
-    <!-- Featured Reviews Row -->
-    <div class="row mb-4">
-        <h1 class="mb-3 mt-3">Featured Reviews</h1>
-        <div class="col-12">
+    <!-- Featured Reviews Section -->
+    <section aria-labelledby="featured-heading">
+        <div class="row mb-4">
+            <h1 id="featured-heading" class="mb-3 mt-3">Featured Reviews</h1>
+            <div class="col-12">
             <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     {% for review in featured_reviews %}
@@ -17,7 +19,7 @@
                         {% endif %}
                         
                         <div class="col-md-3">
-                            <div class="card mb-4 homepage-review-card">
+                            <article class="card mb-4 homepage-review-card">
                                 <div class="card-body">
                                     <div class="image-container">
                                         <a href="{% url 'reviews:review_detail' review.slug %}">
@@ -47,7 +49,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         </div>
                         
                         {% if forloop.counter|divisibleby:3 or forloop.last %}
@@ -66,13 +68,20 @@
                 </button>
             </div>
         </div>
-    </div>
-    <!-- Recent Reviews Row -->
-    <div class="row">
-        <div class="d-flex align-items-center mb-3">
-            <h1 class="mb-0 me-3">Recent Reviews</h1>
-            <div class="dropdown">
-                <button class="btn btn-outline-success dropdown-toggle" type="button" id="recentReviewsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+    </section>
+    
+    <!-- Recent Reviews Section -->
+    <section aria-labelledby="recent-heading">
+        <div class="row">
+            <div class="d-flex align-items-center mb-3">
+                <h2 id="recent-heading" class="mb-0 me-3">Recent Reviews</h2>
+                <div class="dropdown">
+                <button class="btn btn-outline-success dropdown-toggle" 
+                        type="button" 
+                        id="recentReviewsDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false"
+                        aria-label="Filter recent reviews by time period">
                     {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 1 Day{% endif %}
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="recentReviewsDropdown">
@@ -94,7 +103,7 @@
             <div class="row">
                 {% for review in review_list %}
                     <div class="col-md-3">
-                        <div class="card mb-4 homepage-review-card">
+                        <article class="card mb-4 homepage-review-card">
                             <div class="card-body">
                                 <div class="image-container">
                                     <a href="{% url 'reviews:review_detail' review.slug %}">
@@ -125,7 +134,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     </div>
                     {% if forloop.counter|divisibleby:4 %}
                         </div>
@@ -167,7 +176,9 @@
         </ul>
     </nav>
     {% endif %}
+</section>
 </div>
+</main>
 <!-- index.html content ends here -->
 {% endblock %}
 

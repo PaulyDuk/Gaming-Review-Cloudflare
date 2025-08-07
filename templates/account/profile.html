@@ -4,56 +4,73 @@
 {% block head_title %}Profile{% endblock %}
 
 {% block content %}
+
+<main class="profile-main">
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-md-12 mt-3">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="orange-text">Welcome, {{ user.username }}!</h2>
+            <section aria-labelledby="welcome-heading">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 id="welcome-heading" class="orange-text">Welcome, {{ user.username }}!</h1>
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 
     <!-- Account Management Section -->
     <div class="row mt-4">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="orange-text">Account Management</h4>
-                </div>
-                <div class="card-body">
-                    <div class="list-group list-group-flush">
-                        <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action text-dark">
-                            <i class="fas fa-lock me-2"></i>Change Password
-                        </a>
-                        <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">
-                            <i class="fas fa-sign-out-alt me-2"></i>Logout
-                        </a>
+            <section aria-labelledby="account-management-heading">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="account-management-heading" class="orange-text">Account Management</h2>
                     </div>
+                <div class="card-body">
+                    <nav aria-label="Account management">
+                        <div class="list-group list-group-flush">
+                            <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action text-dark">
+                                <i class="fas fa-lock me-2"></i>Change Password
+                            </a>
+                            <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a>
+                        </div>
+                    </nav>
                 </div>
             </div>
+            </section>
         </div>
         
         <!-- User Stats Section -->
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="orange-text">My Activity</h4>
-                </div>
+            <section aria-labelledby="activity-heading">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="activity-heading" class="orange-text">My Activity</h2>
+                    </div>
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h3 class="orange-text">{{ user_reviews.count }}</h3>
+                            <div class="display-4 orange-text">{{ user_reviews.count }}</div>
                             <p class="mb-0 info-heading">Reviews Written</p>
                         </div>
                         <div class="col-6">
-                            <h3 class="orange-text">{{ user_comments.count }}</h3>
+                            <div class="display-4 orange-text">{{ user_comments.count }}</div>
                             <p class="mb-0 info-heading">Comments Posted</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
 
@@ -61,29 +78,31 @@
     {% if user_reviews %}
     <div class="row mt-4">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="orange-text">My Recent Reviews</h4>
-                </div>
-                <div class="card-body">
-                    {% for review in user_reviews|slice:":5" %}
-                    <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'reviews:review_detail' slug=review.game.slug %}" class="orange-link">{{ review.game.title }}</a></h6>
-                        <div class="d-flex align-items-center mb-1">
-                            <span class="badge bg-primary me-2">{{ review.rating }}/10</span>
-                            <small class="card-text">Reviewed on: {{ review.created_on|date:"M d, Y" }}</small>
-                            {% if not review.approved %}
-                            <span class="badge bg-warning ms-2">Awaiting Approval</span>
-                            {% endif %}
-                        </div>
-                        <p class="mb-0 card-text">{{ review.review_text|truncatewords:20 }}</p>
+            <section aria-labelledby="recent-reviews-heading">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="recent-reviews-heading" class="orange-text">My Recent Reviews</h2>
                     </div>
-                    {% endfor %}
-                    {% if user_reviews.count > 5 %}
-                    <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_reviews.count }} reviews</small></p>
-                    {% endif %}
+                    <div class="card-body">
+                        {% for review in user_reviews|slice:":5" %}
+                        <article class="border-bottom pb-2 mb-2">
+                            <h3><a href="{% url 'reviews:review_detail' slug=review.game.slug %}" class="orange-link">{{ review.game.title }}</a></h3>
+                            <div class="d-flex align-items-center mb-1">
+                                <span class="badge bg-primary me-2">{{ review.rating }}/10</span>
+                                <small class="card-text">Reviewed on: {{ review.created_on|date:"M d, Y" }}</small>
+                                {% if not review.approved %}
+                                <span class="badge bg-warning ms-2">Awaiting Approval</span>
+                                {% endif %}
+                            </div>
+                            <p class="mb-0 card-text">{{ review.review_text|truncatewords:20 }}</p>
+                        </article>
+                        {% endfor %}
+                        {% if user_reviews.count > 5 %}
+                        <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_reviews.count }} reviews</small></p>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
     {% endif %}
@@ -92,30 +111,33 @@
     {% if user_comments %}
     <div class="row mt-4 mb-4">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="orange-text">My Recent Comments</h4>
-                </div>
-                <div class="card-body">
-                    {% for comment in user_comments|slice:":5" %}
-                    <div class="border-bottom pb-2 mb-2">
-                        <h6><a href="{% url 'reviews:review_detail' slug=comment.review.slug %}" class="orange-link">{{ comment.review.title }}</a></h6>
-                        <div class="d-flex align-items-center mb-1">
-                            <small class="card-text">Commented on: {{ comment.created_on|date:"M d, Y" }}</small>
-                            {% if not comment.approved %}
-                            <span class="badge bg-warning ms-2">Awaiting Approval</span>
-                            {% endif %}
-                        </div>
-                        <p class="mb-0 card-text">{{ comment.body|truncatewords:20 }}</p>
+            <section aria-labelledby="recent-comments-heading">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 id="recent-comments-heading" class="orange-text">My Recent Comments</h2>
                     </div>
-                    {% endfor %}
-                    {% if user_comments.count > 5 %}
-                    <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_comments.count }} comments</small></p>
-                    {% endif %}
+                    <div class="card-body">
+                        {% for comment in user_comments|slice:":5" %}
+                        <article class="border-bottom pb-2 mb-2">
+                            <h3><a href="{% url 'reviews:review_detail' slug=comment.review.slug %}" class="orange-link">{{ comment.review.title }}</a></h3>
+                            <div class="d-flex align-items-center mb-1">
+                                <small class="card-text">Commented on: {{ comment.created_on|date:"M d, Y" }}</small>
+                                {% if not comment.approved %}
+                                <span class="badge bg-warning ms-2">Awaiting Approval</span>
+                                {% endif %}
+                            </div>
+                            <p class="mb-0 card-text">{{ comment.body|truncatewords:20 }}</p>
+                        </article>
+                        {% endfor %}
+                        {% if user_comments.count > 5 %}
+                        <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_comments.count }} comments</small></p>
+                        {% endif %}
+                    </div>
                 </div>
-            </div>
+            </section>
         </div>
     </div>
     {% endif %}
 </div>
+</main>
 {% endblock content %}

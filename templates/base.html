@@ -31,9 +31,14 @@
 
 <body class="d-flex flex-column min-vh-100">
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg dark-bg">
-        <div class="container-fluid">
+    <!-- Skip Navigation Link - Hidden by default, visible when focused with keyboard -->
+    <!-- Allows keyboard users to skip directly to main content, bypassing navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <header>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg dark-bg" role="navigation" aria-label="Main navigation">
+            <div class="container-fluid">
             <img src="{% static 'images/logo.png' %}" alt="The Gaming Verdict" class="navbar-brand">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,8 +119,9 @@
                 </ul>
                 
                 <!-- Search Form -->
-                <form class="d-flex me-3" method="GET" action="{% url 'reviews:search_games' %}">
-                    <input class="form-control me-2" type="search" name="q" aria-label="Search" value="{{ request.GET.q|default:'' }}">
+                <form class="d-flex me-3" method="GET" action="{% url 'reviews:search_games' %}" role="search" aria-label="Search games">
+                    <label for="search-input" class="visually-hidden">Search for games</label>
+                    <input id="search-input" class="form-control me-2" type="search" name="q" placeholder="Search games..." value="{{ request.GET.q|default:'' }}">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
 
@@ -129,6 +135,7 @@
             </div>
         </div>
     </nav>
+    </header>
 <!-- displaying Django messages -->
 <div class="container">
   <div class="row">
@@ -144,7 +151,7 @@
     </div>
   </div>
 </div>
-    <main class="flex-grow-1 main-bg">
+    <main class="flex-grow-1 main-bg" role="main" id="main-content">
 
         {% block content %}
         <!-- Content Goes here -->
@@ -153,8 +160,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer mt-auto py-3 dark-bg">
-        <p class="m-0 text-center text-white">Copyright Paul Smith 2025</p>
+    <footer class="footer mt-auto py-3 dark-bg" role="contentinfo">
+        <div class="container">
+            <p class="m-0 text-center text-white">
+                <small>&copy; 2025 <span class="visually-hidden">Copyright</span> Paul Smith. All rights reserved.</small>
+            </p>
+        </div>
     </footer>
     <script src="https://kit.fontawesome.com/4774d4020a.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>

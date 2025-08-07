@@ -2,56 +2,76 @@
 {% load static %}
 
 {% block content %}
+
+<main class="admin-populate-reviews-main">
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Add Reviews</li>
+    </ol>
+</nav>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
             <h1 class="mb-4">Add Reviews</h1>
             
             <!-- Search Form -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <form method="post" action="{% url 'reviews:populate_interface' %}">
-                        {% csrf_token %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="search" class="info-heading">Game Name:</label>
-                                <input type="text" class="form-control" id="search" name="search" 
-                                    value="{{ search_term|default:'' }}" placeholder="Enter game name or leave empty for all">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="limit" class="info-heading">Search Limit:</label>
-                                <input type="number" class="form-control" id="limit" name="limit" 
-                                    value="{{ limit|default:50 }}" min="1" max="100">
-                            </div>
-                            <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-outline-success">Search Games</button>
-                            </div>
-                        </div>
-                    </form>
+            <section aria-labelledby="search-heading">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 id="search-heading" class="visually-hidden">Search for Games</h2>
+                        <form method="post" action="{% url 'reviews:populate_interface' %}">
+                            {% csrf_token %}
+                            <fieldset>
+                                <legend class="visually-hidden">Game Search Parameters</legend>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="search" class="info-heading">Game Name:</label>
+                                        <input type="text" class="form-control" id="search" name="search" 
+                                            value="{{ search_term|default:'' }}" placeholder="Enter game name or leave empty for all">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="limit" class="info-heading">Search Limit:</label>
+                                        <input type="number" class="form-control" id="limit" name="limit" 
+                                            value="{{ limit|default:50 }}" min="1" max="100">
+                                    </div>
+                                    <div class="col-md-3 d-flex align-items-end">
+                                        <button type="submit" class="btn btn-outline-success">Search Games</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </section>
 
             {% if search_term and not games %}
             <!-- No Results Message -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="info-heading">No games found</h5>
-                    <p class="info-heading">No games were found for your search term "<strong>{{ search_term }}</strong>". Please check the spelling and try again.</p>
-                    <p class="mb-0 info-heading">
-                        <small>
-                            Tips: Try searching with fewer words or alternative spellings. 
-                            For example, try "God of War" instead of "God of War Ragnarök".
-                        </small>
-                    </p>
+            <section aria-labelledby="no-results-heading">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 id="no-results-heading" class="info-heading">No games found</h2>
+                        <p class="info-heading">No games were found for your search term "<strong>{{ search_term }}</strong>". Please check the spelling and try again.</p>
+                        <p class="mb-0 info-heading">
+                            <small>
+                                Tips: Try searching with fewer words or alternative spellings. 
+                                For example, try "God of War" instead of "God of War Ragnarök".
+                            </small>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            </section>
             {% endif %}
 
             {% if games %}
             <!-- Games Selection Form -->
-            <div class="card mb-3">
-                <div class="card-body">
-                    <p class="card-text">Found {{ games|length }} games. Select the games you want to create reviews for:</p>
+            <section aria-labelledby="games-selection-heading">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h2 id="games-selection-heading" class="visually-hidden">Select Games for Review Creation</h2>
+                        <p class="card-text">Found {{ games|length }} games. Select the games you want to create reviews for:</p>
                     {% if games %}
                         {% regroup games by has_review as grouped_games %}
                         {% for group in grouped_games %}
@@ -305,10 +325,12 @@
                 </ul>
             </nav>
             {% endif %}
+            </section>
             {% endif %}
         </div>
     </div>
 </div>
+</main>
 
 <script src="{% static 'js/populate_reviews.js' %}"></script>
 

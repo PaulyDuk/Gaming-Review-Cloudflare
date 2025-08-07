@@ -2,27 +2,41 @@
 {% load static %}
 
 {% block content %}
+
+<main class="publisher-games-main">
+<!-- Breadcrumb Navigation -->
+<nav aria-label="Breadcrumb" class="container mt-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'publisher:publisher_list' %}" class="orange-link">Publishers</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ publisher.name }}</li>
+    </ol>
+</nav>
+
 <div class="container">
     <div class="row">
         <div class="col-12 mt-3 left">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card-body">
-                        <h1>{{ publisher.name }}</h1>
-                        {% if publisher.description %}
-                            <p class="lead card-text">{{ publisher.description | safe }}</p>
-                        {% else %}
-                            <p class="lead card-text">No publisher information available.</p>
-                        {% endif %}
-                    </div>
+                    <section aria-labelledby="publisher-info-heading">
+                        <div class="card-body">
+                            <h1 id="publisher-info-heading">{{ publisher.name }}</h1>
+                            {% if publisher.description %}
+                                <p class="lead card-text">{{ publisher.description | safe }}</p>
+                            {% else %}
+                                <p class="lead card-text">No publisher information available.</p>
+                            {% endif %}
+                        </div>
+                    </section>
                     {% if games %}
                     
-                        <h2 class="mt-4">Games ({{ games.count }})</h2>
+                    <section aria-labelledby="games-heading">
+                        <h2 id="games-heading" class="mt-4">Games ({{ games.count }})</h2>
                         <div class="col-12 mt-3 left">
                             <div class="row">
                                 {% for game in games %}
                                     <div class="col-md-3">
-                                        <div class="card mb-4 homepage-review-card">
+                                        <article class="card mb-4 homepage-review-card">
                                             <div class="card-body">
                                                 <div class="image-container">
                                                     <a href="{% url 'reviews:review_detail' slug=game.slug %}">
@@ -36,7 +50,7 @@
                                                 <a href="{% url 'reviews:review_detail' slug=game.slug %}" class="post-link">
                                                     <div class="game-title-container">
                                                         <img src="{% static 'images/arrows.png' %}" class="game-title-arrow" alt="Arrow icon">
-                                                        <h5 class="card-title m-0 orange-link d-inline">{{ game.title }}</h5>
+                                                        <h3 class="card-title m-0 orange-link d-inline">{{ game.title }}</h3>
                                                     </div>
                                                     <p class="card-text">{{ game.description|striptags }}</p>
                                                 </a>
@@ -51,7 +65,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </article>
                                     </div>
                                     {% if forloop.counter|divisibleby:4 %}
                                         </div>
@@ -60,15 +74,19 @@
                                 {% endfor %}
                             </div>
                         </div>
+                    </section>
                     {% else %}
-                        <div class="alert alert-info mt-4" role="alert">
-                            <h4 class="alert-heading">No games found</h4>
-                            <p>{{ publisher.name }} doesn't have any reviewed games yet.</p>
-                        </div>
+                        <section aria-labelledby="no-games-heading">
+                            <div class="alert alert-info mt-4" role="alert">
+                                <h2 id="no-games-heading" class="alert-heading">No games found</h2>
+                                <p>{{ publisher.name }} doesn't have any reviewed games yet.</p>
+                            </div>
+                        </section>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </div>
+</main>
 {% endblock content %}

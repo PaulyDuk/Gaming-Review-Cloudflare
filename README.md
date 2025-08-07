@@ -40,7 +40,7 @@
 
 <h1 id="introduction">Introduction</h1>
 The Gaming Verdict is a computer game review site. The site itself writes a review and provides information about the game, the publisher and the developer. Users are then able to register and add their own comments and reviews to each game that is listed. These will require admin approval to avoid any unwanted/obscene comments being automatically added. The users then will have a profile page where they can see what, where and when they have commented and reviewed on.
-
+<br><br>
 The site also features an admin panel that only super users can access. This allows the Superuser to add and edit reviews to the site without going into the Django Admin panel and adding manually. This also allows the user to access APIs for information and review population. More details will be covered later on in the readme regarding this feature.
 <br><br>
 
@@ -79,6 +79,7 @@ There were 5 main criteria for this project:
 
 <br><br>
 
+I feel like my code holds these critierias to a high standard as demonstrated through my code and this README.
 <h1 id="structure">Structure & Concept</h1>
 The application to be structured to provide:<br><br>
 <ul>
@@ -154,10 +155,9 @@ I decided I wwould want all my forms simply centered in the screen with no other
 <img src="/static/docs/form.png">
 <br>
 
-
-<br><br>
-
 <h1 id="user-stories">User Stories</h1>
+
+There were quite a few user stories to begin with to get the CRUD design in place. Once completed new user stories emerged as the project progressed. There was an iteration of design that caused new user stories to be produced. The design and features section will expand upon this. These followed the MoSoCo proess for priority.<br><br>
 <ul>
 <li>list them </li>
 </ul>

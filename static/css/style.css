@@ -2,6 +2,26 @@
    Base Styles - Foundation elements
    ========================================================================== */
 
+/* Skip Navigation Link - Accessibility feature for keyboard users */
+/* Hidden off-screen by default, becomes visible when focused via keyboard */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 8px;
+    background-color: #ffc107;
+    color: #000;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* When skip link receives keyboard focus, position it visibly on screen */
+.skip-link:focus {
+    left: 6px;
+    top: 7px;
+}
+
 /* Body and basic elements */
 body {
     background-color: #1e1e2f;
@@ -12,7 +32,7 @@ hr {
 }
 
 /* Typography hierarchy - base headings */
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
     color: #ffc107;
 }
 
@@ -25,7 +45,9 @@ strong {
    ========================================================================== */
 
 /* Card base styles */
-.card {
+.card,
+article.card,
+aside.card {
     border: none;
     background-color: transparent;
 }
@@ -44,7 +66,10 @@ strong {
 /* Card body headings override global heading colors for readability */
 .card-body h1, 
 .card-body h2, 
-.card-body h3 {
+.card-body h3,
+.card-body h4,
+.card-body h5,
+.card-body h6 {
     color: #fff;
 }
 
@@ -56,6 +81,28 @@ strong {
 /* ==========================================================================
    Navigation Components
    ========================================================================== */
+
+/* Breadcrumb navigation */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0.5rem 0;
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.breadcrumb-item {
+    color: #fff;
+}
+
+.breadcrumb-item.active {
+    color: #ffc107;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: #fff;
+    padding: 0 0.5rem;
+}
 
 /* Navbar base styles */
 .navbar-nav .nav-link {
@@ -128,11 +175,31 @@ strong {
    Form Components
    ========================================================================== */
 
+/* Visually hidden content - accessible to screen readers but not visible */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
 .form-layout {
     margin-top: 1.3em;
 }
 
 /* Form field alignment for login/signup forms */
+.login fieldset,
+.signup fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
 .login p,
 .signup p {
     margin-bottom: 1rem;
@@ -263,6 +330,44 @@ strong {
 }
 
 /* ==========================================================================
+   List Components
+   ========================================================================== */
+
+/* Inline list styling for badges and similar content */
+.list-inline {
+    margin: 0;
+}
+
+.list-inline-item {
+    display: inline-block;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 0.25rem;
+}
+
+/* Unstyled lists for content grouping */
+.list-unstyled {
+    list-style: none;
+    padding-left: 0;
+}
+
+/* Definition lists styling */
+dl {
+    margin-bottom: 1rem;
+}
+
+dt {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+dd {
+    margin-bottom: 0.5rem;
+    margin-left: 0;
+}
+
+/* ==========================================================================
    Specialized Card Components
    ========================================================================== */
 
@@ -308,15 +413,27 @@ strong {
     display: flex;
     flex-direction: column;
     height: 100%;
+    padding: 1rem;
+}
+
+.homepage-review-card .post-link {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
 }
 
 .homepage-review-card .card-text {
     display: -webkit-box;
-    -webkit-line-clamp: 11;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 0.5rem;
+    flex-grow: 1;
+    height: auto;
+    max-height: 4.5em; /* Approximate height for 3 lines */
+    line-height: 1.5;
 }
 
 .homepage-review-card .d-flex.justify-content-between {
@@ -639,6 +756,7 @@ h5.orange-link:hover,
 /* Card hover states - Only apply rollover to h3 without .info-heading, but not to orange-link elements */
 .card-body:hover,
 .card-body:hover h2.card-title:not(.orange-link),
+.card-body:hover h3.card-title:not(.orange-link),
 .card-body:hover h5.card-title:not(.orange-link),
 .card-body:hover h3:not(.info-heading):not(.orange-link) {
     color: #ffc107;

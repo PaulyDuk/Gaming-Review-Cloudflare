@@ -109,7 +109,7 @@ This page shows the users profile. They will be able to see their comments and r
 <br>
 This page shows all the games, publishers, developers or genres that match the search criteria and would show as separate sections.
 <br>
-<img src="/static/docs/search_results.png">
+<img src="/static/docs/search.png">
 <br>
 <h2 id="wf-form">Form Pages:</h2>
 <br>

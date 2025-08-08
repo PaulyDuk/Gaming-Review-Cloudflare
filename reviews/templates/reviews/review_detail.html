@@ -30,15 +30,6 @@
     </div>
 </div>
 
-<!-- Breadcrumb Navigation -->
-<nav aria-label="Breadcrumb" class="container mt-3">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="orange-link">Home</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'reviews:review_list' %}" class="orange-link">Reviews</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ review.title }}</li>
-    </ol>
-</nav>
-
 <div class="container">
     <div class="row">
         <!-- Main content - takes up full width on small screens, 2/3 on large screens -->
@@ -141,7 +132,7 @@
                                     {% endif %}
                                     
                                     {% if developer.founded_year %}
-                                        <dt class="fw-bold">Established:</dt>
+                                        <dt class="orange-text">Established:</dt>
                                         <dd class="card-text mb-2">{{ developer.founded_year }}</dd>
                                     {% endif %}
                                     
@@ -189,7 +180,7 @@
                                     {% endif %}
                                     
                                     {% if publisher.founded_year %}
-                                        <dt class="fw-bold">Established:</dt>
+                                        <dt class="orange-text">Established:</dt>
                                         <dd class="card-text mb-2">{{ publisher.founded_year }}</dd>
                                     {% endif %}
                                     

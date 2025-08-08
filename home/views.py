@@ -6,8 +6,8 @@ from django.utils import timezone
 
 
 def home_view(request):
-    # Get the days filter parameter, default to 1 day
-    days_filter = int(request.GET.get('days', 1))
+    # Get the days filter parameter, default to 7 days
+    days_filter = int(request.GET.get('days', 7))
 
     # Calculate the date threshold based on the filter
     filter_date = timezone.now() - timedelta(days=days_filter)

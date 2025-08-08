@@ -82,7 +82,7 @@
                         data-bs-toggle="dropdown" 
                         aria-expanded="false"
                         aria-label="Filter recent reviews by time period">
-                    {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 1 Day{% endif %}
+                    {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 7 Days{% endif %}
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="recentReviewsDropdown">
                     <li><a class="dropdown-item{% if days_filter == 1 %} active{% endif %}" href="?days=1">Last 1 Day</a></li>

@@ -39,7 +39,7 @@
                 </div>
             </section>
 
-            {% if search_term and not games %}
+            {% if search_term and not games %}     
             <!-- No Results Message -->
             <section aria-labelledby="no-results-heading">
                 <div class="card mb-4">
@@ -160,8 +160,9 @@
                             </table>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-outline-success" id="create-reviews-btn" disabled>
-                                Create Selected Reviews
+                            {# Only show the button if at least one game is selected and all have scores #}
+                            <button type="submit" class="btn btn-outline-success" id="create-reviews-btn" style="display: none;" disabled>
+                                Create Reviews
                             </button>
                         </div>
                     </form>
@@ -324,6 +325,40 @@
 </div>
 </main>
 
+<script src="{% static 'js/utils.js' %}"></script>
 <script src="{% static 'js/populate_reviews.js' %}"></script>
+
+<script>
+// Hide or show the create button based on selection and scores (legacy logic)
+function updateCreateButton() {
+    const checkedBoxes = document.querySelectorAll('.game-checkbox:checked:not(:disabled)');
+    const createBtn = document.getElementById('create-reviews-btn');
+    if (!createBtn) return;
+
+    if (checkedBoxes.length > 0) {
+        // Check if all selected games have scores
+        let allHaveScores = true;
+        checkedBoxes.forEach(checkbox => {
+            const row = checkbox.closest('tr');
+            const scoreInput = row.querySelector('.review-score');
+            if (!scoreInput.value || scoreInput.value === '') {
+                allHaveScores = false;
+            }
+        });
+        if (allHaveScores) {
+            createBtn.disabled = false;
+            createBtn.style.display = '';
+            createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
+        } else {
+            createBtn.disabled = true;
+            createBtn.style.display = '';
+            createBtn.textContent = `Enter scores for ${checkedBoxes.length} selected game${checkedBoxes.length > 1 ? 's' : ''}`;
+        }
+    } else {
+        createBtn.disabled = true;
+        createBtn.style.display = 'none';
+    }
+}
+</script>
 
 {% endblock %}

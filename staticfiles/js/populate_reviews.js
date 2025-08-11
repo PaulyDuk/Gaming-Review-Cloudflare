@@ -61,7 +61,10 @@ function toggleGameData(checkbox, index) {
 function updateCreateButton() {
     const checkedBoxes = document.querySelectorAll('.game-checkbox:checked:not(:disabled)');
     const createBtn = document.getElementById('create-reviews-btn');
-    
+    if (!createBtn) return;
+
+    // Always show the button when games are present (never hide it)
+    // Update text and state only
     if (checkedBoxes.length > 0) {
         // Check if all selected games have scores
         let allHaveScores = true;
@@ -72,17 +75,16 @@ function updateCreateButton() {
                 allHaveScores = false;
             }
         });
-        
         if (allHaveScores) {
             createBtn.disabled = false;
             createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
         } else {
             createBtn.disabled = true;
-            createBtn.textContent = 'Enter scores for all selected games';
+            createBtn.textContent = 'Enter scores for selected games';
         }
     } else {
         createBtn.disabled = true;
-        createBtn.textContent = 'Create Selected Reviews';
+        createBtn.textContent = 'Select games to create reviews';
     }
 }
 

@@ -244,7 +244,15 @@ def create_reviews_from_selection(request):
                 try:
                     game = json.loads(game_json)
                     if i < len(review_scores):
-                        review_score = float(review_scores[i])
+                        score_str = review_scores[i]
+                        if not score_str.strip():
+                            messages.error(request, f'No score entered for game: {game.get("name", "(unknown)")}. Skipping.')
+                            continue
+                        try:
+                            review_score = float(score_str)
+                        except ValueError:
+                            messages.error(request, f'Invalid score for game: {game.get("name", "(unknown)")}. Skipping.')
+                            continue
                     else:
                         review_score = 5.0
 

@@ -8,14 +8,13 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.urls import reverse
-import json
-import datetime
-
 from .igdb_service import IGDBService
 from .models import Review, Genre
 from developer.models import Developer
 from publisher.models import Publisher
 from .management.commands.populate_reviews import Command as PopulateCommand
+import json
+import datetime
 
 
 def is_superuser(user):
@@ -246,12 +245,24 @@ def create_reviews_from_selection(request):
                     if i < len(review_scores):
                         score_str = review_scores[i]
                         if not score_str.strip():
-                            messages.error(request, f'No score entered for game: {game.get("name", "(unknown)")}. Skipping.')
+                            game_name = game.get("name", "(unknown)")
+                            messages.error(
+                                request,
+                                'No score entered for game: '
+                                + game_name +
+                                '. Skipping.'
+                            )
                             continue
                         try:
                             review_score = float(score_str)
                         except ValueError:
-                            messages.error(request, f'Invalid score for game: {game.get("name", "(unknown)")}. Skipping.')
+                            game_name = game.get("name", "(unknown)")
+                            messages.error(
+                                request,
+                                'Invalid score for game: '
+                                + game_name +
+                                '. Skipping.'
+                            )
                             continue
                     else:
                         review_score = 5.0

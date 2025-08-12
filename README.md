@@ -39,7 +39,7 @@
 </ol>
 
 <h1 id="introduction">Introduction</h1>
-The Gaming Verdict is a computer game review site. The site itself writes a review and provides information about the game, the publisher and the developer. Users are then able to register and add their own comments and reviews to each game that is listed. These will require admin approval to avoid any unwanted/obscene comments being automatically added. The users then will have a profile page where they can see what, where and when they have commented and reviewed on.
+The Gaming Verdict is a computer game review site. The site itself writes a review via AI and provides information about the game, the publisher and the developer via an API from IGDB.com. Users are then able to register and add their own comments and reviews to each game that is listed. These will require admin approval to avoid any unwanted/obscene comments being automatically added. The users then will have a profile page where they can see what, where and when they have commented and reviewed on.
 <br><br>
 The site also features an admin panel that only super users can access. This allows the Superuser to add and edit reviews to the site without going into the Django Admin panel and adding manually. This also allows the user to access APIs for information and review population. More details will be covered later on in the readme regarding this feature.
 <br><br>
@@ -81,7 +81,7 @@ There were 5 main criteria for this project:
 
 I feel like my code holds these critierias to a high standard as demonstrated through my code and this README.
 <h1 id="structure">Structure & Concept</h1>
-The application to be structured to provide:<br><br>
+The application to be structured via 4 different Django applications, home, publisher, developer and reviews. I decided separation would be best to for each separate function to keep it clear and concise as to their functionality. The site launches directly to the home page that hosts both featured reviews and all reviews with a default view of showing the last 7 days of reviews. Clicking on a review will show it and populate all of the game, developer and publisher information on the right hand side. All of this information is populated via IGDB.com's API with the review itself generated at creation via GitHub's AI model<br><br>
 <ul>
     <li> an initial presentation of 'rules' and 'start' options to user;</li>
     <li>selection of 'rules' lanuches modal setting out how to play</li>
@@ -157,16 +157,30 @@ I decided I wwould want all my forms simply centered in the screen with no other
 
 <h1 id="user-stories">User Stories</h1>
 
-There were quite a few user stories to begin with to get the CRUD design in place. Once completed new user stories emerged as the project progressed. There was an iteration of design that caused new user stories to be produced. The design and features section will expand upon this. These followed the MoSoCo proess for priority.<br><br>
+There were quite a few user stories to begin with to get the CRUD design in place. Once completed, new user stories emerged as the project progressed. There was an iteration of design as the project progressed. These followed the MoSoCo proess for priority.<br><br>
 <ul>
-<li>list them </li>
+<li>USER STORY: I would like to see what I have commented and reviewed </li>
+<li>USER STORY: Approve comments: As a Site Admin I can approve or disapprove comments so that I can filter out objectionable comments</li>
+<li>USER STORY: Modify or delete comment on a post: As a Site User I can modify or delete my comment on a post so that I can be involved in the conversation </li>
+<li>USER STORY: Comment on a post: As a Site User I can leave comments on a post</li>
+<li>USER STORY: Account registration: As a Site User I can register an account so that I can comment on a post </li>
+<li>USER STORY: View comments: As a Site User / Admin I can view comments on an individual post so that I can read the conversation </li>
+<li>USER STORY: As a user I would like to see previous comments and reviews </li>
+<li>USER STORY: As a user I would like to filter the reviews to particular genres</li>
+<li>USER STORY: As a site user, I would like to leave my own review</li>
+<li>USER STORY: Open a post: As a Site User, I can click on a post so that I can read the full text.</li>
+<li>USER STORY: As a user I would like to see all games by a developer/publisher</li>
+<li>USER STORY: User should be able to search for a game</li>
 </ul>
 <br>
 
 <h1 id="design">UI/UX Design</h1>
-
+ I decided to go with a card based approach for my layout. This made it easy to style each segment as well as apply styles to make the appearance "pop" a bit more with drop shadows. Using cards also gave a consistent layout and was easy to iterate with loops for repeated segments, such as the review cards.
 <br><br>
-
+ For the colour scheme I decided to have the navbar dark with colour hex #2a2a2a, the background is slightly lighter to contrast with #457b9d used as the card bodies. For the text I used a mix of #ffc107 for highlighting the text and for link usage, so it was a bit more apparent what was hyperlinked or not. The main body of the text would then be white to ensure good readability. I originally went with an off white for text but this failed WCAG visibility checking so had to be adjusted.
+<br><br>
+I wanted the Developer and Publisher information on each card that would link to the specific section, originally I was using IDs to do so but after integrating the API for pulling this information I moved to slugs of the developer/publisher name. This made it easier to link and the URL was much more readable having this.
+<br><br>
 <h1 id="features">Features</h1>
 
 <br><br>
@@ -188,22 +202,38 @@ AI is a fantastic tool but is not a replacement for a developer who does not und
 <br><br>
 
 <h2 id="html-validation">HTML Validation</h2>
-HTML Validation passes successfully with no errors:
+HTML Validation passes successfully with no errors, I have only shown the one validation for brevity given the amount of pages validated. The following pages were all checked and clear of any errors:
 <br><br>
-<img src="#" alt="HTML Validation">
+index.html
+developer_games.html
+developer_list.html
+publisher_games.html
+publisher_list.html
+approve_comments.html
+approve_reviews.html
+populate_review.html
+review_detail.html
+review_list.html
+logout.html
+login.html
+register.html
+profile.html
+change_password.html
+<br><br>
+<img src="/static/docs/index_validartion.png" alt="HTML Validation">
 <br>
 
 <h2 id="css-validation">CSS Validation</h2>
 CSS Validation passes successfully with no errors:
 <br><br>
-<img src="#" alt="CSS Validation">
+<img src="/static/docs/css.png" alt="CSS Validation">
 <br>
 
 
 <h2 id="lighthouse">Lighthouse</h2>
-Lighthouse scores a perfect 100% due to the lightweight design of the site:
+Lighthouse scores 95% for perforamnce. Unfortuantely best practices drops to 59%. This is due to Cloudinary serving the game cover images that are stored via HTTP rather than HTTPS:
 <br><br>
-<img src="#" alt="CSS Validation">
+<img src="/static/docs/lighthouse.png" alt="Lighthouse Score">
 <br>
 
 <h2 id="contrast">Contrast Checker</h2>

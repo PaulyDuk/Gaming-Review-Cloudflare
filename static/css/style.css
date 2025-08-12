@@ -56,7 +56,7 @@ aside.card {
     background-color: #457b9d;
     border-radius: 10px; 
     box-shadow: 0 0 15px 0 #888888;
-    padding: 12px;
+    padding: 1px;
 }
 
 .card-text {

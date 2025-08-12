@@ -48,133 +48,132 @@
                                             <span class="card-text"><i class="fas fa-star orange-text"></i> {{ review.user_reviews.count }}</span>
                                         </div>
                                     </div>
-                                </div>
-                            </article>
-                        </div>
-                        
-                        {% if forloop.counter|divisibleby:3 or forloop.last %}
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Recent Reviews Section -->
-    <section aria-labelledby="recent-heading">
-        <div class="row">
-            <div class="d-flex align-items-center mb-3">
-                <h2 id="recent-heading" class="mb-0 me-3">Recent Reviews</h2>
-                <div class="dropdown">
-                <button class="btn btn-outline-success dropdown-toggle" 
-                        type="button" 
-                        id="recentReviewsDropdown" 
-                        data-bs-toggle="dropdown" 
-                        aria-expanded="false"
-                        aria-label="Filter recent reviews by time period">
-                    {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 7 Days{% endif %}
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="recentReviewsDropdown">
-                    <li><a class="dropdown-item{% if days_filter == 1 %} active{% endif %}" href="?days=1">Last 1 Day</a></li>
-                    <li><a class="dropdown-item{% if days_filter == 3 %} active{% endif %}" href="?days=3">Last 3 Days</a></li>
-                    <li><a class="dropdown-item{% if days_filter == 7 %} active{% endif %}" href="?days=7">Last 7 Days</a></li>
-                    <li><a class="dropdown-item{% if days_filter == 14 %} active{% endif %}" href="?days=14">Last 14 Days</a></li>
-                    <li><a class="dropdown-item{% if days_filter == 30 %} active{% endif %}" href="?days=30">Last 30 Days</a></li>
-                </ul>
-            </div>
-        </div>
-        {% if is_paginated %}
-            <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} reviews</p>
-        {% else %}
-            <p class="info-heading mb-3">Showing {{ review_list|length }} of {{ paginator.count }} reviews</p>
-        {% endif %}
-        <!-- Review Entries Column -->
-        <div class="col-12 mt-3 left">
-            <div class="row">
-                {% for review in review_list %}
-                    <div class="col-md-3">
-                        <article class="card mb-4 homepage-review-card">
-                            <div class="card-body">
-                                <div class="image-container">
-                                    <a href="{% url 'reviews:review_detail' review.slug %}">
-                                        {% if "placeholder" in review.featured_image.url %}
-                                            <img class="card-img-top" src="https://via.placeholder.com/400x300/6c757d/ffffff?text=No+Image" alt="Default image">
-                                        {% else %}
-                                            <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
+                                {% extends "base.html" %}
+                                {% load static %}
+
+                                {% block content %}
+                                <!-- index.html content starts here -->
+                                <div class="container">
+                                    <!-- Featured Reviews Section -->
+                                    <section aria-labelledby="featured-heading">
+                                        <div class="row mb-4">
+                                            <h1 id="featured-heading" class="mb-3 mt-3">Featured Reviews</h1>
+                                            <div class="col-12">
+                                                <div id="featuredReviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+                                                    <div class="carousel-inner">
+                                                        {% for review in featured_reviews %}
+                                                            {% if forloop.counter0|divisibleby:3 %}
+                                                                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                                                                    <div class="row justify-content-center">
+                                                            {% endif %}
+
+                                                            <div class="col-md-3">
+                                                                <article class="card mb-4 homepage-review-card">
+                                                                </article>
+                                                            </div>
+
+                                                            {% if forloop.counter|divisibleby:3 or forloop.last %}
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Previous</span>
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#featuredReviewsCarousel" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                        <span class="visually-hidden">Next</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <!-- Recent Reviews Section -->
+                                    <section aria-labelledby="recent-heading">
+                                        <div class="row">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <h2 id="recent-heading" class="mb-0 me-3">Recent Reviews</h2>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-success dropdown-toggle" 
+                                                            type="button" 
+                                                            id="recentReviewsDropdown" 
+                                                            data-bs-toggle="dropdown" 
+                                                            aria-expanded="false"
+                                                            aria-label="Filter recent reviews by time period">
+                                                        {% if days_filter == 1 %}Last 1 Day{% elif days_filter == 3 %}Last 3 Days{% elif days_filter == 7 %}Last 7 Days{% elif days_filter == 14 %}Last 14 Days{% elif days_filter == 30 %}Last 30 Days{% else %}Last 7 Days{% endif %}
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="recentReviewsDropdown">
+                                                        <li><a class="dropdown-item{% if days_filter == 1 %} active{% endif %}" href="?days=1">Last 1 Day</a></li>
+                                                        <li><a class="dropdown-item{% if days_filter == 3 %} active{% endif %}" href="?days=3">Last 3 Days</a></li>
+                                                        <li><a class="dropdown-item{% if days_filter == 7 %} active{% endif %}" href="?days=7">Last 7 Days</a></li>
+                                                        <li><a class="dropdown-item{% if days_filter == 14 %} active{% endif %}" href="?days=14">Last 14 Days</a></li>
+                                                        <li><a class="dropdown-item{% if days_filter == 30 %} active{% endif %}" href="?days=30">Last 30 Days</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {% if is_paginated %}
+                                                <p class="info-heading mb-3">Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ paginator.count }} reviews</p>
+                                            {% else %}
+                                                <p class="info-heading mb-3">Showing {{ review_list|length }} of {{ paginator.count }} reviews</p>
+                                            {% endif %}
+                                            <!-- Review Entries Column -->
+                                            <div class="col-12 mt-3 left">
+                                                <div class="row">
+                                                    {% for review in review_list %}
+                                                        <div class="col-md-3">
+                                                            <article class="card mb-4 homepage-review-card">
+                                                            </article>
+                                                        </div>
+                                                        {% if forloop.counter|divisibleby:4 %}
+                                                            </div>
+                                                            <div class="row">
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% if is_paginated %}
+                                        <nav aria-label="Page navigation">
+                                            <ul class="pagination justify-content-center">
+                                                {% if page_obj.has_previous %}
+                                                <li class="page-item">
+                                                    <a href="?page={{ page_obj.previous_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                                                    class="page-link">&laquo; PREV</a>
+                                                </li>
+                                                {% endif %}
+
+                                                {% for num in page_obj.paginator.page_range %}
+                                                    {% if page_obj.number == num %}
+                                                        <li class="page-item active">
+                                                            <span class="page-link">{{ num }}</span>
+                                                        </li>
+                                                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                                        <li class="page-item">
+                                                            <a href="?page={{ num }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                                                            class="page-link">{{ num }}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                {% endfor %}
+
+                                                {% if page_obj.has_next %}
+                                                <li class="page-item">
+                                                    <a href="?page={{ page_obj.next_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
+                                                    class="page-link">NEXT &raquo;</a>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
                                         {% endif %}
-                                    </a>
+                                    </section>
                                 </div>
-                                <a href="{% url 'reviews:review_detail' review.slug %}" class="orange-link">
-                                    <div class="game-title-container">
-                                        <img src="/static/images/arrows.png" class="game-title-arrow" alt="Arrow icon">
-                                        <h5 class="card-title m-0 orange-link d-inline">{{ review.title }}</h5>
-                                    </div>
-                                    <p class="card-text">{{ review.description|striptags }}</p>
-                                </a>
+                                <!-- index.html content ends here -->
+                                {% endblock %}
 
-                                <div class="d-flex justify-content-between align-items-center mt-auto">
-                                    <div>
-
-                                        <p class="card-text h6 mb-0 orange-text">Reviewed:</p>
-                                        <p class="card-text small mb-0">{{ review.review_date|date:'F j, Y' }}</p>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <span class="me-3 card-text"><i class="fas fa-comments orange-text"></i> {{ review.user_comments.count }}</span>
-                                        <span class="card-text"><i class="fas fa-star orange-text"></i> {{ review.user_reviews.count }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    {% if forloop.counter|divisibleby:4 %}
-                        </div>
-                        <div class="row">
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% if is_paginated %}
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a href="?page={{ page_obj.previous_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
-                class="page-link">&laquo; PREV</a>
-            </li>
-            {% endif %}
-            
-            {% for num in page_obj.paginator.page_range %}
-                {% if page_obj.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
-                    </li>
-                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                    <li class="page-item">
-                        <a href="?page={{ num }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
-                        class="page-link">{{ num }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a href="?page={{ page_obj.next_page_number }}{% if days_filter %}&days={{ days_filter }}{% endif %}"
-                class="page-link">NEXT &raquo;</a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
+                                {% block extras %}
+                                {% endblock %}
     {% endif %}
 </section>
 </div>

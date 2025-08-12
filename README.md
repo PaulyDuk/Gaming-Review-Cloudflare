@@ -1,7 +1,5 @@
 <h1 align="center">Welcome to The Gaming Verdict, my final capstone project for Code Institute's Full Stack Developement Boot Camp</h1>
-<p align="center">
-  <img src="/static/docs/index.png">
-</p>
+<p align="center"><img src="/static/docs/home.png"></p>
 <h2 align="center"><a href="https://the-gaming-verdict-8fd4666bd959.herokuapp.com/">Website Link | <a href="https://github.com/users/PaulyDuk/projects/7/views/1">Project Board</a></h2>
 <h1>Table of Contents</h1>
 <ol>

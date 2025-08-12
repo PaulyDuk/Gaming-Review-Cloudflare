@@ -23,17 +23,17 @@
 </ul>
 <li><a href="#user-stories">User Stories</a></li>
 <li><a href="#design">UI/UX Design</a></li>
-<li><a href="#design">Agile Framework</a></li>
+<li><a href="#agile">Agile Framework</a></li>
 <li><a href="#features">Features</a></li>
 <li><a href="#ai">AI Implementation</a></li>
 <li><a href="#testing">Testing and Validation</a></li>
 <ul>
+<li><a href="#python-validation">Python Validation</a></li>
 <li><a href="#html-validation">HTML Validation</a></li>
 <li><a href="#css-validation">CSS Validation</a></li>
 <li><a href="#lighthouse">Lighthouse</a></li>
-<li><a href="#contrast">Contrast Checker</a></li>
 </ul>
-<li><a href="#design">Deployment</a></li>
+<li><a href="#deployment">Deployment</a></li>
 <li><a href="#conclusion">Project Conclusion</a></li>
 <li><a href="#credits">Credits</a></li>
 </ol>
@@ -76,10 +76,9 @@ There were 5 main criteria for this project:
 | Criterion | Description | Expected Performance |
 |-----------|-------------|---------------------|
 | Documentation | Document the UX design process, including wireframes, mockups, and diagrams. Ensure documentation demonstrates that the design process has been followed through to implementation. | • Concise documentation of the UX design process, including wireframes, mockups, diagrams, as well as reasoning for changes throughout the development process.<br>• Well-organized README file detailing the UX process, design rationale, and final implementation. |
-
 <br><br>
-
 I feel like my code holds these critierias to a high standard as demonstrated through my code and this README.
+<br><br>
 <h1 id="structure">Structure & Concept</h1>
 The application to be structured via 4 different Django applications, home, publisher, developer and reviews. I decided separation would be best to for each separate function to keep it clear and concise as to their functionality. The site launches directly to the home page that hosts both featured reviews and all reviews with a default view of showing the last 7 days of reviews. Clicking on a review will show it and populate all of the game, developer and publisher information on the right hand side. All of this information is populated via IGDB.com's API with the review itself generated at creation via GitHub's AI model<br><br>
 <ul>
@@ -89,7 +88,6 @@ The application to be structured via 4 different Django applications, home, publ
     <li>each category, on selection, launching a series of subject related multiple choice questions</li>
     <li>the user's score tallied in real-time as answers to each question are selected</li>
   </ul><br>
-
 <br><br>
 
 <h1 id="wireframes">Wireframes</h1>
@@ -182,9 +180,15 @@ There were quite a few user stories to begin with to get the CRUD design in plac
 I wanted the Developer and Publisher information on each card that would link to the specific section, originally I was using IDs to do so but after integrating the API for pulling this information I moved to slugs of the developer/publisher name. This made it easier to link and the URL was much more readable having this.
 <br><br>
 
-<h1 id="features">Features</h1>
+<h1 id="agile">Agile Framework</h1>
+The Agile framework was used throughout the development lifecycle, follow the MoSoCo process of priority. This quickly enabled me to get an MVP and then work on designing and implementing ideal features to enhance the user experience and make the site more interactive. There are still a couple of ideas that I have in the backlog and will look at implementing in the future as a personal project.
+<br>
+<img src="/static/docs/projectboard.png">
+<br>
+<a href="https://github.com/users/PaulyDuk/projects/7/views/1">Project Board</a>
+<br><br>
 
-## Features
+<h1 id="features">Features</h1>
 
 - **Game Review Listings**  
   Browse a comprehensive list of game reviews, each with detailed descriptions, scores, and user-generated content. Reviews are displayed in a card-based, responsive layout for easy navigation.
@@ -217,20 +221,95 @@ I wanted the Developer and Publisher information on each card that would link to
 - [GitHub AI](https://github.com/features/ai) for review text generation
 - Bootstrap for responsive UI
 
-<br><br>
-
 <h1 id="ai">AI Implementation</h1>
-The Pubtastic Quizathon used the team's skills in combination with AI in a number of key areas:
+AI was used throughout the project lifecycle and was a very important part in the development process. It enabled me to quickly repeat repetitive tasks. For example once I had functioning code to list the developers I could use AI to repeat this code for publishers, as all the information and layout would remain the same. It also quickly allowed me to layout my website using bootstrap and make quick changes when testing new functionality.
 <ul>
-<li>Imagery - the images were developed using a Freepik AI image and graphics generation account, iterating designs and color schemes to achieve the desired result.</li>
-<li>Code Assistance - AI was used in different instances to support learning in the application of code in all areas as appropriate - this included HTML, CSS, and JavaScript. Iteration and defining clear concise prompts was critical for getting the correct assistance from AI</li>
-<li>Debugging - AI was very useful in helping to identify the basis for areas where functionality was not as expected, and allowing different approaches or be used to eliminate those issues. It also served as a learning tool during that process when paricular code segments were not particularly clear.</li>
+<li>Imagery - The logo was generated with Copilot and edited in Photoshop. All other images are generated from IGDB.com and uploaded to Cloudinary</li>
+<li>Code Assistance - AI was used in different instances to support learning in the application of code in all areas. Sometimes multiple prompts were rqeuired as AI would "go off the beaten path" and make some incorrect choices, where further iterations made further mistakes. Understanding the programming language was critical to see these errors and where AI was going wrong.</li>
+<li>Debugging - AI was very useful in helping to identify the basis for areas where functionality was not as expected, and allowing different approaches or be used to eliminate those issues. It also served as a learning tool during that process when particular code segments were not particularly clear, or to explain the functionality furthe.</li>
 </ul>
-AI is a fantastic tool but is not a replacement for a developer who does not understand the code that is generated. Duplicate segments of code had to be removed during iterations as well as moving inline CSS styles that it preferred to a separate CSS file.
+AI is a great tool and was really beneficial when creating this website. It served amazingly well for repeating repetitive tasks and getting a layout that I wanted quickly. It was also particurly good at implementing Django for creating loops for each review. That said it did have short comings and would often introduce errors or redundant code, or repeat sections that already existed so its definitely not a replacement for a competant developer!  
 <br><br>
 
 <h1 id="testing">Testing & Validation</h1>
 
+<h2 id="python-validation">Python Validation</h2>
+
+All pages are clear of any errors and pass PEP8 standard:
+
+<h2>Admin views:</h2>
+<br>
+<img src="/static/docs/py/admin_views.png">
+<br><br>
+
+<h2>Developer Models:</h2>
+<br>
+<img src="/static/docs/py/developer_models.png">
+<br><br>
+
+<h2>Developer URLs:</h2>
+<br>
+<img src="/static/docs/py/developer_urls.png">
+<br><br>
+
+<h2>Developer Views:</h2>
+<br>
+<img src="/static/docs/py/developer_views.png">
+<br><br>
+
+<h2>Home URLs:</h2>
+<br>
+<img src="/static/docs/py/home_urls.png">
+<br><br>
+
+<h2>Home Views:</h2>
+<br>
+<img src="/static/docs/py/home_views.png">
+<br><br>
+
+<h2>IGDB Service:</h2>
+<br>
+<img src="/static/docs/py/igdb_service.png">
+<br><br>
+
+<h2>Populate Reviews:</h2>
+<br>
+<img src="/static/docs/py/populate_reviews.png">
+<br><br>
+
+<h2>Populate Models:</h2>
+<br>
+<img src="/static/docs/py/publisher_models.png">
+<br><br>
+
+<h2>Publisher Models:</h2>
+<br>
+<img src="/static/docs/py/publisher_models.png">
+<br><br>
+
+<h2>Publisher URLs:</h2>
+<br>
+<img src="/static/docs/py/publisher_urls.png">
+<br><br>
+
+<h2>Publisher Views:</h2>
+<br>
+<img src="/static/docs/py/publisher_views.png">
+<br><br>
+
+<h2>Review Models:</h2>
+<br>
+<img src="/static/docs/py/reviews_models.png">
+<br><br>
+
+<h2>Review URLs:</h2>
+<br>
+<img src="/static/docs/py/reviews_urls.png">
+<br><br>
+
+<h2>Review Views:</h2>
+<br>
+<img src="/static/docs/py/reviews_views.png">
 <br><br>
 
 <h2 id="html-validation">HTML Validation</h2>
@@ -268,12 +347,6 @@ Lighthouse scores 95% for perforamnce. Unfortuantely best practices drops to 59%
 <img src="/static/docs/lighthouse.png" alt="Lighthouse Score">
 <br>
 
-<h2 id="contrast">Contrast Checker</h2>
-Contrast checker passes for our text against our background:
-<br><br>
-<img src="#" alt="Contrast Checker">
-<br><br>
-
 <h1 id="conclusion">Conclusion</h1>
 yep
 <br><br>
@@ -282,7 +355,9 @@ yep
 
 - [Code Insitute](https://codeinstitute.net/) - For providing the training to build this website
 - [Bootstrap](https://getbootstrap.com/) - For the responsive site layout tools
-- [Flaticon](https://www.flaticon.com/) - Question mark icon by Freepik
 - [favicon](https://favicon.io/) - Favicon generation
 - [Google Fonts](https://fonts.google.com/) - Font library used
+- [Cloudinary](https://cloudinary.com/) - Image hosting
+- [IGDB.com](https://www.igdb.com/) - API usage for game, developer and publisher information
+- [Github AI](https://github.com/features/ai) - For review text generation
 

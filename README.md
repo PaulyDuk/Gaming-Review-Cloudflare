@@ -339,6 +339,78 @@ Lighthouse scores 95% for perforamnce. Unfortuantely best practices drops to 59%
 <img src="/static/docs/lighthouse.png" alt="Lighthouse Score">
 <br>
 
+<h1 id="deployment">Deployment</h1>
+
+This project is deployed on [Heroku](https://heroku.com/). To deploy your own instance, follow these steps:
+
+### 1. Prerequisites
+
+- A Heroku account
+- A GitHub account
+- IGDB API credentials (requires a Twitch developer account)
+- A GitHub token for AI review generation
+
+### 2. IGDB API and GitHub Token Setup
+
+1. **IGDB API Access**
+   - Go to [Twitch Developer Console](https://dev.twitch.tv/console/apps) and create a new application.
+   - Note your `Client ID` and `Client Secret` for IGDB API access.
+
+2. **GitHub Token**
+   - Generate a [GitHub Personal Access Token](https://github.com/settings/tokens) with appropriate permissions for AI review generation.
+
+3. **Create `env.py`**
+   - At the root of your project, create a file named `env.py` and add the following (replace values with your own):
+
+     os.environ["SECRET_KEY"] = "your-django-secret-key"
+     os.environ["DATABASE_URL"] = "your-database-url"
+     os.environ["CLOUDINARY_URL"] = "your-cloudinary-url"
+     os.environ["IGDB_CLIENT_ID"] = "your-igdb-client-id"
+     os.environ["IGDB_CLIENT_SECRET"] = "your-igdb-client-secret"
+     os.environ["GITHUB_TOKEN"] = "your-github-token"
+
+### 3. Heroku Setup
+
+1. **Create a new Heroku app**
+   - In the Heroku dashboard, click "New" > "Create new app".
+   - Choose a unique name and region.
+
+2. **Set Config Vars**
+   - Go to "Settings" > "Reveal Config Vars".
+   - Add the following keys and values (copy from your `env.py`):
+     - `SECRET_KEY`
+     - `DATABASE_URL`
+     - `CLOUDINARY_URL`
+     - `IGDB_CLIENT_ID`
+     - `IGDB_CLIENT_SECRET`
+     - `GITHUB_TOKEN`
+
+3. **Prepare for Deployment**
+   - Install requirements:
+     ```
+     pip install -r requirements.txt
+     ```
+   - Freeze dependencies:
+     ```
+     pip freeze > requirements.txt
+     ```
+   - Create a `Procfile` at the project root:
+     ```
+     web: gunicorn config.wsgi
+     ```
+   - In `settings.py`, set `DEBUG = False` and add your Heroku app domain to `ALLOWED_HOSTS`.
+
+4. **Push to GitHub and Deploy**
+   - Commit and push your code to GitHub.
+   - In Heroku, go to the "Deploy" tab, connect your GitHub repo, and click "Deploy Branch".
+
+### 4. Usage of IGDB API and GitHub AI
+
+- **IGDB API:**  
+  The site fetches game, developer, and publisher data dynamically from IGDB.com using your API credentials.
+- **GitHub AI:**  
+  When a new review is created, the review text is generated using GitHub AI, authenticated via your GitHub token.
+
 <h1 id="conclusion">Conclusion</h1>
 yep
 <br><br>

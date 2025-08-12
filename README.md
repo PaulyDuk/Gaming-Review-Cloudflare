@@ -204,21 +204,21 @@ AI is a fantastic tool but is not a replacement for a developer who does not und
 <h2 id="html-validation">HTML Validation</h2>
 HTML Validation passes successfully with no errors, I have only shown the one validation for brevity given the amount of pages validated. The following pages were all checked and clear of any errors:
 <br><br>
-index.html
-developer_games.html
-developer_list.html
-publisher_games.html
-publisher_list.html
-approve_comments.html
-approve_reviews.html
-populate_review.html
-review_detail.html
-review_list.html
-logout.html
-login.html
-register.html
-profile.html
-change_password.html
+index.html<br>
+developer_games.html<br>
+developer_list.html<br>
+publisher_games.html<br>
+publisher_list.html<br>
+approve_comments.html<br>
+approve_reviews.html<br>
+populate_review.html<br>
+review_detail.html<br>
+review_list.html<br>
+logout.html<br>
+login.html<br>
+register.html<br>
+profile.html<br>
+change_password.html<br>
 <br><br>
 <img src="/static/docs/index_validartion.png" alt="HTML Validation">
 <br>

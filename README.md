@@ -79,13 +79,7 @@ There were 5 main criteria for this project:
 
 <h1 id="structure">Structure & Concept</h1>
 The application to be structured via 4 different Django applications, home, publisher, developer and reviews. I decided separation would be best to for each separate function to keep it clear and concise as to their functionality. The site launches directly to the home page that hosts both featured reviews and all reviews with a default view of showing the last 7 days of reviews. Clicking on a review will show it and populate all of the game, developer and publisher information on the right hand side. All of this information is populated via IGDB.com's API with the review itself generated at creation via GitHub's AI model<br><br>
-<ul>
-    <li> an initial presentation of 'rules' and 'start' options to user;</li>
-    <li>selection of 'rules' lanuches modal setting out how to play</li>
-    <li>selection of 'start' launches selection of subject matter categories</li>
-    <li>each category, on selection, launching a series of subject related multiple choice questions</li>
-    <li>the user's score tallied in real-time as answers to each question are selected</li>
-  </ul><br>
+I had started out the website with the idea of adding all the information myself. However I quickly found that it was rather time consuming to do so! This led me to utilising the API from IGDB.com. Further on in the design process I found the use of prompting an AI to create the review. I decided to do this both to show the possibility of implementing it as well as a time saving measure for myself.
 <br><br>
 
 <h1 id="wireframes">Wireframes</h1>

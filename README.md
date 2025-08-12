@@ -181,9 +181,41 @@ There were quite a few user stories to begin with to get the CRUD design in plac
 <br><br>
 I wanted the Developer and Publisher information on each card that would link to the specific section, originally I was using IDs to do so but after integrating the API for pulling this information I moved to slugs of the developer/publisher name. This made it easier to link and the URL was much more readable having this.
 <br><br>
+
 <h1 id="features">Features</h1>
 
-<br><br>
+## Features
+
+- **Game Review Listings**  
+  Browse a comprehensive list of game reviews, each with detailed descriptions, scores, and user-generated content. Reviews are displayed in a card-based, responsive layout for easy navigation.
+
+- **Game Details with Rich Metadata**  
+  Each review page displays extensive information about the game, including platforms, genres, release dates, developer and publisher details, and cover images. This metadata is dynamically fetched from the [IGDB.com API](https://api.igdb.com/), ensuring up-to-date and accurate information.
+
+- **Automated Review Generation with GitHub AI**  
+  When a new game review is created, the review text is automatically generated using [GitHub AI](https://github.com/features/ai). This integration produces professional, multi-paragraph reviews, reducing manual effort and maintaining consistent quality.
+
+- **User Registration and Profiles**  
+  Users can register, log in, and manage their profiles. Each profile displays the user’s submitted reviews and comments, allowing users to track their contributions.
+
+- **User Reviews and Comments**  
+  Authenticated users can submit their own reviews and comments on games. All user-generated content is subject to admin approval to maintain quality and appropriateness.
+
+- **Admin Review Management**  
+  Superusers have access to a custom admin interface for managing reviews, including bulk actions (publish, unpublish, feature, delete) and the ability to populate reviews directly from IGDB.com data. The review itself is generated via GitHub AI for automatic content.
+
+- **Search and Filtering**  
+  Users can search for games by name, filter reviews by genre, and view all games by a specific developer or publisher.
+
+- **Accessibility and Responsive Design**  
+  The site is designed with accessibility in mind, using semantic HTML, proper color contrast, and responsive layouts for optimal viewing on all devices.
+
+### Key Technologies
+
+- Django (backend and templating)
+- [IGDB.com API](https://api.igdb.com/) for game data (`IGDBService`)
+- [GitHub AI](https://github.com/features/ai) for review text generation
+- Bootstrap for responsive UI
 
 <br><br>
 
@@ -202,7 +234,7 @@ AI is a fantastic tool but is not a replacement for a developer who does not und
 <br><br>
 
 <h2 id="html-validation">HTML Validation</h2>
-HTML Validation passes successfully with no errors, I have only shown the one validation for brevity given the amount of pages validated. The following pages were all checked and clear of any errors:
+HTML Validation passes successfully with no errors, I have only shown the one index.html validation for brevity given the amount of pages validated. The following pages were all checked and clear of any errors:
 <br><br>
 index.html<br>
 developer_games.html<br>
@@ -211,7 +243,7 @@ publisher_games.html<br>
 publisher_list.html<br>
 approve_comments.html<br>
 approve_reviews.html<br>
-populate_review.html<br>
+populate_reviews.html<br>
 review_detail.html<br>
 review_list.html<br>
 logout.html<br>
@@ -224,7 +256,7 @@ change_password.html<br>
 <br>
 
 <h2 id="css-validation">CSS Validation</h2>
-CSS Validation passes successfully with no errors:
+CSS Validation passes successfully with no errors, there are some warnings for using webkit within the CSS as this is a vendor specific code:
 <br><br>
 <img src="/static/docs/css.png" alt="CSS Validation">
 <br>

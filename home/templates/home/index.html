@@ -72,7 +72,7 @@
         <div class="row">
             <div class="d-flex align-items-center mb-3">
                 <h2 id="recent-heading" class="mb-0 me-3">Recent Reviews</h2>
-                <div class="dropdown">
+                <!-- main wrapper removed to avoid nested <main> elements -->
                     <button class="btn btn-outline-success dropdown-toggle" 
                             type="button" 
                             id="recentReviewsDropdown" 
@@ -140,7 +140,6 @@
                 {% endfor %}
             </div>
         </div>
-    </div>
     {% if is_paginated %}
     <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
@@ -173,10 +172,9 @@
         </ul>
     </nav>
     {% endif %}
-</section>
+    </section>
+    <!-- index.html content ends here -->
 </div>
-</main>
-<!-- index.html content ends here -->
 {% endblock %}
 
 <!-- extras block removed to fix unclosed block error -->

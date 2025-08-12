@@ -412,7 +412,9 @@ This project is deployed on [Heroku](https://heroku.com/). To deploy your own in
   When a new review is created, the review text is generated using GitHub AI, authenticated via your GitHub token.
 
 <h1 id="conclusion">Conclusion</h1>
-yep
+I have thoroughly enjoyed undertaking this project. I have learnt a lot through the process and am proud of what I have been able to produce. AI was particularly useful during the process, although you have to be mindful and understand the code when it starts going down the wrong path! It was particularly useful for quick design layouts using bootstrap and for repeating code between sections (devloper and publisher for myself).
+<br>
+I hope this showcases what I am able to produce and I look forward to continuing learning in the future.
 <br><br>
 
 <h1 id="credits">Credits</h1>

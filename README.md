@@ -77,8 +77,7 @@ There were 5 main criteria for this project:
 |-----------|-------------|---------------------|
 | Documentation | Document the UX design process, including wireframes, mockups, and diagrams. Ensure documentation demonstrates that the design process has been followed through to implementation. | • Concise documentation of the UX design process, including wireframes, mockups, diagrams, as well as reasoning for changes throughout the development process.<br>• Well-organized README file detailing the UX process, design rationale, and final implementation. |
 <br><br>
-I feel like my code holds these critierias to a high standard as demonstrated through my code and this README.
-<br><br>
+
 <h1 id="structure">Structure & Concept</h1>
 The application to be structured via 4 different Django applications, home, publisher, developer and reviews. I decided separation would be best to for each separate function to keep it clear and concise as to their functionality. The site launches directly to the home page that hosts both featured reviews and all reviews with a default view of showing the last 7 days of reviews. Clicking on a review will show it and populate all of the game, developer and publisher information on the right hand side. All of this information is populated via IGDB.com's API with the review itself generated at creation via GitHub's AI model<br><br>
 <ul>

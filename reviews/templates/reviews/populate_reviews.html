@@ -2,8 +2,6 @@
 {% load static %}
 
 {% block content %}
-
-<main class="admin-populate-reviews-main">
 <div class="container mt-4">
     <div class="row">
         <div class="col-12">
@@ -317,12 +315,9 @@
                 </ul>
             </nav>
             {% endif %}
-            </section>
-            {% endif %}
         </div>
     </div>
 </div>
-</main>
 
 <script src="{% static 'js/utils.js' %}"></script>
 <script src="{% static 'js/populate_reviews.js' %}"></script>
@@ -358,4 +353,5 @@ function updateCreateButton() {
 }
 </script>
 
+{% endif %}
 {% endblock %}

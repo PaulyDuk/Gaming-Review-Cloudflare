@@ -6,8 +6,6 @@
 
 {% block content %}
 
-<main class="signup-main">
-
 <div class="container">
   <div class="row">
     <div class="col-md-8 mt-3 offset-md-2">
@@ -43,7 +41,43 @@
                     </div>
                 {% endif %}
                 
-                {{ form.as_p }}
+        {# Render all fields except password1 and password2 #}
+        {% for field in form.visible_fields %}
+          {% if field.name != 'password1' and field.name != 'password2' %}
+            <div class="mb-3">
+              {{ field.label_tag }}
+              {{ field }}
+              {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endfor %}
+
+        {# Render password1 field manually #}
+        <div class="mb-3">
+          {{ form.password1.label_tag }}
+          {{ form.password1 }}
+          {% if form.password1.help_text %}
+            <div id="id_password1_helptext" class="form-text text-white">{{ form.password1.help_text|safe }}</div>
+          {% endif %}
+          {# Removed inline password1 errors as requested #}
+        </div>
+
+        {# Render password2 field manually #}
+        <div class="mb-3">
+          {{ form.password2.label_tag }}
+          {{ form.password2 }}
+          {% if form.password2.help_text %}
+            {{ form.password2.help_text|safe }}
+          {% endif %}
+          {% for error in form.password2.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
                 {% if redirect_field_value %}
                 <input type="hidden" name="{{ redirect_field_name }}"
                   value="{{ redirect_field_value }}" />
@@ -58,6 +92,5 @@
     </div>
   </div>
 </div>
-</main>
 
 {% endblock %}

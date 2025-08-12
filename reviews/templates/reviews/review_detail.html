@@ -1,8 +1,6 @@
 {% extends 'base.html' %} {% block content %}
 {% load static %}
 {% load crispy_forms_tags %}
-
-<main class="review-detail-main">
 <div class="masthead">
     <div class="container">
         <div class="row align-items-center g-0">
@@ -13,7 +11,7 @@
             </div>
             <!-- Center column: Arrows -->
             <div class="col-md-4 d-flex justify-content-center align-items-center">
-                <img src="{% static 'images/large_arrows_300.png' %}" alt="" class="arrows-large" role="presentation">
+                <img src="{% static 'images/large_arrows_300.png' %}" alt="" class="arrows-large">
             </div>
             <!-- Right column: Game image -->
             <div class="col-md-4 masthead-image">
@@ -36,9 +34,10 @@
         <div class="col-12 col-lg-8 order-1 order-lg-1">
             <!-- Review Section -->
             <article class="card mb-4 mt-3">
+                <h2 class="visually-hidden">Review Details</h2>
                 <div class="card-body mb-4">
                     <section aria-labelledby="description-heading">
-                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt="" role="presentation"><h2 id="description-heading" class="mb-0 info-heading">Description</h2></div>
+                        <div class="d-flex align-items-center mb-2"><img src="{% static 'images/arrows.png' %}" class="arrows" alt=""><h2 id="description-heading" class="mb-0 info-heading">Description</h2></div>
                         <p class="card-text">{{ review.description | safe }}</p>
                         <hr>
                     </section>
@@ -66,7 +65,7 @@
                     {% if game_platforms %}
                         <div class="mb-3">
                             <strong>Available on:</strong>
-                            <ul class="list-inline mt-1 mb-0" role="list" aria-label="Gaming platforms">
+                            <ul class="list-inline mt-1 mb-0" aria-label="Gaming platforms">
                                 {% for platform in game_platforms %}
                                     <li class="list-inline-item">
                                         <span class="badge bg-secondary me-1 fs-6">{{ platform.name }}</span>
@@ -78,7 +77,7 @@
                     {% if game_genres %}
                         <div class="mb-3">
                             <strong>Genres:</strong>
-                            <ul class="list-inline mt-1 mb-0" role="list" aria-label="Game genres">
+                            <ul class="list-inline mt-1 mb-0" aria-label="Game genres">
                                 {% for genre in game_genres %}
                                     <li class="list-inline-item">
                                         <span class="badge bg-success me-1 fs-6">{{ genre.name }}</span>
@@ -90,7 +89,7 @@
                     {% if game_release_dates %}
                         <div class="mb-3">
                             <strong>Release Dates:</strong>
-                            <ul class="list-unstyled mt-1 mb-0" role="list" aria-label="Game release dates by platform">
+                            <ul class="list-unstyled mt-1 mb-0" aria-label="Game release dates by platform">
                                 {% for release in game_release_dates %}
                                     <li class="d-flex align-items-center mb-1">
                                         <strong>{{ release.platform }} - </strong>
@@ -238,12 +237,12 @@
                             {% endif %}
                                 {% if user.is_authenticated and user_comment.author == user %}
                                     <button class="btn btn-outline-success btn-edit-user-comment" 
-                                            comment_id="{{ user_comment.id }}"
+                                            data-comment-id="{{ user_comment.id }}"
                                             aria-label="Edit comment by {{ user_comment.author.username }}">
                                         Edit
                                     </button>
                                     <button class="btn btn-outline-success btn-delete-user-comment" 
-                                            comment_id="{{ user_comment.id }}"
+                                            data-comment-id="{{ user_comment.id }}"
                                             aria-label="Delete comment by {{ user_comment.author.username }}">
                                         Delete
                                     </button>
@@ -333,13 +332,13 @@
                                     {% endif %}
                                     {% if user.is_authenticated and user_review.user == user %}
                                         <button class="btn btn-outline-success btn-edit-user-review" 
-                                                review_id="{{ user_review.id }}" 
-                                                review_rating="{{ user_review.rating }}"
+                                                data-review-id="{{ user_review.id }}" 
+                                                data-review-rating="{{ user_review.rating }}"
                                                 aria-label="Edit review by {{ user_review.user.username }}">
                                             Edit
                                         </button>
                                         <button class="btn btn-outline-success btn-delete-user-review" 
-                                                review_id="{{ user_review.id }}"
+                                                data-review-id="{{ user_review.id }}"
                                                 aria-label="Delete review by {{ user_review.user.username }}">
                                             Delete
                                         </button>
@@ -446,7 +445,6 @@
         </div>
     </div>
 </div>
-</main>
 {% endblock content %}
 
 {% block extras %}

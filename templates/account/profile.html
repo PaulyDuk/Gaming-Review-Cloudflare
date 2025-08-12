@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<main class="profile-main">
+<div class="profile-main">
 <div class="container">
     <div class="row">
         <div class="col-md-12 mt-3">
@@ -27,19 +27,19 @@
                     <div class="card-header">
                         <h2 id="account-management-heading" class="orange-text">Account Management</h2>
                     </div>
-                <div class="card-body">
-                    <nav aria-label="Account management">
-                        <div class="list-group list-group-flush">
-                            <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action text-dark">
-                                <i class="fas fa-lock me-2"></i>Change Password
-                            </a>
-                            <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
-                            </a>
-                        </div>
-                    </nav>
+                    <div class="card-body">
+                        <nav aria-label="Account management">
+                            <div class="list-group list-group-flush">
+                                <a href="{% url 'account_change_password' %}" class="list-group-item list-group-item-action text-dark">
+                                    <i class="fas fa-lock me-2"></i>Change Password
+                                </a>
+                                <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </a>
+                            </div>
+                        </nav>
+                    </div>
                 </div>
-            </div>
             </section>
         </div>
         
@@ -50,15 +50,16 @@
                     <div class="card-header">
                         <h2 id="activity-heading" class="orange-text">My Activity</h2>
                     </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <div class="display-4 orange-text">{{ user_reviews.count }}</div>
-                            <p class="mb-0 info-heading">Reviews Written</p>
-                        </div>
-                        <div class="col-6">
-                            <div class="display-4 orange-text">{{ user_comments.count }}</div>
-                            <p class="mb-0 info-heading">Comments Posted</p>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-6">
+                                <div class="display-4 orange-text">{{ user_reviews.count }}</div>
+                                <p class="mb-0 info-heading">Reviews Written</p>
+                            </div>
+                            <div class="col-6">
+                                <div class="display-4 orange-text">{{ user_comments.count }}</div>
+                                <p class="mb-0 info-heading">Comments Posted</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,12 +125,14 @@
                         {% if user_comments.count > 5 %}
                         <p class="text-center mt-3"><small class="card-text">Showing 5 of {{ user_comments.count }} comments</small></p>
                         {% endif %}
-                    </div>
-                </div>
+                    </div> <!-- End of .card-body -->
+                </div> <!-- End of .card -->
             </section>
-        </div>
-    </div>
+        </div> <!-- End of .col-md-12 -->
+    </div> <!-- End of .row -->
     {% endif %}
-</div>
-</main>
+    <!-- End of .row (Recent Comments) -->
+
+    </div> <!-- End of .container -->
+</div> <!-- End of .profile-main -->
 {% endblock content %}

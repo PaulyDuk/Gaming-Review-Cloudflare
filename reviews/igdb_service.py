@@ -78,13 +78,13 @@ class IGDBService:
 
         query_string = (
             f'fields id, name, summary, release_dates.date, '
-            f'release_dates.platform.name, platforms.id, platforms.name, '
-            f'platforms.abbreviation, cover.url, genres.name, '
+            f'release_dates.platform.id, release_dates.platform.name, release_dates.platform.platform_type, '
+            f'platforms.id, platforms.name, platforms.platform_type, cover.url, genres.name, '
             f'involved_companies.company.name, '
             f'involved_companies.company.description, '
             f'involved_companies.company.websites.url, '
-            f'involved_companies.company.websites.category, '
-            f'involved_companies.company.start_date, '
+            f'involved_companies.company.websites.type, '
+            f'involved_companies.company.start_date_format, '
             f'involved_companies.company.logo.url, '
             f'involved_companies.developer, involved_companies.publisher; '
             f'search "{game_name}"; limit {limit};'
@@ -144,8 +144,8 @@ class IGDBService:
                             website_url = ''
                             if 'websites' in company:
                                 for website in company['websites']:
-                                    # Category 1 is official website
-                                    if website.get('category') == 1:
+                                    # Type 1 is official website (per new docs)
+                                    if website.get('type') == 1:
                                         website_url = website.get('url', '')
                                         break
                                 # If no official site, take the first one
@@ -153,12 +153,12 @@ class IGDBService:
                                     first_site = company['websites'][0]
                                     website_url = first_site.get('url', '')
 
-                            # Convert start_date timestamp to year
+                            # Convert start_date_format timestamp to year
                             founded_year = ''
-                            if company.get('start_date'):
+                            if company.get('start_date_format'):
                                 try:
                                     import datetime
-                                    timestamp = company['start_date']
+                                    timestamp = company['start_date_format']
                                     if (isinstance(timestamp, (int, float)) and
                                             timestamp > 0):
                                         date_obj = datetime.datetime.\

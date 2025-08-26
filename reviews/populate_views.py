@@ -285,10 +285,6 @@ def create_reviews_from_selection(request):
 
                     if existing_review:
                         skipped_reviews += 1
-                        messages.warning(
-                            request,
-                            f'Skipped "{title}" - review already exists'
-                        )
                         continue
 
                     description = game.get('summary', '')

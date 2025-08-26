@@ -127,14 +127,14 @@
                                             {% endif %}
                                             <!-- Hidden input to store game data -->
                                             <input type="hidden" class="game-data" name="selected_games" 
-                                                value="{{ game.raw_data }}" {% if not game.has_review %}disabled{% endif %}>
+                                                value="{{ game.raw_data }}" {% if game.has_review %}disabled{% endif %}>
                                         </td>
                                         <td>{{ game.year }}</td>
                                         <td>{{ game.platforms }}</td>
                                         <td>
                                             <input type="number" class="form-control form-control-sm review-score" 
                                                 name="review_scores" min="0" max="10" step="0.1" 
-                                                value="" style="width: 80px;" {% if not game.has_review %}disabled{% endif %}
+                                                value="" style="width: 80px;" {% if game.has_review %}disabled{% endif %}
                                                 oninput="updateCreateButton()">
                                         </td>
                                         <td>
@@ -158,7 +158,7 @@
                             </table>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-outline-success" id="create-reviews-btn" disabled>
+                            <button type="submit" class="btn btn-outline-success" id="create-reviews-btn">
                                 Select games to create reviews
                             </button>
                         </div>
@@ -329,9 +329,8 @@ function updateCreateButton() {
     const createBtn = document.getElementById('create-reviews-btn');
     if (!createBtn) return;
 
+    let allHaveScores = true;
     if (checkedBoxes.length > 0) {
-        // Check if all selected games have scores
-        let allHaveScores = true;
         checkedBoxes.forEach(checkbox => {
             const row = checkbox.closest('tr');
             const scoreInput = row.querySelector('.review-score');
@@ -340,17 +339,39 @@ function updateCreateButton() {
             }
         });
         if (allHaveScores) {
-            createBtn.disabled = false;
             createBtn.textContent = `Create ${checkedBoxes.length} Review${checkedBoxes.length > 1 ? 's' : ''}`;
         } else {
-            createBtn.disabled = true;
             createBtn.textContent = `Enter scores for ${checkedBoxes.length} selected game${checkedBoxes.length > 1 ? 's' : ''}`;
         }
     } else {
-        createBtn.disabled = true;
         createBtn.textContent = 'Select games to create reviews';
     }
+    createBtn.disabled = false;
 }
+
+// Prevent form submission if not all selected games have scores
+document.addEventListener('DOMContentLoaded', function() {
+    updateCreateButton();
+    attachScoreListeners();
+    const form = document.getElementById('create-reviews-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const checkedBoxes = document.querySelectorAll('.game-checkbox:checked:not(:disabled)');
+            let allHaveScores = true;
+            checkedBoxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const scoreInput = row.querySelector('.review-score');
+                if (!scoreInput.value || scoreInput.value === '') {
+                    allHaveScores = false;
+                }
+            });
+            if (!allHaveScores || checkedBoxes.length === 0) {
+                e.preventDefault();
+                alert('Please select at least one game and enter a score for each selected game.');
+            }
+        });
+    }
+});
 </script>
 
 {% endif %}

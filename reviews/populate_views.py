@@ -245,24 +245,12 @@ def create_reviews_from_selection(request):
                     if i < len(review_scores):
                         score_str = review_scores[i]
                         if not score_str.strip():
-                            game_name = game.get("name", "(unknown)")
-                            messages.error(
-                                request,
-                                'No score entered for game: '
-                                + game_name +
-                                '. Skipping.'
-                            )
+                            # silently skip if no score entered
                             continue
                         try:
                             review_score = float(score_str)
                         except ValueError:
-                            game_name = game.get("name", "(unknown)")
-                            messages.error(
-                                request,
-                                'Invalid score for game: '
-                                + game_name +
-                                '. Skipping.'
-                            )
+                            # silently skip if invalid score
                             continue
                     else:
                         review_score = 5.0
@@ -415,6 +403,7 @@ def create_reviews_from_selection(request):
                             created_reviews += 1
 
                 except Exception as e:
+                    # Only show error modal for actual errors, not for skipped games
                     messages.error(
                         request, f'Error processing {title}: {str(e)}')
                     continue

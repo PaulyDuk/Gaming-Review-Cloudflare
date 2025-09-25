@@ -1,0 +1,8 @@
+{
+  "name": "my-django-worker",
+  "main": "src/index.js",
+  "compatibility_date": "2025-09-25",
+  "vars": {
+    "DJANGO_SETTINGS_MODULE": "config.settings"
+  }
+}

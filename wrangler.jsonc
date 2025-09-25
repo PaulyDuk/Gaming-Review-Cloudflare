@@ -1,5 +1,5 @@
 {
-  "name": "my-django-worker",
+  "name": "gaming-review-worker",
   "main": "src/index.js",
   "compatibility_date": "2025-09-25",
   "vars": {
@@ -7,8 +7,7 @@
   },
   "build": {
     "upload": {
-      "format": "modules",
-      "external": ["django-worker"]
+      "format": "modules"
     }
   }
 }

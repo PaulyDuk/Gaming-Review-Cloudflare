@@ -1,20 +1,8 @@
 {
-  "name": "gaming-review-cloudflare",
+  "name": "gaming-review-worker",
   "version": "1.0.0",
-  "description": "<h1 align=\"center\">Welcome to The Gaming Verdict, my final capstone project for Code Institute's Full Stack Developement Boot Camp</h1>\r <p align=\"center\"><img src=\"/static/docs/home.png\"></p>\r <h2 align=\"center\"><a href=\"https://the-gaming-verdict-8fd4666bd959.herokuapp.com/\">Website Link | <a href=\"https://github.com/users/PaulyDuk/projects/7/views/1\">Project Board</a></h2>\r <h1>Table of Contents</h1>\r <ol>\r <li><a href=\"#introduction\">Introduction</a></li>\r <ul>\r <li><a href=\"#requirements\">Requirements</a></li>\r <li><a href=\"#structure\">Structure & Concepts</a></li>\r </ul>\r <li><a href=\"#wireframes\">Wireframes</a></li>\r <ul>\r <li><a href=\"#wf-index\">Index Page</a></li>\r <li><a href=\"#wf-review-detail\">Review Details Page</a></li>\r <li><a href=\"#wf-review-list\">Reviews List Page</a></li>\r <li><a href=\"#wf-developer-detail\">Developer Details Page</a></li>\r <li><a href=\"#wf-developer-list\">Developer List Page</a></li>\r <li><a href=\"#wf-publisher-detail\">Publisher Details Page</a></li>\r <li><a href=\"#wf-publisher-list\">Publisher List Page</a></li>\r <li><a href=\"#wf-profile\">Profile Page</a></li>\r <li><a href=\"#wf-search\">Search Page</a></li>\r <li><a href=\"#wf-form\">Form Pages</a></li>",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PaulyDuk/Gaming-Review-Cloudflare.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/PaulyDuk/Gaming-Review-Cloudflare/issues"
-  },
-  "homepage": "https://github.com/PaulyDuk/Gaming-Review-Cloudflare#readme"
+  "private": true,
+  "dependencies": {
+    "django-worker": "^0.2.0"
+  }
 }
